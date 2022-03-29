@@ -1,0 +1,42 @@
+Package: genomesh
+Title: Inference And Analysis Of Synteny Networks
+Version: 0.99.0
+Date: 2022-03-28
+Authors@R: 
+    c(
+    person(given = "Fabrício",
+           family = "Almeida-Silva",
+           role = c("aut", "cre"),
+           email = "fabricio_almeidasilva@hotmail.com",
+           comment = c(ORCID = "0000-0002-5314-2964")),
+    person(given = "Yves",
+           family = "Van de Peer",
+           role = "aut",
+           email = "yves.vandepeer@psb.vib-ugent.be",
+           comment = c(ORCID = "0000-0003-4327-3730"))
+    )
+Description: genomesh can be used to infer synteny networks and analyze them.
+License: GPL-3
+URL: https://github.com/almeidasilvaf/genomesh
+BugReports: https://support.bioconductor.org/t/genomesh
+biocViews: Software
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+Imports:
+    rtracklayer,
+    GenomicRanges,
+    methods
+Suggests: 
+    BiocStyle,
+    covr,
+    knitr,
+    RefManageR,
+    rmarkdown,
+    sessioninfo,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+VignetteBuilder: knitr
+Depends: 
+    R (>= 2.10)
+LazyData: true
