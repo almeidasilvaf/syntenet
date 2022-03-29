@@ -33,13 +33,15 @@ Intro.
 ```{r installation, eval=FALSE}
 if(!requireNamespace('BiocManager', quietly = TRUE))
   install.packages('BiocManager')
-BiocManager::install("cogeqc")
+BiocManager::install("syntenet")
 ```
 
 ```{r load_package, message=FALSE}
 # Load package after installation
-library(cogeqc)
+library(syntenet)
 ```
+
+
 # Session information {.unnumbered}
 
 This document was created under the following conditions:
