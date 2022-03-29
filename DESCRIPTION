@@ -26,14 +26,13 @@ RoxygenNote: 7.1.2
 Imports:
     rtracklayer,
     GenomicRanges,
+    Biostrings,
     methods
 Suggests: 
     BiocStyle,
     covr,
     knitr,
-    RefManageR,
     rmarkdown,
-    sessioninfo,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 VignetteBuilder: knitr

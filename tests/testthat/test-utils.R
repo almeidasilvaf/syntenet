@@ -19,3 +19,8 @@ test_that("check_gene_names() checks if sequence names match gene names", {
     check <- check_gene_names(proteomes, annotation)
     expect_equal(check, TRUE)
 })
+
+test_that("species_id_length() returns the best string length for IDs", {
+    len <- species_id_length(proteomes)
+    expect_equal(class(len), "numeric")
+})

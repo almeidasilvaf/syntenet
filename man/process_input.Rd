@@ -4,14 +4,57 @@
 \alias{process_input}
 \title{Process sequence data}
 \usage{
-process_input(seq = NULL)
+process_input(seq = NULL, annotation = NULL)
 }
 \arguments{
-\item{seq}{A list of AAStringSet objects.}
+\item{seq}{A list of AAStringSet objects, each list element containing
+protein sequences for a given species. This list must have names
+(not NULL), and names of each list element must match the names of
+list elements in \strong{annotation}.}
+
+\item{annotation}{A GRangesList or CompressedGRangesList object
+with the annotation for the sequences in \strong{seq}. This list must
+have names (not NULL), and names of each list element must match the names
+of list elements in \strong{seq}.}
+}
+\value{
+A list of 2 elements:
+\describe{
+\item{seq}{The processed list of AAStringSet objects from \strong{seq}.}
+\item{annotation}{The processed GRangesList or CompressedGRangesList
+object from \strong{annotation}.}
+}
 }
 \description{
 Process sequence data
 }
+\details{
+This function processes the input sequences and annotation to:
+\enumerate{
+\item Remove whitespace and anything after it in sequence names
+(i.e., \code{names(seq[[x]])}, which is equivalent to FASTA headers), if
+there is any.
+\item Remove period followed by number at the end of sequence names, which
+typically indicates different isoforms of the same gene
+(e.g., Arabidopsis thaliana's transcript AT1G01010.1, which belongs to
+gene AT1G01010).
+\item Add a unique species identifier to sequence names. The species
+identifier consists of the first 3-5 strings of the element name.
+For instance, if the first element of the \strong{seq} list is named
+"Athaliana", each sequence in it will have an identifier "Atha_" added
+to the beginning of each gene name (e.g., Atha_AT1G01010).
+\item If sequences have an asterisk (*) representing stop codon, remove it.
+\item Add a unique species identifier (same as above) to
+gene and chromosome names of each element of the \strong{annotation}
+GRangesList/CompressedGRangesList.
+\item Filter each element of the \strong{annotation}
+GRangesList/CompressedGRangesList to keep only seqnames, ranges, and
+gene ID.
+}
+}
 \examples{
+data(annotation)
 data(proteomes)
+seq <- proteomes
+clean_data <- process_input(seq, annotation)
 }

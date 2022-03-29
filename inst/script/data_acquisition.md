@@ -16,10 +16,15 @@ links <- c(
     Otauri = "ftp://ftp.psb.ugent.be/pub/plaza/plaza_pico_03/Fasta/proteome.selected_transcript.ota.fasta.gz"
 )
 
-proteomes <- lapply(links, Biostrings::readAAStringSet)
+proteomes <- lapply(links, function(x) {
+    seq <- Biostrings::readAAStringSet(x)
+    names(seq) <- gsub("\\.[0-9] .*", "", names(seq))
+    return(seq)
+})
+
 
 usethis::use_data(
-    proteomes, compress = "xz"
+    proteomes, compress = "xz", overwrite = TRUE
 )
 ```
 

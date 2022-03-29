@@ -20,7 +20,7 @@ check_list_names <- function(seq = NULL, annotation = NULL) {
     n_match <- annot_names %in% seq_names
     
     if(is.null(annot_names) | is.null(seq_names)) {
-        stop("List-like objects in 'seq' and 'annotation' must have names.")
+        stop("List-like arguments 'seq' and 'annotation' must have names.")
     } else if(any(isFALSE(n_match))) {
         stop("Names of list elements in 'seq' and 'annotation' must match.")
     } else {
@@ -126,35 +126,32 @@ check_gene_names <- function(seq = NULL, annotation = NULL) {
     return(TRUE)
 }
 
-#' Clean sequence names
+
+#' Pick best length for unique species identifiers
 #'
-#' This function removes anything after a space in sequence names and adds
-#' a unique species abbreviation to each sequence name.
-#'
-#' @param seq A list of AAStringSet objects.
-#'
-#' @return A list of AAStringSet objects with clean names.
-#' @examples 
+#' @param input_list A list of AAStringSet objects or a 
+#' GRangesList/CompressedGRangesList object.
+#' 
+#' @return Numeric scalar with the length of the 
+#' species ID (either 3, 4, or 5).
 #' @noRd
-#' data(proteomes)
-#' seq <- proteomes
-#' clean_seqs <- clean_seqnames(seq)
-clean_seqnames <- function(seq = NULL) {
+species_id_length <- function(input_list = NULL) {
     
-    clean_seqs <- lapply(seq_along(seq), function(x) {
-        sequence <- seq[[x]]
-        gene_names <- names(sequence)
-        
-        # 1. Remove everything after space
-        gene_names <- gsub(" .*", "", gene_names)
-        
-        # 2. Add species abbreviation in front of gene names
-        abbrev <- substr(names(seq)[x], 1, 4)
-        gene_names <- paste(abbrev, gene_names, sep = "_")
-        names(sequence) <- gene_names
-        return(sequence)
-    })
-    names(clean_seqs) <- names(seq)
-    return(clean_seqs)
+    nam <- names(input_list)
+    nam <- gsub(" ", "_", nam)
+    abbrev <- unlist(lapply(nam, substr, 1, 3)) # try with 3
+    count <- table(abbrev)
+    n <- 3
+    if(any(count > 1)) {
+        abbrev <- unlist(lapply(nam, substr, 1, 4)) # try with 4
+        count <- table(abbrev)
+        n <- 4
+        if(any(count > 1)) {
+            abbrev <- unlist(lapply(nam, substr, 1, 5)) # try with 5
+            count <- table(abbrev)
+            n <- 5
+        }
+    }
+    return(n)
 }
 

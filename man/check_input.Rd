@@ -44,5 +44,4 @@ equivalent to FASTA headers) match gene names in \strong{annotation}.
 data(annotation) 
 data(proteomes)
 check_input(proteomes, annotation)
-
 }
