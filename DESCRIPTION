@@ -1,4 +1,4 @@
-Package: genomesh
+Package: syntenet
 Title: Inference And Analysis Of Synteny Networks
 Version: 0.99.0
 Date: 2022-03-28
@@ -15,10 +15,10 @@ Authors@R:
            email = "yves.vandepeer@psb.vib-ugent.be",
            comment = c(ORCID = "0000-0003-4327-3730"))
     )
-Description: genomesh can be used to infer synteny networks and analyze them.
+Description: syntenet can be used to infer synteny networks and analyze them.
 License: GPL-3
-URL: https://github.com/almeidasilvaf/genomesh
-BugReports: https://support.bioconductor.org/t/genomesh
+URL: https://github.com/almeidasilvaf/syntenet
+BugReports: https://support.bioconductor.org/t/syntenet
 biocViews: Software
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

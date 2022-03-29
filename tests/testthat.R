@@ -1,4 +1,4 @@
 library(testthat)
-library(genomesh)
+library(syntenet)
 
-test_check("genomesh")
+test_check("syntenet")

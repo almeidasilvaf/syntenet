@@ -1,5 +1,5 @@
 ---
-title: "Introduction to genomesh"
+title: "Introduction to syntenet"
 author: 
   - name: Fabricio Almeida-Silva
     affiliation: VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
@@ -11,7 +11,7 @@ output:
     number_sections: yes
 bibliography: vignette_01.bib
 vignette: >
-  %\VignetteIndexEntry{Introduction to genomesh}
+  %\VignetteIndexEntry{Introduction to syntenet}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  ---
 ---

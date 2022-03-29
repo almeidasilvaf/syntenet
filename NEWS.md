@@ -1,4 +1,4 @@
-# genomesh 0.99.0
+# syntenet 0.99.0
 
 NEW FEATURES
 
