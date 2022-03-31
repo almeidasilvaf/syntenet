@@ -155,3 +155,36 @@ species_id_length <- function(input_list = NULL) {
     return(n)
 }
 
+
+#' Wrapper to check if command is found in PATH
+#'
+#' @param cmd Command to test.
+#' @param args Arguments for command.
+#'
+#' @author Fabricio Almeida-Silva
+#' @return Logical indicating whether the command is in PATH or not.
+#' @noRd
+is_valid <- function(cmd = NULL, args = NULL) {
+    found <- tryCatch(
+        system2(cmd, args = args, stdout = FALSE, stderr = FALSE),
+        error = function(e) return(FALSE),
+        warning = function(w) return(FALSE)
+    )
+    if(!isFALSE(found)) {
+        found <- TRUE
+    }
+    return(found)
+}
+
+
+#' Check if DIAMOND is installed
+#'
+#' @return Logical indicating whether DIAMOND is installed or not.
+#' @export
+#' @rdname diamond_is_installed
+#' @examples
+#' diamond_is_installed()
+diamond_is_installed <- function() {
+    valid <- is_valid(cmd = "diamond", args = "-h")
+    return(valid)
+}

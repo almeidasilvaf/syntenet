@@ -24,3 +24,13 @@ test_that("species_id_length() returns the best string length for IDs", {
     len <- species_id_length(proteomes)
     expect_equal(class(len), "numeric")
 })
+
+test_that("is_valid() returns a logical scalar", {
+    valid <- is_valid("echo", "Hello world")
+    expect_equal(class(valid), "logical")
+})
+
+test_that("diamond_is_installed() returns a logical scalar", {
+    diamond <- diamond_is_installed()
+    expect_equal(class(diamond), "logical")
+})
