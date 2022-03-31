@@ -9,7 +9,6 @@ output:
   BiocStyle::html_document:
     toc: true
     number_sections: yes
-bibliography: vignette_01.bib
 vignette: >
   %\VignetteIndexEntry{Introduction to syntenet}
   %\VignetteEngine{knitr::rmarkdown}
