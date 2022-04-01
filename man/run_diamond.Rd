@@ -15,7 +15,7 @@ run_diamond(
 }
 \arguments{
 \item{seq}{A processed list of AAStringSet objects
-(as returned by \code{process_input()}).}
+as returned by \code{process_input()}.}
 
 \item{top_hits}{Number of top hits to keep in DIAMOND search. Default: 5.}
 

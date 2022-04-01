@@ -2,7 +2,7 @@
 #' Wrapper to run DIAMOND from an R session
 #'
 #' @param seq A processed list of AAStringSet objects 
-#' (as returned by \code{process_input()}).
+#' as returned by \code{process_input()}.
 #' @param top_hits Number of top hits to keep in DIAMOND search. Default: 5.
 #' @param verbose Logical indicating if progress messages should be printed.
 #' Default: FALSE. 
@@ -78,5 +78,4 @@ run_diamond <- function(seq = NULL, top_hits = 5, verbose = FALSE,
     names(final_list) <- gsub("\\.tsv", "", basename(result_files))
     return(final_list)
 }
-
 

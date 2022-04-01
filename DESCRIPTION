@@ -27,7 +27,8 @@ Imports:
     rtracklayer,
     GenomicRanges,
     Biostrings,
-    methods
+    methods,
+    igraph
 Suggests: 
     BiocStyle,
     covr,
