@@ -22,8 +22,6 @@ A 2-column data frame with the following variables:
 Cluster the synteny network using the Infomap algorithm
 }
 \examples{
-library(cogeqc)
-data(synnet)
-network <- synnet[1:500, ]
-clusters <- cluster_network(network)
+data(network)
+clusters <- cluster_network(network[1:500, ])
 }

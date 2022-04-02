@@ -1,8 +1,6 @@
 
 #----Setup----------------------------------------------------------------------
-library(cogeqc)
-data(synnet)
-network <- synnet
+data(network)
 
 #----Start tests----------------------------------------------------------------
 test_that("cluster_network() clusters genes using the infomap algorithm", {
@@ -11,5 +9,4 @@ test_that("cluster_network() clusters genes using the infomap algorithm", {
     expect_equal(class(cluster$Gene), "character")
     expect_equal(class(cluster$Cluster), "numeric")
     expect_equal(ncol(cluster), 2)
-    expect_equal(nrow(cluster), 200)
 })

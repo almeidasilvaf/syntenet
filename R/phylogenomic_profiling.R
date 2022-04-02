@@ -18,10 +18,8 @@
 #' @export
 #' @rdname cluster_network
 #' @examples 
-#' library(cogeqc)
-#' data(synnet)
-#' network <- synnet[1:500, ]
-#' clusters <- cluster_network(network)
+#' data(network)
+#' clusters <- cluster_network(network[1:500, ])
 cluster_network <- function(network = NULL) {
     
     graph <- igraph::graph_from_data_frame(network, directed = FALSE)
@@ -34,4 +32,6 @@ cluster_network <- function(network = NULL) {
     )
     return(clusters_df)
 }
+
+
 
