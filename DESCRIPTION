@@ -38,7 +38,9 @@ Imports:
     GenomicRanges,
     Biostrings,
     utils,
-    igraph
+    igraph,
+    stats,
+    vegan
 Suggests: 
     BiocStyle,
     covr,
