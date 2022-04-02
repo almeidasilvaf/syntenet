@@ -10,10 +10,10 @@
     <loc>/SUPPORT.html</loc>
   </url>
   <url>
-    <loc>/articles/genomesh.html</loc>
+    <loc>/articles/index.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>/articles/syntenet.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -28,15 +28,27 @@
     <loc>/reference/check_input.html</loc>
   </url>
   <url>
-    <loc>/reference/clean_seqnames.html</loc>
+    <loc>/reference/cluster_network.html</loc>
+  </url>
+  <url>
+    <loc>/reference/clusters.html</loc>
+  </url>
+  <url>
+    <loc>/reference/diamond_is_installed.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/network.html</loc>
   </url>
   <url>
     <loc>/reference/process_input.html</loc>
   </url>
   <url>
     <loc>/reference/proteomes.html</loc>
+  </url>
+  <url>
+    <loc>/reference/run_diamond.html</loc>
   </url>
 </urlset>

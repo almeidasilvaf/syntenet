@@ -2,6 +2,6 @@ pandoc: 2.17.1.1
 pkgdown: 2.0.2
 pkgdown_sha: ~
 articles:
-  genomesh: genomesh.html
-last_built: 2022-03-29T11:31Z
+  syntenet: syntenet.html
+last_built: 2022-04-02T08:16Z
 
