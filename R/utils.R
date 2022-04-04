@@ -188,3 +188,85 @@ diamond_is_installed <- function() {
     valid <- is_valid(cmd = "diamond", args = "-h")
     return(valid)
 }
+
+
+#' Generate custom color palette
+#'
+#' @param pal Numeric specifying palette number, from 1 to 3.
+#'
+#' @return Character vector of custom color palette with 20 colors
+#' @noRd
+custom_palette <- function(pal = 1) {
+    pal1 <- c("#1F77B4FF", "#FF7F0EFF", "#2CA02CFF", "#D62728FF",
+              "#9467BDFF", "#8C564BFF", "#E377C2FF", "#7F7F7FFF",
+              "#BCBD22FF", "#17BECFFF", "#AEC7E8FF", "#FFBB78FF",
+              "#98DF8AFF", "#FF9896FF", "#C5B0D5FF", "#C49C94FF",
+              "#F7B6D2FF", "#C7C7C7FF", "#DBDB8DFF", "#9EDAE5FF")
+    
+    pal2 <- c("#3182BDFF", "#E6550DFF", "#31A354FF", "#756BB1FF",
+              "#636363FF", "#6BAED6FF", "#FD8D3CFF", "#74C476FF",
+              "#9E9AC8FF", "#969696FF", "#9ECAE1FF", "#FDAE6BFF",
+              "#A1D99BFF", "#BCBDDCFF", "#BDBDBDFF", "#C6DBEFFF",
+              "#FDD0A2FF", "#C7E9C0FF", "#DADAEBFF", "#D9D9D9FF")
+    
+    pal3 <- c("#393B79FF", "#637939FF", "#8C6D31FF", "#843C39FF",
+              "#7B4173FF", "#5254A3FF", "#8CA252FF", "#BD9E39FF",
+              "#AD494AFF", "#A55194FF", "#6B6ECFFF", "#B5CF6BFF",
+              "#E7BA52FF", "#D6616BFF", "#CE6DBDFF", "#9C9EDEFF",
+              "#CEDB9CFF", "#E7CB94FF", "#E7969CFF", "#DE9ED6FF")
+    
+    l <- list(pal1, pal2, pal3)
+    l_final <- l[[pal]]
+    return(l_final)
+}
+
+
+#' Wrapper to handle gene color annotation in heatmap
+#'
+#' @param species_annotation A 2-column data frame with species IDs in 
+#' the first column (same as column names of profile matrix), and species
+#' annotation (e.g., higher-level taxonomic information) in the second column.
+#'
+#' @return A list containing a data frame of species annotation and a list with
+#' a named character vector of colors for each annotation category.
+#' @noRd
+#' @examples 
+#' species_order <- c(
+#'     "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",
+#'     "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
+#'     "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
+#' ) 
+#' species_annotation <- data.frame(
+#'    Species = species_order,
+#'    Family = c(rep("Fabaceae", 11), rep("Rosaceae", 6),
+#'               "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
+#'               "Linaceae", "Salicaceae")
+#')
+#' species_colors(species_annotation)
+species_colors <- function(species_annotation) {
+    
+    # First column to rownames
+    rownames(species_annotation) <- species_annotation[,1]
+    species_annotation[,1] <- NULL
+    
+    a_col <- colnames(species_annotation)[1] # Name of annotation column
+    n_categories <- length(unique(species_annotation[[a_col]]))
+    
+    # List of named character vector with annotation colors for each category
+    annotation_colors <- list(
+        custom_palette(2)[seq_len(n_categories)]
+    )
+    names(annotation_colors) <- a_col
+    names(annotation_colors[[a_col]]) <- unique(species_annotation[[a_col]])
+    
+    # Save results in a list
+    results <- list(
+        species_annotation = species_annotation,
+        annotation_colors = annotation_colors
+    )
+    return(results)
+}
+
+
+
+

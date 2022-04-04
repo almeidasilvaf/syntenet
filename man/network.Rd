@@ -3,7 +3,7 @@
 \docType{data}
 \name{network}
 \alias{network}
-\title{Synteny network for the legume species G. max, P. vulgaris, and C. cajan}
+\title{Synteny network of BUSCO genes for 25 eudicot species}
 \format{
 An edgelist (i.e., a 2-column data frame with node 1 in
 column 1 and node 2 in column 2).
@@ -12,7 +12,7 @@ column 1 and node 2 in column 2).
 data(network)
 }
 \description{
-Synteny network for the legume species G. max, P. vulgaris, and C. cajan
+Synteny network of BUSCO genes for 25 eudicot species
 }
 \examples{
 data(network)

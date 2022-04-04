@@ -17,9 +17,10 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![GitHub issues](https://img.shields.io/github/issues/almeidasilvaf/syntenet)](https://github.com/almeidasilvaf/syntenet/issues)
-[![GitHub pulls](https://img.shields.io/github/issues-pr/almeidasilvaf/syntenet)](https://github.com/almeidasilvaf/syntenet/pulls)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
 [![R-CMD-check-bioc](https://github.com/almeidasilvaf/syntenet/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/almeidasilvaf/syntenet/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/almeidasilvaf/syntenet/branch/master/graph/badge.svg)](https://codecov.io/gh/almeidasilvaf/syntenet?branch=master)
 <!-- badges: end -->
 
 The goal of `syntenet` is to ...

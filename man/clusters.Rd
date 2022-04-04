@@ -3,8 +3,7 @@
 \docType{data}
 \name{clusters}
 \alias{clusters}
-\title{Synteny network clusters for the legume species
-G. max, P. vulgaris, and C. cajan}
+\title{Synteny network clusters of BUSCO genes for 25 eudicot species}
 \format{
 A 2-column data frame containing the following variables:
 \describe{
@@ -16,8 +15,7 @@ A 2-column data frame containing the following variables:
 data(clusters)
 }
 \description{
-Synteny network clusters for the legume species
-G. max, P. vulgaris, and C. cajan
+Synteny network clusters of BUSCO genes for 25 eudicot species
 }
 \examples{
 data(clusters)

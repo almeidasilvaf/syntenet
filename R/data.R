@@ -37,7 +37,7 @@
 "annotation"
 
 
-#' Synteny network for the legume species G. max, P. vulgaris, and C. cajan
+#' Synteny network of BUSCO genes for 25 eudicot species
 #'
 #' @name network
 #' @format An edgelist (i.e., a 2-column data frame with node 1 in 
@@ -54,8 +54,7 @@
 
 
 
-#' Synteny network clusters for the legume species 
-#' G. max, P. vulgaris, and C. cajan
+#' Synteny network clusters of BUSCO genes for 25 eudicot species
 #'
 #' @name clusters
 #' @format A 2-column data frame containing the following variables:

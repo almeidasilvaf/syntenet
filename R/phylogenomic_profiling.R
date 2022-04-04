@@ -39,10 +39,16 @@ cluster_network <- function(network = NULL) {
 #' @param clusters A 2-column data frame with variables \strong{Gene} and
 #' \strong{Cluster} as returned by \code{cluster_network}.
 #' 
-#' @return A matrix of i rows and j columns containing the number of genes 
-#' in cluster i for each species j. The number of rows is equal to 
-#' the number of clusters in \strong{clusters}, and the number of columns 
-#' is equal to the number of species in \strong{clusters}.
+#' @return A list with the following elements:
+#' \describe{
+#'   \item{profile_matrix}{A matrix of i rows and j columns containing 
+#'   the number of genes in cluster i for each species j. The number of rows 
+#'   is equal to the number of clusters in \strong{clusters}, and 
+#'   the number of columns is equal to the number of species 
+#'   in \strong{clusters}.}
+#'   \item{hclust}{An hclust object containing the network clusters
+#'   grouped by ward.D based on Jaccard distances.}
+#' } 
 #'
 #' @importFrom vegan vegdist 
 #' @importFrom stats hclust
@@ -50,7 +56,7 @@ cluster_network <- function(network = NULL) {
 #' @rdname phylogenomic_profile
 #' @examples 
 #' data(clusters)
-#' profiles <- phylogenomic_profile(clusters)
+#' profiles <- phylogenomic_profile(clusters)$profile_matrix
 phylogenomic_profile <- function(clusters = NULL) {
     
     # Add species info and create profile matrix
@@ -68,6 +74,9 @@ phylogenomic_profile <- function(clusters = NULL) {
     
     # Reorder rows based on clustering
     fprofile_matrix <- profile_matrix[clust_mat$order, ]
-    return(fprofile_matrix)
+    
+    final_list <- list(profile_matrix = fprofile_matrix, 
+                       hclust = clust_mat)
+    return(final_list)
 }
 

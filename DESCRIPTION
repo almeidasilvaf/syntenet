@@ -40,7 +40,10 @@ Imports:
     utils,
     igraph,
     stats,
-    vegan
+    vegan,
+    grDevices,
+    RColorBrewer,
+    pheatmap
 Suggests: 
     BiocStyle,
     covr,

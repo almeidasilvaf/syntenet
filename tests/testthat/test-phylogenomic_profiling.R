@@ -17,7 +17,11 @@ test_that("phylogenomic_profile() returns cluster profiles", {
     fclusters <- sample(clusters$Cluster, size = 50, replace = FALSE)
     fclusters <- clusters[clusters$Cluster %in% fclusters, ]
     profiles <- phylogenomic_profile(fclusters)
-    expect_true("matrix" %in% class(profiles))
-    expect_equal(ncol(profiles), 3)
-    expect_equal(nrow(profiles), length(unique(fclusters$Cluster)))
+    expect_true("matrix" %in% class(profiles$profile_matrix))
+    expect_equal(ncol(profiles$profile_matrix), 24)
+    expect_equal(nrow(profiles$profile_matrix), 
+                 length(unique(fclusters$Cluster)))
+    expect_equal(class(profiles), "list")
+    expect_equal(length(profiles), 2)
+    expect_equal(class(profiles$hclust), "hclust")
 })
