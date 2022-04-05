@@ -46,6 +46,7 @@ Imports:
     pheatmap,
     ggplot2,
     ggnetwork,
+    intergraph,
     networkD3
 Suggests: 
     BiocStyle,
