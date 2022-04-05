@@ -92,3 +92,113 @@ plot_profiles <- function(
     )
     return(p)
 }
+
+
+#' Plot network
+#' 
+#' @param network The synteny network represented as an edge list, which is
+#' a 2-column data frame with each member of the anchor pair in a column.
+#' @param clusters A 2-column data frame with the variables \strong{Gene} 
+#' and \strong{Cluster} representing gene ID and cluster ID, respectively,
+#' exactly as returned by \code{cluster_network}.
+#' @param cluster_id Character scalar or vector with cluster ID. If more than one 
+#' cluster is passed as input, clusters are colored differently. 
+#' @param color_by Either "cluster" or a 2-column data frame with 
+#' gene IDs in the first column and variable to be used for 
+#' coloring (e.g., taxonomic information) in the second column.
+#' @param interactive Logical scalar indicating whether to display an 
+#' interactive network or not. Default: FALSE.
+#' @param dim_intereactive Numeric vector of length 2 with the window 
+#' dimensions of the interactive plot. If \strong{interactive} is set to FALSE,
+#' this parameter is ignored.
+#' 
+#' @return A ggplot object with the network.
+#' 
+#' @importFrom ggnetwork ggnetwork theme_blank geom_edges geom_nodes
+#' @importFrom networkD3 igraph_to_networkD3 forceNetwork
+#' @importFrom igraph graph_from_data_frame
+#' @importFrom ggplot2 aes_ ggplot scale_color_manual guides
+#' @importFrom grDevices colorRampPalette
+#' @import intergraph
+#' @export
+#' @rdname plot_network
+#' @examples 
+#' data(network)
+#' data(clusters)
+#' # Option 1: 1 cluster
+#' cluster_id <- 25
+#' plot_network(network, clusters, cluster_id)
+#' 
+#' # Option 2: 2 clusters
+#' cluster_id <- c(25, 1089)
+#' plot_network(network, clusters, cluster_id)
+#' 
+#' # Option 3: custom annotation for coloring
+#' species_order <- c(
+#'     "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",
+#'     "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
+#'     "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
+#' ) 
+#' species_annotation <- data.frame(
+#'    Species = species_order,
+#'    Family = c(rep("Fabaceae", 11), rep("Rosaceae", 6),
+#'               "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
+#'               "Linaceae", "Salicaceae")
+#')
+#' genes <- unique(c(network$node1, network$node2))
+#' gene_df <- data.frame(
+#'     Gene = genes,
+#'     Species = unlist(lapply(strsplit(genes, "_"), head, 1))
+#' )
+#' gene_df <- merge(gene_df, species_annotation)[, c("Gene", "Family")]
+#' 
+#' plot_network(network, clusters, cluster_id = 25, color_by = gene_df)
+plot_network <- function(network = NULL, clusters = NULL, 
+                         cluster_id = NULL, color_by = "cluster",
+                         interactive = FALSE, 
+                         dim_interactive = c(600, 600)) {
+    
+    requireNamespace("intergraph", quietly=TRUE)
+    names(network) <- c("node1", "node2")
+    #----Handle node attributes------------------------------------------------
+    genes <- clusters[clusters$Cluster %in% cluster_id, ] # Att. 1: Cluster
+    fedges <- network[network$node1 %in% genes$Gene, ]
+    fedges <- fedges[fedges$node2 %in% genes$Gene, ]
+    deg <- as.data.frame(table(c(fedges$node1, fedges$node2)))
+    names(deg) <- c("Gene", "Degree")
+    genes <- merge(genes, deg) # Attr. 2: Degree
+    genes$Class <- as.factor(genes$Cluster) # Attr. 3: Class
+    if(is.data.frame(color_by)) {
+        genes$Class <- as.factor(color_by[, 2][color_by[, 1] %in% genes$Gene])
+    }
+    graph <- graph_from_data_frame(fedges, directed = FALSE, vertices = genes)
+    palette <- custom_palette(1)[seq_len(nlevels(genes$Class))]
+    if(nlevels(genes$Class) > 20) {
+        palette <- colorRampPalette(custom_palette(1))(nlevels(genes$Class))
+    }
+    if(interactive) {
+        graph_d3 <- networkD3::igraph_to_networkD3(graph, group = genes)
+        d <- dim_interactive
+        p <- networkD3::forceNetwork(
+            Links = graph_d3$links, Nodes = graph_d3$nodes,
+            Source = 'source', Target = 'target',
+            NodeID = 'name', Group = 'Class',
+            height = d[2], width = d[1], Nodesize = 'Degree',
+            opacity=0.8, zoom = TRUE, fontSize = 12
+        )
+    } else {
+        n <- ggnetwork::ggnetwork(graph, arrow.gap = 0)
+        # Plot graph
+        p <- ggplot2::ggplot(n, ggplot2::aes_(x = ~x, y = ~y, xend = ~xend, yend = ~yend)) +
+            ggnetwork::geom_edges(color = "grey75", alpha = 0.5, show.legend=FALSE) +
+            ggnetwork::geom_nodes(ggplot2::aes_(size = ~Degree, color = ~Class)) +
+            ggplot2::guides(size = "none") +
+            ggplot2::scale_color_manual(values = palette) +
+            ggnetwork::theme_blank()
+    }
+    return(p)
+}
+
+
+
+
