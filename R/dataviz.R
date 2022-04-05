@@ -108,7 +108,7 @@ plot_profiles <- function(
 #' coloring (e.g., taxonomic information) in the second column.
 #' @param interactive Logical scalar indicating whether to display an 
 #' interactive network or not. Default: FALSE.
-#' @param dim_intereactive Numeric vector of length 2 with the window 
+#' @param dim_interactive Numeric vector of length 2 with the window 
 #' dimensions of the interactive plot. If \strong{interactive} is set to FALSE,
 #' this parameter is ignored.
 #' 

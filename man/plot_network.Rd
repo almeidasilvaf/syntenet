@@ -31,7 +31,7 @@ coloring (e.g., taxonomic information) in the second column.}
 \item{interactive}{Logical scalar indicating whether to display an
 interactive network or not. Default: FALSE.}
 
-\item{dim_intereactive}{Numeric vector of length 2 with the window
+\item{dim_interactive}{Numeric vector of length 2 with the window
 dimensions of the interactive plot. If \strong{interactive} is set to FALSE,
 this parameter is ignored.}
 }
