@@ -25,6 +25,12 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/angiosperm_phylogeny.html</loc>
+  </url>
+  <url>
+    <loc>/reference/binarize_and_transpose.html</loc>
+  </url>
+  <url>
     <loc>/reference/check_input.html</loc>
   </url>
   <url>
@@ -38,6 +44,12 @@
   </url>
   <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/infer_microsynteny_phylogeny.html</loc>
+  </url>
+  <url>
+    <loc>/reference/iqtree_is_installed.html</loc>
   </url>
   <url>
     <loc>/reference/network.html</loc>
