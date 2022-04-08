@@ -10,6 +10,7 @@ plot_profiles(
   palette = "Greens",
   cluster_species = FALSE,
   cluster_columns = profiles$hclust,
+  show_colnames = FALSE,
   discretize = TRUE
 )
 }
@@ -35,6 +36,11 @@ with \code{ggtree::get_taxa_name()}.}
 object. Default: hclust object in the \strong{profiles} list as returned
 by \code{phylogenomic_profile()}.}
 
+\item{show_colnames}{Logical indicating whether to show column names (i.e.,
+cluster IDs) or not. Showing cluster IDs can be useful when visualizing
+a small subset of them. When visualizing all clusters, cluster IDs are
+impossible to read. Default: FALSE.}
+
 \item{discretize}{Logical indicating whether to discretize clusters in
 4 categories: 0, 1, 2, and 3+.}
 }
@@ -58,6 +64,11 @@ species_annotation <- data.frame(
               "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
               "Linaceae", "Salicaceae")
 )
+# Option 1: cluster cols using ward.D clustering based on Jaccard distances
+p <- plot_profiles(profiles, species_annotation, 
+                   cluster_species = species_order)
+                   
+# Option 2: hierarchical clustering
 p <- plot_profiles(profiles, species_annotation, 
                    cluster_species = species_order, 
                    cluster_columns = TRUE)

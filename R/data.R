@@ -71,3 +71,21 @@
 #' data(clusters)
 #' @usage data(clusters)
 "clusters"
+
+
+#' Microsynteny-based angiosperm phylogeny.
+#'
+#' The data are stored as a 'phylo' object, which can be created 
+#' with \code{treeio::read.tree()}.
+#'
+#' @name angiosperm_phylogeny
+#' @format An object of class 'phylo'.
+#' @references
+#' Zhao, T., Zwaenepoel, A., Xue, J. Y., Kao, S. M., Li, Z., 
+#' Schranz, M. E., & Van de Peer, Y. (2021). 
+#' Whole-genome microsynteny-based phylogeny of angiosperms. 
+#' Nature Communications, 12(1), 1-14.
+#' @examples
+#' data(angiosperm_phylogeny)
+#' @usage data(angiosperm_phylogeny)
+"angiosperm_phylogeny"

@@ -190,6 +190,19 @@ diamond_is_installed <- function() {
 }
 
 
+#' Check if IQTREE is installed
+#'
+#' @return Logical indicating whether IQTREE is installed or not.
+#' @export
+#' @rdname iqtree_is_installed
+#' @examples
+#' iqtree_is_installed()
+iqtree_is_installed <- function() {
+    valid <- is_valid(cmd = "iqtree", args = "-h")
+    return(valid)
+}
+
+
 #' Generate custom color palette
 #'
 #' @param pal Numeric specifying palette number, from 1 to 3.

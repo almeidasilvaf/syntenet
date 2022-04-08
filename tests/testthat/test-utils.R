@@ -35,6 +35,11 @@ test_that("diamond_is_installed() returns a logical scalar", {
     expect_equal(class(diamond), "logical")
 })
 
+test_that("iqtree_is_installed() returns a logical scalar", {
+    iqtree <- iqtree_is_installed()
+    expect_equal(class(iqtree), "logical")
+})
+
 test_that("species_colors() returns a list for plot_profiles()", {
     species_order <- c(
         "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",

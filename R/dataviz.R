@@ -17,6 +17,10 @@
 #' @param cluster_columns Either a logical scalar (TRUE or FALSE) or an hclust
 #' object. Default: hclust object in the \strong{profiles} list as returned
 #' by \code{phylogenomic_profile()}.
+#' @param show_colnames Logical indicating whether to show column names (i.e.,
+#' cluster IDs) or not. Showing cluster IDs can be useful when visualizing
+#' a small subset of them. When visualizing all clusters, cluster IDs are
+#' impossible to read. Default: FALSE.
 #' @param discretize Logical indicating whether to discretize clusters in
 #' 4 categories: 0, 1, 2, and 3+. 
 #'
@@ -41,6 +45,11 @@
 #'               "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
 #'               "Linaceae", "Salicaceae")
 #')
+#' # Option 1: cluster cols using ward.D clustering based on Jaccard distances
+#' p <- plot_profiles(profiles, species_annotation, 
+#'                    cluster_species = species_order)
+#'                    
+#' # Option 2: hierarchical clustering
 #' p <- plot_profiles(profiles, species_annotation, 
 #'                    cluster_species = species_order, 
 #'                    cluster_columns = TRUE)
@@ -50,6 +59,7 @@ plot_profiles <- function(
         palette = "Greens",
         cluster_species = FALSE,
         cluster_columns = profiles$hclust,
+        show_colnames = FALSE,
         discretize = TRUE
 ) {
     # Set defaults
@@ -84,7 +94,7 @@ plot_profiles <- function(
         profile_matrix, color = palette,
         cluster_cols = cluster_columns,
         cluster_rows = cluster_species,
-        show_colnames = FALSE,
+        show_colnames = show_colnames,
         legend_breaks = breaks,
         legend_labels = legend_labels,
         annotation_row = annot_row,
