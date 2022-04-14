@@ -167,7 +167,7 @@ find_GS_clusters <- function(profile_matrix = NULL,
         return(gs)
     }))
 
-    if(class(gs_df) == "data.frame") {
+    if(is.data.frame(gs_df)) {
         names(gs_df) <- c("Group", "Percentage", "Cluster")
         gs_df$Percentage <- round(gs_df$Percentage, 2)
     }
