@@ -19,11 +19,12 @@ sequence data and analyze them. Anchor pairs from synteny analyses are
 treated as an undirected unweighted graph (i.e., a synteny network), and
 users can perform:
 
+-   **Synteny network inference**;
 -   **Network clustering** using the Infomap algorithm;
 -   **Phylogenomic profiling**, which consists in identifying which
     species contain which clusters. This analysis can reveal highly
     conserved synteny clusters and taxon-specific ones (e.g., family-
-    and order-specific clusters).
+    and order-specific clusters);
 -   **Microsynteny-based phylogeny reconstruction** with maximum
     likelihood, which can be achieved by inferring a phylogeny from a
     binary matrix of phylogenomic profiles with IQTREE.
@@ -60,15 +61,15 @@ print(citation('syntenet'), bibtex = TRUE)
 #> 
 #> To cite package 'syntenet' in publications use:
 #> 
-#>   Fabrício Almeida-Silva and Yves Van de Peer (2022). syntenet:
-#>   Inference And Analysis Of Synteny Networks. R package version 0.99.0.
-#>   https://github.com/almeidasilvaf/syntenet
+#>   Fabrício Almeida-Silva, Tao Zhao and Yves Van de Peer (2022).
+#>   syntenet: Inference And Analysis Of Synteny Networks. R package
+#>   version 0.99.0. https://github.com/almeidasilvaf/syntenet
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
 #>     title = {syntenet: Inference And Analysis Of Synteny Networks},
-#>     author = {Fabrício Almeida-Silva and Yves {Van de Peer}},
+#>     author = {Fabrício Almeida-Silva and Tao Zhao and Yves {Van de Peer}},
 #>     year = {2022},
 #>     note = {R package version 0.99.0},
 #>     url = {https://github.com/almeidasilvaf/syntenet},
