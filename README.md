@@ -14,7 +14,19 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 coverage](https://codecov.io/gh/almeidasilvaf/syntenet/branch/master/graph/badge.svg)](https://codecov.io/gh/almeidasilvaf/syntenet?branch=master)
 <!-- badges: end -->
 
-The goal of `syntenet` is to …
+The goal of `syntenet` is to infer synteny networks from protein
+sequence data and analyze them. Anchor pairs from synteny analyses are
+treated as an undirected unweighted graph (i.e., a synteny network), and
+users can perform:
+
+-   **Network clustering** using the Infomap algorithm;
+-   **Phylogenomic profiling**, which consists in identifying which
+    species contain which clusters. This analysis can reveal highly
+    conserved synteny clusters and taxon-specific ones (e.g., family-
+    and order-specific clusters).
+-   **Microsynteny-based phylogeny reconstruction** with maximum
+    likelihood, which can be achieved by inferring a phylogeny from a
+    binary matrix of phylogenomic profiles with IQTREE.
 
 ## Installation instructions
 
