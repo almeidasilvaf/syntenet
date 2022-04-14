@@ -80,3 +80,103 @@ phylogenomic_profile <- function(clusters = NULL) {
     return(final_list)
 }
 
+
+#' Find group-specific clusters based on user-defined species classification
+#'
+#' @param profile_matrix A matrix with phylogenomic profiles, which can
+#' be obtained from the 1st element of the result list 
+#' from \code{phylogenomic_profile}.
+#' @param species_annotation A 2-column data frame with species IDs in 
+#' the first column (same as column names of profile matrix), and species
+#' annotation (e.g., higher-level taxonomic information) in the second column.
+#' @param min_percentage Numeric scalar with the minimum percentage of species
+#' in a group to consider group specificity. For instance,
+#' if a given cluster is present in only 1 group of species, but in less
+#' than \strong{min_percentage} of the species for this group, it will not
+#' be considered a group-specific cluster. This filtering criterion is useful 
+#' to differentiate group-specific clusters (e.g., family-specific) from 
+#' subgroup-specific clusters (e.g., genus-specific). Default: 50.
+#' 
+#' @return A data frame with the following variables:
+#' \describe{
+#'   \item{Group}{To which group of species the cluster is specific.}
+#'   \item{Percentage}{Percentage of species from the group that are
+#'   represented by the cluster.}
+#'   \item{Cluster}{Cluster ID.}
+#' }
+#' @importFrom stats reshape
+#' @export
+#' @rdname find_GS_clusters
+#' @examples
+#' data(clusters)
+#' profile_matrix <- phylogenomic_profile(clusters)$profile_matrix
+#' 
+#' # Species annotation
+#' species_order <- c(
+#'     "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",
+#'     "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
+#'     "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
+#' ) 
+#' species_annotation <- data.frame(
+#'    Species = species_order,
+#'    Family = c(rep("Fabaceae", 11), rep("Rosaceae", 6),
+#'               "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
+#'               "Linaceae", "Salicaceae")
+#')
+#' gs_clusters <- find_GS_clusters(profile_matrix, species_annotation)
+find_GS_clusters <- function(profile_matrix = NULL, 
+                             species_annotation = NULL,
+                             min_percentage = 50) {
+    
+    names(species_annotation) <- c("Species", "Group")
+    freq_by_group <- as.data.frame(table(species_annotation$Group))
+    n <- length(unique(species_annotation$Group))
+
+    # Reshape to long format
+    bmat <- as.data.frame(profile_matrix)
+    bmat[bmat > 0] <- 1
+    bmat_long <- reshape(bmat, idvar = "Cluster", ids = rownames(bmat),
+                         times = names(bmat), timevar = "Species", 
+                         varying = list(names(bmat)), direction = "long")
+    names(bmat_long) <- c("Species", "Presence", "Cluster")
+    
+    # Add group information
+    prof_grouped <- merge(bmat_long, species_annotation)
+    
+    # Look for group-specific clusters
+    prof_list <- split(prof_grouped, prof_grouped$Cluster)
+    gs_df <- Reduce(rbind, lapply(seq_along(prof_list), function(x) {
+        gs <- NULL
+        filt_df <- prof_list[[x]][prof_list[[x]]$Presence == 1, ]
+        group_count <- as.data.frame(table(filt_df$Group))
+        group_count <- merge(freq_by_group, group_count, by = "Var1", 
+                             all.x = TRUE)
+        group_count$perc <- (group_count$Freq.y / group_count$Freq.x) * 100
+        group_count[is.na(group_count)] <- 0
+        
+        # How many groups have 0% of species?
+        perc_zero <- sum(group_count$perc == 0)
+        if(perc_zero == n - 1) {
+            # How many families are represented by >x% of the genes?
+            fgroup_count <- group_count[group_count$perc > min_percentage, ]
+            if(nrow(fgroup_count) == 1) {
+                gs <- fgroup_count[, c("Var1", "perc")]
+                gs$Cluster <- names(prof_list)[x]
+            }
+        }
+        return(gs)
+    }))
+
+    if(class(gs_df) == "data.frame") {
+        names(gs_df) <- c("Group", "Percentage", "Cluster")
+        gs_df$Percentage <- round(gs_df$Percentage, 2)
+    }
+    return(gs_df)
+}
+
+
+
+
+    
+    
+    

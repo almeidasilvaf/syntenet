@@ -48,8 +48,9 @@ Imports:
     ggnetwork,
     intergraph,
     networkD3
-Suggests: 
+Suggests:
     BiocStyle,
+    ggtree,
     covr,
     knitr,
     rmarkdown,

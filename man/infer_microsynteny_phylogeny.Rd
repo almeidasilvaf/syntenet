@@ -11,7 +11,8 @@ infer_microsynteny_phylogeny(
   threads = "AUTO",
   model = "MK+FO+R",
   outdir = tempdir(),
-  outgroup = NULL
+  outgroup = NULL,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -38,6 +39,9 @@ If you want to keep the files, specify a custom output directory.}
 
 \item{outgroup}{Name of outgroup clade to group the phylogeny.
 Default: NULL (unrooted phylogeny).}
+
+\item{verbose}{Logical indicating if progress messages should be prompted.
+Default: FALSE.}
 }
 \value{
 A character vector of paths to output files.
@@ -57,7 +61,6 @@ tmat <- tmat[rownames(tmat) \%in\% included, ]
 # Remove non-variable sites
 tmat <- tmat[, colSums(tmat) != length(included)]
 
-phylo <- character(length = 10)
 if(iqtree_is_installed()) {
     phylo <- infer_microsynteny_phylogeny(tmat, outgroup = "pmu", 
                                           threads = 1)

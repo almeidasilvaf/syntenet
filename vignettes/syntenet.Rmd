@@ -1,16 +1,22 @@
 ---
-title: "Introduction to syntenet"
+title: "Inference and Analysis of Synteny Networks"
 author: 
   - name: Fabricio Almeida-Silva
-    affiliation: VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
+    affiliation: 
+    - VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
+    - Department of Plant Biotechnology and Bioinformatics, Ghent, Belgium
   - name: Yves Van de Peer
-    affiliation: VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
+    affiliation: 
+    - VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
+    - Department of Plant Biotechnology and Bioinformatics, Ghent, Belgium
 output: 
   BiocStyle::html_document:
     toc: true
+    toc_float: true
     number_sections: yes
+bibliography: vignette_bibliography.bib
 vignette: >
-  %\VignetteIndexEntry{Introduction to syntenet}
+  %\VignetteIndexEntry{Inference and Analysis of Synteny Networks}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}  ---
 ---
@@ -40,6 +46,342 @@ BiocManager::install("syntenet")
 library(syntenet)
 ```
 
+# Data description
+
+For this vignette, we will use the proteomes and gene annotation of the algae 
+species *Ostreococcus lucimarinus* and *Ostreococcus sp RCC809*, which were 
+obtained from Pico-PLAZA 3.0 [@vandepoele2013pico]. [^1]
+
+[^1]: **Friendly tip:** To read the proteomes in a FASTA file, use the 
+function `readAAStringSet()` from the Bioconductor package *Biostrings*. 
+To read gene annotation from a GFF/GTF file, use the function `import()` 
+from the Bioconductor package *rtracklayer*.
+
+```{r data}
+# Protein sequences
+data(proteomes)
+head(proteomes)
+
+# Annotation (ranges)
+data(annotation)
+head(annotation)
+```
+
+# Data preprocessing
+
+To detect synteny and infer synteny networks, `syntenet` requires two objects
+as input:
+
+- **seq:** A list of AAStringSet objects containing the translated sequences
+of primary transcripts for each species.
+- **annotation:** A GRangesList or CompressedGRangesList object containing
+the coordinates for the genes in **seq**.
+
+The first part of the pipeline consists in processing the data to make it
+match a standard structure. However, before processing the data for synteny 
+detection, you must use the function `check_input()` to check if your data can
+enter the pipeline. This function checks the input data for 3 
+required conditions:
+
+1. Names of **seq** list (i.e., `names(seq)`) match 
+the names of **annotation** GRangesList/CompressedGRangesList
+(i.e., `names(annotation)`)
+
+2. For each species (list elements), the number of sequences
+in **seq** is not greater than the number of genes 
+in **annotation**. This is a way to ensure users do not input
+the translated sequences for multiple isoforms of the same gene (generated
+by alternative splicing). Ideally, the number of sequences in **seq** 
+should be equal to the number of genes in **annotation**, but
+this may not always stand true because of non-protein-coding genes.
+
+3. For each species, sequence names (i.e., `names(seq[[x]])`,
+equivalent to FASTA headers) match gene names in `annotation`.
+
+Let's check if the example data sets satisfy these 3 criteria:
+
+```{r check_input}
+check_input(proteomes, annotation)
+```
+
+As you can see, the data passed the checks. Now, let's process them 
+with the function `process_input`.
+
+This function processes the input sequences and annotation to:
+
+1. Remove whitespace and anything after it in sequence names 
+(i.e., `names(seq[[x]])`, which is equivalent to FASTA headers), if
+there is any.
+
+2. Remove period followed by number at the end of sequence names, which
+typically indicates different isoforms of the same gene 
+(e.g., Arabidopsis thaliana's transcript AT1G01010.1, which belongs to
+gene AT1G01010).
+
+3. Add a unique species identifier to sequence names. The species 
+identifier consists of the first 3-5 strings of the element name.
+For instance, if the first element of the **seq** list is named
+"Athaliana", each sequence in it will have an identifier "Atha_" added
+to the beginning of each gene name (e.g., Atha_AT1G01010).
+
+4. If sequences have an asterisk (*) representing stop codon, remove it.
+
+5. Add a unique species identifier (same as above) to 
+gene and chromosome names of each element of the **annotation**
+GRangesList/CompressedGRangesList.
+
+6. Filter each element of the **annotation** GRangesList/CompressedGRangesList 
+to keep only seqnames, ranges, and gene ID.
+
+
+Let's process our input data:
+
+```{r process_input}
+pdata <- process_input(proteomes, annotation)
+
+# Looking at the processed data
+pdata$seq
+pdata$annotation
+```
+
+# Synteny network inference
+
+Now that we have our processed data, we can infer the synteny network.
+To detect synteny, we need the tabular output from BLASTp [@altschul1997gapped]
+or similar programs. Here, we give you two options:
+
+1. Running BLASTp, DIAMOND [@buchfink2021sensitive] or similar programs 
+on the command line, saving the output in tabular format and reading
+the output table as a data frame 
+(e.g., with the base R function `read.table()`).
+
+2. Using a helper function in `syntenet` named `run_diamond()`, which 
+runs DIAMOND from the R session and automatically parses its output 
+to a data frame.
+
+Here, we will use `run_diamond()` to demonstrate how it works. 
+Needless to say, you need to have DIAMOND installed in your machine 
+and in your PATH to run this function. To check if you have DIAMOND installed,
+use the function `diamond_is_installed()`.
+
+```{r run_diamond}
+if(diamond_is_installed()) {
+    diamond <- run_diamond(seq = pdata$seq)
+}
+```
+
+
+# Phylogenomic profiling
+
+After inferring the synteny network, the first thing you would want to do is
+cluster your network and identify which phylogenetic groups are contained
+in each cluster. This is what we call **phylogenomic profiling**. This way,
+you can identify clade-specific clusters, and highly conserved clusters,
+for instance.
+
+To obtain the phylogenomic profiles, you first need to cluster your network.
+`syntenet` identifies network clusters using the infomap algorithm.
+Here, we will cluster a network of BUSCO (Best Universal Single-Copy 
+Orthologous) genes for some angiosperm genomes. 
+The original dataset was obtained from @zhao2019network.
+
+```{r cluster_network}
+# Load example data and take a look at it
+data(network)
+head(network)
+
+# Cluster network
+clusters <- cluster_network(network)
+head(clusters)
+```
+
+Now that each gene has been assigned to a cluster, we can identify the
+phylogenomic profiles of each cluster. This function returns 
+a list of 2 elements:
+
+1. A matrix of phylogenomic profiles, with clusters in rows 
+and species in columns.
+
+2. An hclust object containing the results of Ward's clustering on a matrix
+of Jaccard distances obtained from the phylogenomic profiles matrix.
+
+
+```{r phylogenomic_profile}
+# Phylogenomic profiling
+profiles <- phylogenomic_profile(clusters)
+
+# Exploring the output
+str(profiles)
+
+head(profiles$profile_matrix)
+```
+
+As a plot is worth a thousand words (or numbers), you can visualize the
+phylogenomic profiles as a heatmap with `plot_profiles()`. Let's also add some
+species annotation.
+
+```{r plot_profiles}
+# Create a vector of custom species order to plot
+species_order <- c(
+    "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",
+    "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
+    "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
+) 
+
+# Create a data frame of families for each species
+species_annotation <- data.frame(
+   Species = species_order,
+   Family = c(rep("Fabaceae", 11), rep("Rosaceae", 6),
+              "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
+              "Linaceae", "Salicaceae")
+)
+head(species_annotation)
+
+# Plot phylogenomic profiles
+plot_profiles(
+    profiles, species_annotation, 
+    cluster_species = species_order, 
+    cluster_columns = TRUE
+)
+```
+
+The heatmap is a nice way to observe patterns. For instance, you can see some
+Rosaceae-specific clusters, Fabaceae-specific clusters, and highly conserved
+ones as well.
+
+If you want to explore in more details the group-specific clusters,
+you can use the function `find_GS_clusters()`. For that, you only need to
+input the profiles matrix and a data frame of species annotation (i.e.,
+species groups).
+
+```{r find_GS_clusters}
+# Find group-specific clusters
+gs_clusters <- find_GS_clusters(profiles$profile_matrix, species_annotation)
+
+head(gs_clusters)
+
+# How many family-specific clusters are there?
+nrow(gs_clusters)
+```
+
+As you can see, there are `r nrow(gs_clusters)` family-specific clusters
+in the network. Let's plot a heatmap of group-specific clusters only.
+
+```{r heatmap_filtered}
+# Filter profiles matrix to only include group-specific clusters
+pgs <- profiles
+pgs$profile_matrix <- pgs$profile_matrix[rownames(pgs$profile_matrix) %in%
+                                             gs_clusters$Cluster, ]
+
+# Plot heatmap
+plot_profiles(
+    pgs, species_annotation, 
+    cluster_species = species_order, 
+    cluster_columns = TRUE
+)
+```
+
+Pretty cool, huh? You can also visualize clusters as a network plot with
+the function `plot_network()`. For example, let's visualize the 
+group-specific clusters.
+
+```{r plot_network}
+# 1) Plot first GS cluster
+id <- gs_clusters$Cluster[1]
+plot_network(network, clusters, cluster_id = id)
+
+# 2) A combination of clusters
+id <- gs_clusters$Cluster[1:10]
+plot_network(network, clusters, cluster_id = id)
+
+# 3) Coloring nodes by family
+genes <- unique(c(network$node1, network$node2))
+gene_df <- data.frame(
+    Gene = genes,
+    Species = unlist(lapply(strsplit(genes, "_"), head, 1))
+)
+gene_df <- merge(gene_df, species_annotation)[, c("Gene", "Family")]
+head(gene_df)
+
+plot_network(network, clusters, cluster_id = id, color_by = gene_df)
+
+# 4) Interactive visualization
+plot_network(network, clusters, cluster_id = id, 
+             interactive = TRUE, dim_interactive = c(500, 400))
+```
+
+# Microsynteny-based phylogeny reconstruction
+
+Finally, you can use the information on presence/absence of clusters in each
+species to reconstruct a microsynteny-based phylogeny.
+
+To do that, you first need to binarize the profiles matrix (0s and 1s
+representing absence and presence, respectively) and transpose it. This can
+be done with `binarize_and_tranpose()`.
+
+```{r binarize}
+bt_mat <- binarize_and_transpose(profiles$profile_matrix)
+
+# Looking at the first 5 rows and 5 columns of the matrix
+bt_mat[1:5, 1:5]
+```
+
+Now, you can use this transposed binary matrix as input to IQTREE [minh2020iq] 
+to infer a phylogeny. Here, once again, we give you 2 options:
+
+1. Using `profiles2phylip()` to write the transposed binary matrix to a 
+PHYLIP file and running IQTREE from the command line. As you are inferring 
+a phylogeny from the profiles matrix, you need to specify `-st MORPH` to 
+indicate you have a binary alignment.
+
+2. Using the helper function `infer_microsynteny_phylogeny()`,
+which allows you to run IQTREE from an R session. You need to have 
+IQTREE installed in your machine and in your PATH to run this function.
+You can check if you have IQTREE installed with `iqtree_is_installed()`.
+
+
+For the sake of demonstration, we will infer a phylogeny with 
+`infer_microsynteny_phylogeny()` using the profiles for BUSCO genes for 
+six legume species only. We will also remove non-variable sites (i.e.,
+clusters that are present in all species or absent in all species).
+However, we're only using this filtered data set for speed issues. 
+For real-life applications, the best thing to do is to 
+**include phylogenomic profiles for all genes** (not only BUSCO genes).
+
+
+```{r infer_phylogeny}
+# Leave only 6 legume species and P. mume as an outgroup for testing purposes
+included <- c("gma", "pvu", "vra", "van", "cca", "pmu")
+bt_mat <- bt_mat[rownames(bt_mat) %in% included, ]
+
+# Remove non-variable sites
+bt_mat <- bt_mat[, colSums(bt_mat) != length(included)]
+
+if(iqtree_is_installed()) {
+    phylo <- infer_microsynteny_phylogeny(bt_mat, outgroup = "pmu", 
+                                          threads = 1)
+}
+```
+
+The output of `infer_microsynteny_phylogeny()` is a character vector with paths
+to the output files from IQTREE. Usually, you are interested in the file
+ending in *.treefile*. This is the species tree in Newick format, and it can
+be visualized with your favorite tree viewer. We strongly recommend using
+the `read.tree()` function from the Bioconductor package treeio [@wang2020treeio] to
+read the tree, and visualizing it with the ggtree Bioc package [@yu2017ggtree].
+For example, let's visualize a microsynteny-based phylogeny for 123 angiosperm
+species, whose phylogenomic profiles were obtained from @zhao2021whole.
+
+```{r vis_phylogeny, message = FALSE, warning = FALSE, fig.height = 12, fig.width = 7}
+data(angiosperm_phylogeny)
+
+# Plotting the tree
+library(ggtree)
+ggtree(angiosperm_phylogeny) +
+    geom_tiplab(size = 3) +
+    xlim(0, 0.3)
+```
+
 
 # Session information {.unnumbered}
 
@@ -48,3 +390,5 @@ This document was created under the following conditions:
 ```{r sessionInfo}
 sessionInfo()
 ```
+
+# References {.unnumbered}

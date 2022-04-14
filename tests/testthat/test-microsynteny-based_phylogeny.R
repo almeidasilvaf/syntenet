@@ -13,6 +13,12 @@ test_that("binarize_and_transpose() binarizes and transposes the profiles", {
     expect_equal(length(which(tmat > 1)), 0)
 })
 
+test_that("profiles2phylip() returns path to a PHYLIP file", {
+    tmat <- binarize_and_transpose(profile_matrix)
+    path <- profiles2phylip(tmat)
+    expect_equal(class(path), "character")
+    expect_equal(length(path), 1)
+})
 
 test_that("infer_microsynteny_phylogeny() infers a phylogeny", {
     tmat <- binarize_and_transpose(profile_matrix)
