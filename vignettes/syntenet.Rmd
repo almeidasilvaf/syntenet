@@ -4,11 +4,16 @@ author:
   - name: Fabricio Almeida-Silva
     affiliation: 
     - VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
-    - Department of Plant Biotechnology and Bioinformatics, Ghent, Belgium
+    - Department of Plant Biotechnology and Bioinformatics, Ghent University, Ghent, Belgium
+  - name: Tao Zhao
+    affiliation:
+    - State Key Laboratory of Crop Stress Biology for Arid Areas/Shaanxi Key Laboratory of Apple, College of Horticulture, Northwest A&F University, Yangling, China
   - name: Yves Van de Peer
     affiliation: 
     - VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
-    - Department of Plant Biotechnology and Bioinformatics, Ghent, Belgium
+    - Department of Plant Biotechnology and Bioinformatics, Ghent University, Ghent, Belgium
+    - College of Horticulture, Academy for Advanced Interdisciplinary Studies, Nanjing Agricultural University, Nanjing, China
+    - Center for Microbial Ecology and Genomics, Department of Biochemistry, Genetics and Microbiology, University of Pretoria, Pretoria, South Africa
 output: 
   BiocStyle::html_document:
     toc: true
