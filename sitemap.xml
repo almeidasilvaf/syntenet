@@ -43,6 +43,9 @@
     <loc>/reference/diamond_is_installed.html</loc>
   </url>
   <url>
+    <loc>/reference/find_GS_clusters.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
   </url>
   <url>
@@ -65,6 +68,9 @@
   </url>
   <url>
     <loc>/reference/process_input.html</loc>
+  </url>
+  <url>
+    <loc>/reference/profiles2phylip.html</loc>
   </url>
   <url>
     <loc>/reference/proteomes.html</loc>

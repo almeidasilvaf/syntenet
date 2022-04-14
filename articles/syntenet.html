@@ -5,13 +5,13 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Introduction to syntenet • syntenet</title>
+<title>Inference and Analysis of Synteny Networks • syntenet</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
 <script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Introduction to syntenet">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Inference and Analysis of Synteny Networks">
 <meta property="og:description" content="syntenet">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -66,18 +66,20 @@
 
       
 
-      </header><div class="row">
+      </header><script src="syntenet_files/htmlwidgets-1.5.4/htmlwidgets.js"></script><script src="syntenet_files/d3-4.5.0/d3.min.js"></script><script src="syntenet_files/forceNetwork-binding-0.4/forceNetwork.js"></script><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1 data-toc-skip>Introduction to syntenet</h1>
+      <h1 data-toc-skip>Inference and Analysis of Synteny Networks</h1>
                         <h4 data-toc-skip class="author">Fabricio
 Almeida-Silva</h4>
             <address class="author_afil">
       VIB-UGent Center for Plant Systems Biology, Ghent,
+BelgiumDepartment of Plant Biotechnology and Bioinformatics, Ghent,
 Belgium<br><h4 data-toc-skip class="author">Yves
 Van de Peer</h4>
             <address class="author_afil">
       VIB-UGent Center for Plant Systems Biology, Ghent,
+BelgiumDepartment of Plant Biotechnology and Bioinformatics, Ghent,
 Belgium<br><small class="dont-index">Source: <a href="https://github.com/almeidasilvaf/syntenet/blob/HEAD/vignettes/syntenet.Rmd" class="external-link"><code>vignettes/syntenet.Rmd</code></a></small>
       <div class="hidden name"><code>syntenet.Rmd</code></div>
 
@@ -104,10 +106,580 @@ Belgium<br><small class="dont-index">Source: <a href="https://github.com/almeida
 <span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></span><span class="op">)</span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="data-description">Data description<a class="anchor" aria-label="anchor" href="#data-description"></a>
+</h2>
+<p>For this vignette, we will use the proteomes and gene annotation of
+the algae species <em>Ostreococcus lucimarinus</em> and <em>Ostreococcus
+sp RCC809</em>, which were obtained from Pico-PLAZA 3.0 <span class="citation">(Vandepoele et al. 2013)</span>. <a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a></p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Protein sequences</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">proteomes</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">proteomes</span><span class="op">)</span>
+<span class="co">#&gt; $Olucimarinus</span>
+<span class="co">#&gt; AAStringSet object of length 7778:</span>
+<span class="co">#&gt;        width seq                                            names               </span>
+<span class="co">#&gt;    [1]   911 MTTMADERASIARVSVVKYGAI...VQLYTYPGSTNDPNFLLKLA* OL01G00010</span>
+<span class="co">#&gt;    [2]   789 MGGRRCFCSRSSPVGVGAPAPA...PPQCGADIEAGSEPPPDKCG* OL01G00020</span>
+<span class="co">#&gt;    [3]   618 MTRAKDAIVVDDGNDDDDDDDD...RDASASLALALAFSSEESVV* OL01G00030</span>
+<span class="co">#&gt;    [4]   547 MPTKAQCWVVSYARVRDGASRS...TGSVSARASIFGEQASFRKA* OL01G00040</span>
+<span class="co">#&gt;    [5]   319 MFTASHTTSKVTLRARVATQPR...HNGMALWRETTPKDSLIPAL* OL01G00050</span>
+<span class="co">#&gt;    ...   ... ...</span>
+<span class="co">#&gt; [7774]   274 MVGTRRASTSSSTSVAHGKDLI...PAAALINQTLLYAKELERIV* OL21G01780</span>
+<span class="co">#&gt; [7775]   157 MSRLGTPPPPSPMQLLQEYYAH...LQSFCAWQRRHGNGKVKVET* OL21G01790</span>
+<span class="co">#&gt; [7776]    98 AGRSALHWAARNGHVEVVEYLL...RGNRDVCEWLLDTPSLGLTRD OL21G01800</span>
+<span class="co">#&gt; [7777]   270 MLADTRKTAGSSREALRSSIVA...VPTHANAYACAFVGLSRLEE* OL21G01810</span>
+<span class="co">#&gt; [7778]   222 MVIDNAFDDNVKIVFDLTNQAP...ESGAVRSVEGEVCGAVLVDE* OL21G01820</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Osp_RCC809</span>
+<span class="co">#&gt; AAStringSet object of length 7492:</span>
+<span class="co">#&gt;        width seq                                            names               </span>
+<span class="co">#&gt;    [1]   274 MASTTGSAARRVFVDVEKTVNG...DVLSLGQGSLSGESSSSDEE* ORCC809_01G00010</span>
+<span class="co">#&gt;    [2]   175 MDQMRAANAQRSYLLFFVLFFL...SRRLLGRLDSEHTDLHPSWR* ORCC809_01G00020</span>
+<span class="co">#&gt;    [3]   403 MTAPRVRASRRATATAAATVTA...LTERDLRYMEPKATIEEWMG* ORCC809_01G00030</span>
+<span class="co">#&gt;    [4]   217 MTIDADGDDTLAPHAPAHGEVS...LIRLRGVEKTPTVDPPPPPP* ORCC809_01G00040</span>
+<span class="co">#&gt;    [5]  1691 RIEADEKSLLVFGKESPVRTAC...VRMGNNVVTSRYASSESEEDV ORCC809_01G00050</span>
+<span class="co">#&gt;    ...   ... ...</span>
+<span class="co">#&gt; [7488]   343 MVSPPSRRRRDRRAVERLHRAF...ALSGDFVDDNQPSSFVPETS* ORCC809_20G03240</span>
+<span class="co">#&gt; [7489]   323 MRAQNAPGHIPGLAEHVQSVTK...AKKKLASSKLGKTKKSEGKD* ORCC809_20G03250</span>
+<span class="co">#&gt; [7490]   337 MPRSTNGEEEEEEARAMEIMRL...PYSKAVERARASSYRVAESG* ORCC809_20G03260</span>
+<span class="co">#&gt; [7491]   368 TTTVIGRHEHVISGYSLLKGIG...DDMIASCPHLASEILSSVAEM ORCC809_20G03270</span>
+<span class="co">#&gt; [7492]  2123 RRVVCLTADFQSGTPAISDVFC...TNGQYRVDVKGVSDIAGNLAL ORCC809_20G03280</span>
+
+<span class="co"># Annotation (ranges)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">annotation</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">annotation</span><span class="op">)</span>
+<span class="co">#&gt; GRangesList object of length 2:</span>
+<span class="co">#&gt; $Olucimarinus</span>
+<span class="co">#&gt; GRanges object with 7805 ranges and 10 metadata columns:</span>
+<span class="co">#&gt;          seqnames        ranges strand |   source     type     score     phase</span>
+<span class="co">#&gt;             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;factor&gt; &lt;factor&gt; &lt;numeric&gt; &lt;integer&gt;</span>
+<span class="co">#&gt;      [1]    Chr_1      939-3671      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      [2]    Chr_1     3907-6927      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      [3]    Chr_1     7085-9160      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      [4]    Chr_1    9830-11480      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      [5]    Chr_1   11467-12599      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      ...      ...           ...    ... .      ...      ...       ...       ...</span>
+<span class="co">#&gt;   [7801]    Chr_9 664411-665228      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [7802]    Chr_9 665365-666519      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [7803]    Chr_9 666657-667149      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [7804]    Chr_9 667940-668878      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [7805]    Chr_9 668907-670103      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;                   ID                       name        Name     gene_id</span>
+<span class="co">#&gt;          &lt;character&gt;            &lt;CharacterList&gt; &lt;character&gt; &lt;character&gt;</span>
+<span class="co">#&gt;      [1]  OL01G00010 estExt_fgenesh1_pg.C..,pid  OL01G00010  OL01G00010</span>
+<span class="co">#&gt;      [2]  OL01G00020 estExt_fgenesh1_pg.C..,pid  OL01G00020  OL01G00020</span>
+<span class="co">#&gt;      [3]  OL01G00030      eugene.0100010004,pid  OL01G00030  OL01G00030</span>
+<span class="co">#&gt;      [4]  OL01G00040 estExt_fgenesh1_pg.C..,pid  OL01G00040  OL01G00040</span>
+<span class="co">#&gt;      [5]  OL01G00050 estExt_fgenesh1_pg.C..,pid  OL01G00050  OL01G00050</span>
+<span class="co">#&gt;      ...         ...                        ...         ...         ...</span>
+<span class="co">#&gt;   [7801]  OL09G04130      eugene.0900010408,pid  OL09G04130  OL09G04130</span>
+<span class="co">#&gt;   [7802]  OL09G04140        e_gwEuk.9.282.1,pid  OL09G04140  OL09G04140</span>
+<span class="co">#&gt;   [7803]  OL09G04150      eugene.0900010410,pid  OL09G04150  OL09G04150</span>
+<span class="co">#&gt;   [7804]  OL09G04160        e_gwEuk.9.433.1,pid  OL09G04160  OL09G04160</span>
+<span class="co">#&gt;   [7805]  OL09G04170      eugene.0900010412,pid  OL09G04170  OL09G04170</span>
+<span class="co">#&gt;                   Parent         pid</span>
+<span class="co">#&gt;          &lt;CharacterList&gt; &lt;character&gt;</span>
+<span class="co">#&gt;      [1]                        &lt;NA&gt;</span>
+<span class="co">#&gt;      [2]                        &lt;NA&gt;</span>
+<span class="co">#&gt;      [3]                        &lt;NA&gt;</span>
+<span class="co">#&gt;      [4]                        &lt;NA&gt;</span>
+<span class="co">#&gt;      [5]                        &lt;NA&gt;</span>
+<span class="co">#&gt;      ...             ...         ...</span>
+<span class="co">#&gt;   [7801]                        &lt;NA&gt;</span>
+<span class="co">#&gt;   [7802]                        &lt;NA&gt;</span>
+<span class="co">#&gt;   [7803]                        &lt;NA&gt;</span>
+<span class="co">#&gt;   [7804]                        &lt;NA&gt;</span>
+<span class="co">#&gt;   [7805]                        &lt;NA&gt;</span>
+<span class="co">#&gt;   -------</span>
+<span class="co">#&gt;   seqinfo: 41 sequences from an unspecified genome; no seqlengths</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Osp_RCC809</span>
+<span class="co">#&gt; GRanges object with 7492 ranges and 10 metadata columns:</span>
+<span class="co">#&gt;          seqnames        ranges strand |   source     type     score     phase</span>
+<span class="co">#&gt;             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;factor&gt; &lt;factor&gt; &lt;numeric&gt; &lt;integer&gt;</span>
+<span class="co">#&gt;      [1]    chr_1      321-1142      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      [2]    chr_1     1463-2089      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      [3]    chr_1     2162-3370      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      [4]    chr_1     3774-4424      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      [5]    chr_1     4693-9924      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;      ...      ...           ...    ... .      ...      ...       ...       ...</span>
+<span class="co">#&gt;   [7488]    chr_9 982676-984077      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [7489]    chr_9 984184-985615      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [7490]    chr_9 986270-988382      - |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [7491]    chr_9 989090-992371      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;   [7492]    chr_9 992769-993908      + |  JGI 2.0     gene        NA      &lt;NA&gt;</span>
+<span class="co">#&gt;                        ID                   name             Name</span>
+<span class="co">#&gt;               &lt;character&gt;        &lt;CharacterList&gt;      &lt;character&gt;</span>
+<span class="co">#&gt;      [1] ORCC809_01G00010          e_gw1.1.976.1 ORCC809_01G00010</span>
+<span class="co">#&gt;      [2] ORCC809_01G00020         e_gw1.1.1003.1 ORCC809_01G00020</span>
+<span class="co">#&gt;      [3] ORCC809_01G00030  fgenesh1_pm.chr_1_#_3 ORCC809_01G00030</span>
+<span class="co">#&gt;      [4] ORCC809_01G00040          e_gw1.1.811.1 ORCC809_01G00040</span>
+<span class="co">#&gt;      [5] ORCC809_01G00050             gw1.1.13.1 ORCC809_01G00050</span>
+<span class="co">#&gt;      ...              ...                    ...              ...</span>
+<span class="co">#&gt;   [7488] ORCC809_09G05830 fgenesh1_pm.chr_9_#_.. ORCC809_09G05830</span>
+<span class="co">#&gt;   [7489] ORCC809_09G05840          e_gw1.9.398.1 ORCC809_09G05840</span>
+<span class="co">#&gt;   [7490] ORCC809_09G05850 fgenesh1_kg.chr_9_#_.. ORCC809_09G05850</span>
+<span class="co">#&gt;   [7491] ORCC809_09G05860          e_gw1.9.775.1 ORCC809_09G05860</span>
+<span class="co">#&gt;   [7492] ORCC809_09G05870      EuGene.0900010631 ORCC809_09G05870</span>
+<span class="co">#&gt;                   gene_id          Parent         pid</span>
+<span class="co">#&gt;               &lt;character&gt; &lt;CharacterList&gt; &lt;character&gt;</span>
+<span class="co">#&gt;      [1] ORCC809_01G00010                       28626</span>
+<span class="co">#&gt;      [2] ORCC809_01G00020                       27594</span>
+<span class="co">#&gt;      [3] ORCC809_01G00030                       55371</span>
+<span class="co">#&gt;      [4] ORCC809_01G00040                       28519</span>
+<span class="co">#&gt;      [5] ORCC809_01G00050                       10027</span>
+<span class="co">#&gt;      ...              ...             ...         ...</span>
+<span class="co">#&gt;   [7488] ORCC809_09G05830                       59046</span>
+<span class="co">#&gt;   [7489] ORCC809_09G05840                       37114</span>
+<span class="co">#&gt;   [7490] ORCC809_09G05850                       54927</span>
+<span class="co">#&gt;   [7491] ORCC809_09G05860                       37483</span>
+<span class="co">#&gt;   [7492] ORCC809_09G05870                       94164</span>
+<span class="co">#&gt;   -------</span>
+<span class="co">#&gt;   seqinfo: 41 sequences from an unspecified genome; no seqlengths</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="data-preprocessing">Data preprocessing<a class="anchor" aria-label="anchor" href="#data-preprocessing"></a>
+</h2>
+<p>To detect synteny and infer synteny networks, <code>syntenet</code>
+requires two objects as input:</p>
+<ul>
+<li>
+<strong>seq:</strong> A list of AAStringSet objects containing the
+translated sequences of primary transcripts for each species.</li>
+<li>
+<strong>annotation:</strong> A GRangesList or CompressedGRangesList
+object containing the coordinates for the genes in
+<strong>seq</strong>.</li>
+</ul>
+<p>The first part of the pipeline consists in processing the data to
+make it match a standard structure. However, before processing the data
+for synteny detection, you must use the function
+<code><a href="../reference/check_input.html">check_input()</a></code> to check if your data can enter the pipeline.
+This function checks the input data for 3 required conditions:</p>
+<ol style="list-style-type: decimal">
+<li><p>Names of <strong>seq</strong> list (i.e.,
+<code>names(seq)</code>) match the names of <strong>annotation</strong>
+GRangesList/CompressedGRangesList (i.e.,
+<code>names(annotation)</code>)</p></li>
+<li><p>For each species (list elements), the number of sequences in
+<strong>seq</strong> is not greater than the number of genes in
+<strong>annotation</strong>. This is a way to ensure users do not input
+the translated sequences for multiple isoforms of the same gene
+(generated by alternative splicing). Ideally, the number of sequences in
+<strong>seq</strong> should be equal to the number of genes in
+<strong>annotation</strong>, but this may not always stand true because
+of non-protein-coding genes.</p></li>
+<li><p>For each species, sequence names (i.e.,
+<code>names(seq[[x]])</code>, equivalent to FASTA headers) match gene
+names in <code>annotation</code>.</p></li>
+</ol>
+<p>Let’s check if the example data sets satisfy these 3 criteria:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="../reference/check_input.html">check_input</a></span><span class="op">(</span><span class="va">proteomes</span>, <span class="va">annotation</span><span class="op">)</span>
+<span class="co">#&gt; [1] TRUE</span></code></pre></div>
+<p>As you can see, the data passed the checks. Now, let’s process them
+with the function <code>process_input</code>.</p>
+<p>This function processes the input sequences and annotation to:</p>
+<ol style="list-style-type: decimal">
+<li><p>Remove whitespace and anything after it in sequence names (i.e.,
+<code>names(seq[[x]])</code>, which is equivalent to FASTA headers), if
+there is any.</p></li>
+<li><p>Remove period followed by number at the end of sequence names,
+which typically indicates different isoforms of the same gene (e.g.,
+Arabidopsis thaliana’s transcript AT1G01010.1, which belongs to gene
+AT1G01010).</p></li>
+<li><p>Add a unique species identifier to sequence names. The species
+identifier consists of the first 3-5 strings of the element name. For
+instance, if the first element of the <strong>seq</strong> list is named
+“Athaliana”, each sequence in it will have an identifier “Atha_” added
+to the beginning of each gene name (e.g., Atha_AT1G01010).</p></li>
+<li><p>If sequences have an asterisk (*) representing stop codon, remove
+it.</p></li>
+<li><p>Add a unique species identifier (same as above) to gene and
+chromosome names of each element of the <strong>annotation</strong>
+GRangesList/CompressedGRangesList.</p></li>
+<li><p>Filter each element of the <strong>annotation</strong>
+GRangesList/CompressedGRangesList to keep only seqnames, ranges, and
+gene ID.</p></li>
+</ol>
+<p>Let’s process our input data:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">pdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/process_input.html">process_input</a></span><span class="op">(</span><span class="va">proteomes</span>, <span class="va">annotation</span><span class="op">)</span>
+
+<span class="co"># Looking at the processed data</span>
+<span class="va">pdata</span><span class="op">$</span><span class="va">seq</span>
+<span class="co">#&gt; $Olucimarinus</span>
+<span class="co">#&gt; AAStringSet object of length 7778:</span>
+<span class="co">#&gt;        width seq                                            names               </span>
+<span class="co">#&gt;    [1]   910 MTTMADERASIARVSVVKYGAI...DVQLYTYPGSTNDPNFLLKLA Olu_OL01G00010</span>
+<span class="co">#&gt;    [2]   788 MGGRRCFCSRSSPVGVGAPAPA...FPPQCGADIEAGSEPPPDKCG Olu_OL01G00020</span>
+<span class="co">#&gt;    [3]   617 MTRAKDAIVVDDGNDDDDDDDD...DRDASASLALALAFSSEESVV Olu_OL01G00030</span>
+<span class="co">#&gt;    [4]   546 MPTKAQCWVVSYARVRDGASRS...VTGSVSARASIFGEQASFRKA Olu_OL01G00040</span>
+<span class="co">#&gt;    [5]   318 MFTASHTTSKVTLRARVATQPR...LHNGMALWRETTPKDSLIPAL Olu_OL01G00050</span>
+<span class="co">#&gt;    ...   ... ...</span>
+<span class="co">#&gt; [7774]   273 MVGTRRASTSSSTSVAHGKDLI...IPAAALINQTLLYAKELERIV Olu_OL21G01780</span>
+<span class="co">#&gt; [7775]   156 MSRLGTPPPPSPMQLLQEYYAH...NLQSFCAWQRRHGNGKVKVET Olu_OL21G01790</span>
+<span class="co">#&gt; [7776]    97 AGRSALHWAARNGHVEVVEYLL...QRGNRDVCEWLLDTPSLGLTR Olu_OL21G01800</span>
+<span class="co">#&gt; [7777]   269 MLADTRKTAGSSREALRSSIVA...TVPTHANAYACAFVGLSRLEE Olu_OL21G01810</span>
+<span class="co">#&gt; [7778]   221 MVIDNAFDDNVKIVFDLTNQAP...QESGAVRSVEGEVCGAVLVDE Olu_OL21G01820</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Osp_RCC809</span>
+<span class="co">#&gt; AAStringSet object of length 7492:</span>
+<span class="co">#&gt;        width seq                                            names               </span>
+<span class="co">#&gt;    [1]   273 MASTTGSAARRVFVDVEKTVNG...WDVLSLGQGSLSGESSSSDEE Osp_ORCC809_01G00010</span>
+<span class="co">#&gt;    [2]   174 MDQMRAANAQRSYLLFFVLFFL...SSRRLLGRLDSEHTDLHPSWR Osp_ORCC809_01G00020</span>
+<span class="co">#&gt;    [3]   402 MTAPRVRASRRATATAAATVTA...ALTERDLRYMEPKATIEEWMG Osp_ORCC809_01G00030</span>
+<span class="co">#&gt;    [4]   216 MTIDADGDDTLAPHAPAHGEVS...SLIRLRGVEKTPTVDPPPPPP Osp_ORCC809_01G00040</span>
+<span class="co">#&gt;    [5]  1690 RIEADEKSLLVFGKESPVRTAC...SVRMGNNVVTSRYASSESEED Osp_ORCC809_01G00050</span>
+<span class="co">#&gt;    ...   ... ...</span>
+<span class="co">#&gt; [7488]   342 MVSPPSRRRRDRRAVERLHRAF...RALSGDFVDDNQPSSFVPETS Osp_ORCC809_20G03240</span>
+<span class="co">#&gt; [7489]   322 MRAQNAPGHIPGLAEHVQSVTK...FAKKKLASSKLGKTKKSEGKD Osp_ORCC809_20G03250</span>
+<span class="co">#&gt; [7490]   336 MPRSTNGEEEEEEARAMEIMRL...LPYSKAVERARASSYRVAESG Osp_ORCC809_20G03260</span>
+<span class="co">#&gt; [7491]   367 TTTVIGRHEHVISGYSLLKGIG...YDDMIASCPHLASEILSSVAE Osp_ORCC809_20G03270</span>
+<span class="co">#&gt; [7492]  2122 RRVVCLTADFQSGTPAISDVFC...QTNGQYRVDVKGVSDIAGNLA Osp_ORCC809_20G03280</span>
+<span class="va">pdata</span><span class="op">$</span><span class="va">annotation</span>
+<span class="co">#&gt; $Olucimarinus</span>
+<span class="co">#&gt; GRanges object with 7805 ranges and 1 metadata column:</span>
+<span class="co">#&gt;           seqnames        ranges strand |           gene</span>
+<span class="co">#&gt;              &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |    &lt;character&gt;</span>
+<span class="co">#&gt;      [1] Olu_Chr_1      939-3671      * | Olu_OL01G00010</span>
+<span class="co">#&gt;      [2] Olu_Chr_1     3907-6927      * | Olu_OL01G00020</span>
+<span class="co">#&gt;      [3] Olu_Chr_1     7085-9160      * | Olu_OL01G00030</span>
+<span class="co">#&gt;      [4] Olu_Chr_1    9830-11480      * | Olu_OL01G00040</span>
+<span class="co">#&gt;      [5] Olu_Chr_1   11467-12599      * | Olu_OL01G00050</span>
+<span class="co">#&gt;      ...       ...           ...    ... .            ...</span>
+<span class="co">#&gt;   [7801] Olu_Chr_9 664411-665228      * | Olu_OL09G04130</span>
+<span class="co">#&gt;   [7802] Olu_Chr_9 665365-666519      * | Olu_OL09G04140</span>
+<span class="co">#&gt;   [7803] Olu_Chr_9 666657-667149      * | Olu_OL09G04150</span>
+<span class="co">#&gt;   [7804] Olu_Chr_9 667940-668878      * | Olu_OL09G04160</span>
+<span class="co">#&gt;   [7805] Olu_Chr_9 668907-670103      * | Olu_OL09G04170</span>
+<span class="co">#&gt;   -------</span>
+<span class="co">#&gt;   seqinfo: 21 sequences from an unspecified genome; no seqlengths</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $Osp_RCC809</span>
+<span class="co">#&gt; GRanges object with 7492 ranges and 1 metadata column:</span>
+<span class="co">#&gt;           seqnames        ranges strand |                 gene</span>
+<span class="co">#&gt;              &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |          &lt;character&gt;</span>
+<span class="co">#&gt;      [1] Osp_chr_1      321-1142      * | Osp_ORCC809_01G00010</span>
+<span class="co">#&gt;      [2] Osp_chr_1     1463-2089      * | Osp_ORCC809_01G00020</span>
+<span class="co">#&gt;      [3] Osp_chr_1     2162-3370      * | Osp_ORCC809_01G00030</span>
+<span class="co">#&gt;      [4] Osp_chr_1     3774-4424      * | Osp_ORCC809_01G00040</span>
+<span class="co">#&gt;      [5] Osp_chr_1     4693-9924      * | Osp_ORCC809_01G00050</span>
+<span class="co">#&gt;      ...       ...           ...    ... .                  ...</span>
+<span class="co">#&gt;   [7488] Osp_chr_9 982676-984077      * | Osp_ORCC809_09G05830</span>
+<span class="co">#&gt;   [7489] Osp_chr_9 984184-985615      * | Osp_ORCC809_09G05840</span>
+<span class="co">#&gt;   [7490] Osp_chr_9 986270-988382      * | Osp_ORCC809_09G05850</span>
+<span class="co">#&gt;   [7491] Osp_chr_9 989090-992371      * | Osp_ORCC809_09G05860</span>
+<span class="co">#&gt;   [7492] Osp_chr_9 992769-993908      * | Osp_ORCC809_09G05870</span>
+<span class="co">#&gt;   -------</span>
+<span class="co">#&gt;   seqinfo: 20 sequences from an unspecified genome; no seqlengths</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="synteny-network-inference">Synteny network inference<a class="anchor" aria-label="anchor" href="#synteny-network-inference"></a>
+</h2>
+<p>Now that we have our processed data, we can infer the synteny
+network. To detect synteny, we need the tabular output from BLASTp <span class="citation">(Altschul et al. 1997)</span> or similar programs.
+Here, we give you two options:</p>
+<ol style="list-style-type: decimal">
+<li><p>Running BLASTp, DIAMOND <span class="citation">(Buchfink, Reuter,
+and Drost 2021)</span> or similar programs on the command line, saving
+the output in tabular format and reading the output table as a data
+frame (e.g., with the base R function
+<code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table()</a></code>).</p></li>
+<li><p>Using a helper function in <code>syntenet</code> named
+<code><a href="../reference/run_diamond.html">run_diamond()</a></code>, which runs DIAMOND from the R session and
+automatically parses its output to a data frame.</p></li>
+</ol>
+<p>Here, we will use <code><a href="../reference/run_diamond.html">run_diamond()</a></code> to demonstrate how it
+works. Needless to say, you need to have DIAMOND installed in your
+machine and in your PATH to run this function. To check if you have
+DIAMOND installed, use the function
+<code><a href="../reference/diamond_is_installed.html">diamond_is_installed()</a></code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="../reference/diamond_is_installed.html">diamond_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">diamond</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_diamond.html">run_diamond</a></span><span class="op">(</span>seq <span class="op">=</span> <span class="va">pdata</span><span class="op">$</span><span class="va">seq</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="phylogenomic-profiling">Phylogenomic profiling<a class="anchor" aria-label="anchor" href="#phylogenomic-profiling"></a>
+</h2>
+<p>After inferring the synteny network, the first thing you would want
+to do is cluster your network and identify which phylogenetic groups are
+contained in each cluster. This is what we call <strong>phylogenomic
+profiling</strong>. This way, you can identify clade-specific clusters,
+and highly conserved clusters, for instance.</p>
+<p>To obtain the phylogenomic profiles, you first need to cluster your
+network. <code>syntenet</code> identifies network clusters using the
+infomap algorithm. Here, we will cluster a network of BUSCO (Best
+Universal Single-Copy Orthologous) genes for some angiosperm genomes.
+The original dataset was obtained from <span class="citation">Zhao and
+Schranz (2019)</span>.</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Load example data and take a look at it</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">network</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">network</span><span class="op">)</span>
+<span class="co">#&gt;       node1           node2</span>
+<span class="co">#&gt; 1 cca_23646  Lang_109327134</span>
+<span class="co">#&gt; 2 cca_23646  Lang_109328075</span>
+<span class="co">#&gt; 3 cca_23646   Mnot_21394516</span>
+<span class="co">#&gt; 4 cca_23646  Zjuj_107413994</span>
+<span class="co">#&gt; 5 cca_23646 adu_Aradu.8SN53</span>
+<span class="co">#&gt; 6 cca_23646     car_14082.1</span>
+
+<span class="co"># Cluster network</span>
+<span class="va">clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/cluster_network.html">cluster_network</a></span><span class="op">(</span><span class="va">network</span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span>
+<span class="co">#&gt;        Gene Cluster</span>
+<span class="co">#&gt; 1 cca_23646       1</span>
+<span class="co">#&gt; 2 cca_23668       2</span>
+<span class="co">#&gt; 3 cca_32926       3</span>
+<span class="co">#&gt; 4 cca_26186       4</span>
+<span class="co">#&gt; 5 cca_24381       5</span>
+<span class="co">#&gt; 6 cca_24396       6</span></code></pre></div>
+<p>Now that each gene has been assigned to a cluster, we can identify
+the phylogenomic profiles of each cluster. This function returns a list
+of 2 elements:</p>
+<ol style="list-style-type: decimal">
+<li><p>A matrix of phylogenomic profiles, with clusters in rows and
+species in columns.</p></li>
+<li><p>An hclust object containing the results of Ward’s clustering on a
+matrix of Jaccard distances obtained from the phylogenomic profiles
+matrix.</p></li>
+</ol>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Phylogenomic profiling</span>
+<span class="va">profiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phylogenomic_profile.html">phylogenomic_profile</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span>
+
+<span class="co"># Exploring the output</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">)</span>
+<span class="co">#&gt; List of 2</span>
+<span class="co">#&gt;  $ profile_matrix: int [1:2411, 1:25] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
+<span class="co">#&gt;   .. ..$ : chr [1:2411] "335" "262" "1142" "1202" ...</span>
+<span class="co">#&gt;   .. ..$ : chr [1:25] "adu" "car" "cca" "fve" ...</span>
+<span class="co">#&gt;  $ hclust        :List of 7</span>
+<span class="co">#&gt;   ..$ merge      : int [1:2410, 1:2] -18 -1125 -21 -1010 -36 -83 -1174 -115 -125 -127 ...</span>
+<span class="co">#&gt;   ..$ height     : num [1:2410] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="co">#&gt;   ..$ order      : int [1:2411] 335 262 1142 1202 1258 395 1393 663 599 595 ...</span>
+<span class="co">#&gt;   ..$ labels     : chr [1:2411] "1" "2" "3" "4" ...</span>
+<span class="co">#&gt;   ..$ method     : chr "ward.D"</span>
+<span class="co">#&gt;   ..$ call       : language stats::hclust(d = dist_mat, method = "ward.D")</span>
+<span class="co">#&gt;   ..$ dist.method: chr "jaccard"</span>
+<span class="co">#&gt;   ..- attr(*, "class")= chr "hclust"</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span>
+<span class="co">#&gt;       </span>
+<span class="co">#&gt;        adu car cca fve gma hlu jcu Lang lja lus mdo mes Mnot mtr pbr pmu ppe</span>
+<span class="co">#&gt;   335    1   0   1   0   1   0   0    1   0   0   1   0    1   1   0   1   1</span>
+<span class="co">#&gt;   262    1   0   1   0   1   0   0    1   1   0   1   0    1   1   1   1   1</span>
+<span class="co">#&gt;   1142   1   0   1   0   1   0   0    0   1   0   2   1    1   1   0   1   1</span>
+<span class="co">#&gt;   1202   1   1   1   1   2   0   1    1   0   2   1   0    1   0   0   0   1</span>
+<span class="co">#&gt;   1258   1   1   1   0   2   0   0    0   1   2   1   0    1   0   0   1   1</span>
+<span class="co">#&gt;   395    1   0   1   1   1   0   0    0   0   1   1   1    1   1   1   1   1</span>
+<span class="co">#&gt;       </span>
+<span class="co">#&gt;        ptr pvu rco roc tpr van vra Zjuj</span>
+<span class="co">#&gt;   335    1   0   0   1   1   0   0    0</span>
+<span class="co">#&gt;   262    0   1   0   1   1   1   0    0</span>
+<span class="co">#&gt;   1142   0   1   0   1   1   1   0    0</span>
+<span class="co">#&gt;   1202   1   1   1   0   1   0   0    1</span>
+<span class="co">#&gt;   1258   1   1   0   0   1   0   0    1</span>
+<span class="co">#&gt;   395    1   0   0   1   1   0   0    1</span></code></pre></div>
+<p>As a plot is worth a thousand words (or numbers), you can visualize
+the phylogenomic profiles as a heatmap with
+<code><a href="../reference/plot_profiles.html">plot_profiles()</a></code>. Let’s also add some species
+annotation.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Create a vector of custom species order to plot</span>
+<span class="va">species_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>
+    <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"pvu"</span>, <span class="st">"gma"</span>, <span class="st">"cca"</span>, <span class="st">"tpr"</span>, <span class="st">"mtr"</span>, <span class="st">"adu"</span>, <span class="st">"lja"</span>,
+    <span class="st">"Lang"</span>, <span class="st">"car"</span>, <span class="st">"pmu"</span>, <span class="st">"ppe"</span>, <span class="st">"pbr"</span>, <span class="st">"mdo"</span>, <span class="st">"roc"</span>, <span class="st">"fve"</span>,
+    <span class="st">"Mnot"</span>, <span class="st">"Zjuj"</span>, <span class="st">"jcu"</span>, <span class="st">"mes"</span>, <span class="st">"rco"</span>, <span class="st">"lus"</span>, <span class="st">"ptr"</span>
+<span class="op">)</span> 
+
+<span class="co"># Create a data frame of families for each species</span>
+<span class="va">species_annotation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
+   Species <span class="op">=</span> <span class="va">species_order</span>,
+   Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Fabaceae"</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Rosaceae"</span>, <span class="fl">6</span><span class="op">)</span>,
+              <span class="st">"Moraceae"</span>, <span class="st">"Ramnaceae"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Euphorbiaceae"</span>, <span class="fl">3</span><span class="op">)</span>, 
+              <span class="st">"Linaceae"</span>, <span class="st">"Salicaceae"</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">species_annotation</span><span class="op">)</span>
+<span class="co">#&gt;   Species   Family</span>
+<span class="co">#&gt; 1     vra Fabaceae</span>
+<span class="co">#&gt; 2     van Fabaceae</span>
+<span class="co">#&gt; 3     pvu Fabaceae</span>
+<span class="co">#&gt; 4     gma Fabaceae</span>
+<span class="co">#&gt; 5     cca Fabaceae</span>
+<span class="co">#&gt; 6     tpr Fabaceae</span>
+
+<span class="co"># Plot phylogenomic profiles</span>
+<span class="fu"><a href="../reference/plot_profiles.html">plot_profiles</a></span><span class="op">(</span>
+    <span class="va">profiles</span>, <span class="va">species_annotation</span>, 
+    cluster_species <span class="op">=</span> <span class="va">species_order</span>, 
+    cluster_columns <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
+<p><img src="syntenet_files/figure-html/plot_profiles-1.png" width="700"></p>
+<p>The heatmap is a nice way to observe patterns. For instance, you can
+see some Rosaceae-specific clusters, Fabaceae-specific clusters, and
+highly conserved ones as well.</p>
+<p>If you want to explore in more details the group-specific clusters,
+you can use the function <code><a href="../reference/find_GS_clusters.html">find_GS_clusters()</a></code>. For that, you
+only need to input the profiles matrix and a data frame of species
+annotation (i.e., species groups).</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Find group-specific clusters</span>
+<span class="va">gs_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_GS_clusters.html">find_GS_clusters</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span>, <span class="va">species_annotation</span><span class="op">)</span>
+
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">gs_clusters</span><span class="op">)</span>
+<span class="co">#&gt;        Group Percentage Cluster</span>
+<span class="co">#&gt; 2   Fabaceae      90.91    1156</span>
+<span class="co">#&gt; 21  Fabaceae      81.82    1170</span>
+<span class="co">#&gt; 5  Ramnaceae     100.00    1279</span>
+<span class="co">#&gt; 22  Fabaceae      90.91    1305</span>
+<span class="co">#&gt; 23  Fabaceae      81.82    1309</span>
+<span class="co">#&gt; 24  Fabaceae      90.91    1310</span>
+
+<span class="co"># How many family-specific clusters are there?</span>
+<span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">gs_clusters</span><span class="op">)</span>
+<span class="co">#&gt; [1] 394</span></code></pre></div>
+<p>As you can see, there are 394 family-specific clusters in the
+network. Let’s plot a heatmap of group-specific clusters only.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Filter profiles matrix to only include group-specific clusters</span>
+<span class="va">pgs</span> <span class="op">&lt;-</span> <span class="va">profiles</span>
+<span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span> <span class="op">&lt;-</span> <span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span>
+                                             <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span>, <span class="op">]</span>
+
+<span class="co"># Plot heatmap</span>
+<span class="fu"><a href="../reference/plot_profiles.html">plot_profiles</a></span><span class="op">(</span>
+    <span class="va">pgs</span>, <span class="va">species_annotation</span>, 
+    cluster_species <span class="op">=</span> <span class="va">species_order</span>, 
+    cluster_columns <span class="op">=</span> <span class="cn">TRUE</span>
+<span class="op">)</span></code></pre></div>
+<p><img src="syntenet_files/figure-html/heatmap_filtered-1.png" width="700"></p>
+<p>Pretty cool, huh? You can also visualize clusters as a network plot
+with the function <code><a href="../reference/plot_network.html">plot_network()</a></code>. For example, let’s
+visualize the group-specific clusters.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># 1) Plot first GS cluster</span>
+<span class="va">id</span> <span class="op">&lt;-</span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
+<span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></code></pre></div>
+<p><img src="syntenet_files/figure-html/plot_network-1.png" width="700"></p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># 2) A combination of clusters</span>
+<span class="va">id</span> <span class="op">&lt;-</span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
+<span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></code></pre></div>
+<p><img src="syntenet_files/figure-html/plot_network-2.png" width="700"></p>
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># 3) Coloring nodes by family</span>
+<span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">network</span><span class="op">$</span><span class="va">node1</span>, <span class="va">network</span><span class="op">$</span><span class="va">node2</span><span class="op">)</span><span class="op">)</span>
+<span class="va">gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
+    Gene <span class="op">=</span> <span class="va">genes</span>,
+    Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">genes</span>, <span class="st">"_"</span><span class="op">)</span>, <span class="va">head</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span>
+<span class="op">)</span>
+<span class="va">gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">gene_df</span>, <span class="va">species_annotation</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gene"</span>, <span class="st">"Family"</span><span class="op">)</span><span class="op">]</span>
+<span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">gene_df</span><span class="op">)</span>
+<span class="co">#&gt;              Gene   Family</span>
+<span class="co">#&gt; 1 adu_Aradu.3W61T Fabaceae</span>
+<span class="co">#&gt; 2 adu_Aradu.FQ8CE Fabaceae</span>
+<span class="co">#&gt; 3 adu_Aradu.0W76I Fabaceae</span>
+<span class="co">#&gt; 4 adu_Aradu.M4JP1 Fabaceae</span>
+<span class="co">#&gt; 5 adu_Aradu.B26Z6 Fabaceae</span>
+<span class="co">#&gt; 6 adu_Aradu.PLM7U Fabaceae</span>
+
+<span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, color_by <span class="op">=</span> <span class="va">gene_df</span><span class="op">)</span></code></pre></div>
+<p><img src="syntenet_files/figure-html/plot_network-3.png" width="700"></p>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<code class="sourceCode R">
+<span class="co"># 4) Interactive visualization</span>
+<span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, 
+             interactive <span class="op">=</span> <span class="cn">TRUE</span>, dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">400</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div id="htmlwidget-1a1250608a74a5dbbc6c" style="width:500px;height:400px;" class="forceNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-1a1250608a74a5dbbc6c">{"x":{"links":{"source":[8,2,1,4,7,0,3,6,10,2,16,6,8,9,3,7,12,4,1,11,5,14,0,7,21,4,12,22,11,23,1,6,18,16,26,7,13,21,27,22,12,4,10,2,17,3,15,20,17,33,2,10,8,19,9,16,30,18,6,33,35,10,5,24,29,3,20,34,15,36,9,8,19,8,19,36,9,41,24,39,5,0,14,25,28,1,23,11,22,27,32,4,12,19,36,8,9,42,41,43,39,24,40,34,20,3,18,6,16,30,37,31,7,21,13,26,33,35,38,17,2,10,20,3,40,15,49,34,30,50,6,18,16,37,47,8,9,41,36,42,39,24,5,43,48,0,25,44,14,21,31,51,26,7,13,46,27,32,22,12,4,11,28,23,45,1,26,7,58,31,51,21,4,22,59,46,12,27,32,1,11,28,60,45,23,18,54,6,30,50,37,16,10,38,35,2,17,52,33,47,19,41,36,9,42,8,24,43,56,5,39,48,34,53,20,49,40,3,57,44,25,0,14,24,67,56,48,39,43,5,61,13,7,31,21,26,58,51,12,59,4,62,27,22,46,32,18,6,37,16,30,64,50,54,53,11,63,45,23,1,60,28,36,47,55,41,9,66,42,8,19,4,72,22,12,46,62,59,32,27,21,71,58,61,7,51,31,26,52,33,35,10,65,43,56,48,67,70,5,24,39,75,45,11,1,63,23,60,28,18,37,50,73,16,30,54,64,6,23,28,11,60,45,63,81,1,75,20,34,3,68,49,53,40,41,66,55,8,42,47,19,9,76,36,26,58,51,71,21,31,61,7,78,46,27,12,77,32,22,62,72,4,59,6,50,64,37,82,18,30,73,16,54,52,35,10,79,33,65,67,56,24,70,5,43,39,48,80,91],"target":[9,10,11,12,13,14,15,16,17,17,18,18,19,19,20,21,22,22,23,23,24,25,25,26,26,27,27,27,28,28,28,30,30,30,31,31,31,31,32,32,32,32,33,33,33,34,34,34,35,35,35,35,36,36,36,37,37,37,37,38,38,38,39,39,39,40,40,40,40,41,41,41,41,42,42,42,42,42,43,43,43,44,44,44,45,45,45,45,46,46,46,46,46,47,47,47,47,47,47,48,48,48,49,49,49,49,50,50,50,50,50,51,51,51,51,51,52,52,52,52,52,52,53,53,53,53,53,53,54,54,54,54,54,54,55,55,55,55,55,55,56,56,56,56,56,57,57,57,57,58,58,58,58,58,58,59,59,59,59,59,59,60,60,60,60,60,61,61,61,61,61,61,62,62,62,62,62,62,62,63,63,63,63,63,63,64,64,64,64,64,64,64,65,65,65,65,65,65,65,66,66,66,66,66,66,66,67,67,67,67,67,67,68,68,68,68,68,68,69,69,69,69,69,70,70,70,70,70,70,70,71,71,71,71,71,71,71,71,72,72,72,72,72,72,72,72,73,73,73,73,73,73,73,73,74,75,75,75,75,75,75,75,76,76,76,76,76,76,76,76,76,77,77,77,77,77,77,77,77,77,78,78,78,78,78,78,78,78,79,79,79,79,79,80,80,80,80,80,80,80,80,81,81,81,81,81,81,81,81,82,82,82,82,82,82,82,82,82,83,83,83,83,83,83,83,83,83,84,84,84,84,84,84,84,85,85,85,85,85,85,85,85,85,85,86,86,86,86,86,86,86,86,86,87,87,87,87,87,87,87,87,87,87,88,88,88,88,88,88,88,88,88,88,89,89,89,89,89,89,90,90,90,90,90,90,90,90,90,92],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.2RW34","adu_Aradu.69509","adu_Aradu.AV6RW","adu_Aradu.CCF7R","adu_Aradu.DLL0U","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.K4FRV","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_15808.1","car_16250.1","car_16254.1","car_16284.1","car_17177.1","car_19495.1","cca_02211","cca_04052","cca_05788","cca_21129","cca_23316","cca_23319","cca_23498","gma_03G097900","gma_05G151000","gma_05G155700","gma_05G155900","gma_05G189200","gma_07G124000","gma_07G238400","gma_08G113500","gma_08G113800","gma_10G041100","gma_11G109300","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355583","Lang_109355854","Lang_109359285","Lang_109362187","Lang_109362745","Lang_109362916","lja_0g3v0036869.1lja","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_3g3v3639380.1lja","lja_4g3v2263980.1lja","lja_4g3v2603960.1lja","mtr_1g069385","mtr_4g078190","mtr_4g122270","mtr_5g090150","mtr_8g009900","mtr_8g083220","mtr_8g085640","mtr_8g085700","mtr_8g093080","pvu_002G235800","pvu_002G236200","pvu_002G269900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","pvu_011G018400","tpr_gene11890","tpr_gene17355","tpr_gene24369","tpr_gene24371","tpr_gene25402","tpr_gene28023","tpr_gene37318","van_01g01830.1","van_0217s00330.1","van_0217s00360.1","van_06g14500.1","van_08g06220.1","van_10g04530.1","van_11g16300.1","vra_01g10980","vra_02g01410","vra_06g02600","vra_07g16870","vra_07g16900","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1312","1310","1309","1315","1314","1170","1305","1313","1156","1156","1309","1310","1314","1313","1312","1315","1305","1309","1305","1156","1315","1313","1314","1310","1170","1312","1313","1314","1310","1170","1305","1313","1314","1309","1315","1309","1156","1305","1309","1170","1315","1156","1156","1170","1312","1310","1314","1156","1170","1315","1305","1313","1309","1315","1305","1156","1170","1312","1313","1314","1310","1313","1314","1310","1305","1309","1156","1170","1315","1312","1170","1313","1314","1305","1315","1310","1156","1314","1313","1309","1170","1310","1305","1310","1315","1156","1313","1314","1305","1309","1170","1279","1279"],"nodesize":[" 5"," 9"," 6"," 8","10"," 8","10","10","10","10"," 9"," 9","10"," 5"," 5"," 4","10"," 6","10"," 9"," 7"," 9","10"," 9"," 9"," 5"," 9","10"," 9"," 1","10","10","10"," 9"," 8"," 9","10","10"," 5","10"," 8","10","10"," 9"," 5"," 9","10","10"," 8"," 7","10","10"," 9"," 9","10"," 8"," 9"," 5","10","10"," 9"," 9","10"," 9","10"," 9"," 9"," 9"," 7"," 5"," 9","10","10","10"," 1"," 9","10","10"," 9"," 6"," 9"," 9","10"," 9"," 7","10"," 9","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Class","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-30,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div class="section level2">
+<h2 id="microsynteny-based-phylogeny-reconstruction">Microsynteny-based phylogeny reconstruction<a class="anchor" aria-label="anchor" href="#microsynteny-based-phylogeny-reconstruction"></a>
+</h2>
+<p>Finally, you can use the information on presence/absence of clusters
+in each species to reconstruct a microsynteny-based phylogeny.</p>
+<p>To do that, you first need to binarize the profiles matrix (0s and 1s
+representing absence and presence, respectively) and transpose it. This
+can be done with <code>binarize_and_tranpose()</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">bt_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binarize_and_transpose.html">binarize_and_transpose</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span>
+
+<span class="co"># Looking at the first 5 rows and 5 columns of the matrix</span>
+<span class="va">bt_mat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
+<span class="co">#&gt;      </span>
+<span class="co">#&gt;       335 262 1142 1202 1258</span>
+<span class="co">#&gt;   adu   1   1    1    1    1</span>
+<span class="co">#&gt;   car   0   0    0    1    1</span>
+<span class="co">#&gt;   cca   1   1    1    1    1</span>
+<span class="co">#&gt;   fve   0   0    0    1    0</span>
+<span class="co">#&gt;   gma   1   1    1    1    1</span></code></pre></div>
+<p>Now, you can use this transposed binary matrix as input to IQTREE
+[minh2020iq] to infer a phylogeny. Here, once again, we give you 2
+options:</p>
+<ol style="list-style-type: decimal">
+<li><p>Using <code><a href="../reference/profiles2phylip.html">profiles2phylip()</a></code> to write the transposed
+binary matrix to a PHYLIP file and running IQTREE from the command line.
+As you are inferring a phylogeny from the profiles matrix, you need to
+specify <code>-st MORPH</code> to indicate you have a binary
+alignment.</p></li>
+<li><p>Using the helper function
+<code><a href="../reference/infer_microsynteny_phylogeny.html">infer_microsynteny_phylogeny()</a></code>, which allows you to run
+IQTREE from an R session. You need to have IQTREE installed in your
+machine and in your PATH to run this function. You can check if you have
+IQTREE installed with <code><a href="../reference/iqtree_is_installed.html">iqtree_is_installed()</a></code>.</p></li>
+</ol>
+<p>For the sake of demonstration, we will infer a phylogeny with
+<code><a href="../reference/infer_microsynteny_phylogeny.html">infer_microsynteny_phylogeny()</a></code> using the profiles for BUSCO
+genes for six legume species only. We will also remove non-variable
+sites (i.e., clusters that are present in all species or absent in all
+species). However, we’re only using this filtered data set for speed
+issues. For real-life applications, the best thing to do is to
+<strong>include phylogenomic profiles for all genes</strong> (not only
+BUSCO genes).</p>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="co"># Leave only 6 legume species and P. mume as an outgroup for testing purposes</span>
+<span class="va">included</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gma"</span>, <span class="st">"pvu"</span>, <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"cca"</span>, <span class="st">"pmu"</span><span class="op">)</span>
+<span class="va">bt_mat</span> <span class="op">&lt;-</span> <span class="va">bt_mat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">bt_mat</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">included</span>, <span class="op">]</span>
+
+<span class="co"># Remove non-variable sites</span>
+<span class="va">bt_mat</span> <span class="op">&lt;-</span> <span class="va">bt_mat</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">bt_mat</span><span class="op">)</span> <span class="op">!=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">included</span><span class="op">)</span><span class="op">]</span>
+
+<span class="kw">if</span><span class="op">(</span><span class="fu"><a href="../reference/iqtree_is_installed.html">iqtree_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
+    <span class="va">phylo</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/infer_microsynteny_phylogeny.html">infer_microsynteny_phylogeny</a></span><span class="op">(</span><span class="va">bt_mat</span>, outgroup <span class="op">=</span> <span class="st">"pmu"</span>, 
+                                          threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
+<span class="op">}</span></code></pre></div>
+<p>The output of <code><a href="../reference/infer_microsynteny_phylogeny.html">infer_microsynteny_phylogeny()</a></code> is a
+character vector with paths to the output files from IQTREE. Usually,
+you are interested in the file ending in <em>.treefile</em>. This is the
+species tree in Newick format, and it can be visualized with your
+favorite tree viewer. We strongly recommend using the
+<code><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree()</a></code> function from the Bioconductor package treeio
+<span class="citation">(Wang et al. 2020)</span> to read the tree, and
+visualizing it with the ggtree Bioc package <span class="citation">(Yu
+et al. 2017)</span>. For example, let’s visualize a microsynteny-based
+phylogeny for 123 angiosperm species, whose phylogenomic profiles were
+obtained from <span class="citation">Zhao et al. (2021)</span>.</p>
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">angiosperm_phylogeny</span><span class="op">)</span>
+
+<span class="co"># Plotting the tree</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://yulab-smu.top/treedata-book/" class="external-link">ggtree</a></span><span class="op">)</span>
+<span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/ggtree.html" class="external-link">ggtree</a></span><span class="op">(</span><span class="va">angiosperm_phylogeny</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://rdrr.io/pkg/ggtree/man/geom_tiplab.html" class="external-link">geom_tiplab</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span> <span class="op">+</span>
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html" class="external-link">xlim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.3</span><span class="op">)</span></code></pre></div>
+<p><img src="syntenet_files/figure-html/vis_phylogeny-1.png" width="672"></p>
+</div>
+<div class="section level2">
 <h2 class="unnumbered" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
 <p>This document was created under the following conditions:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; R version 4.1.3 (2022-03-10)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
@@ -128,37 +700,100 @@ Belgium<br><small class="dont-index">Source: <a href="https://github.com/almeida
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] syntenet_0.99.0  BiocStyle_2.22.0</span>
+<span class="co">#&gt; [1] ggtree_3.2.1     syntenet_0.99.0  BiocStyle_2.22.0</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] sass_0.4.1             splines_4.1.3          jsonlite_1.8.0        </span>
-<span class="co">#&gt;  [4] network_1.17.1         bslib_0.3.1            BiocManager_1.30.16   </span>
-<span class="co">#&gt;  [7] stats4_4.1.3           GenomeInfoDbData_1.2.7 yaml_2.3.5            </span>
-<span class="co">#&gt; [10] pillar_1.7.0           lattice_0.20-45        glue_1.6.2            </span>
-<span class="co">#&gt; [13] digest_0.6.29          GenomicRanges_1.46.1   RColorBrewer_1.1-3    </span>
-<span class="co">#&gt; [16] XVector_0.34.0         colorspace_2.0-3       Matrix_1.4-1          </span>
-<span class="co">#&gt; [19] htmltools_0.5.2        pkgconfig_2.0.3        pheatmap_1.0.12       </span>
-<span class="co">#&gt; [22] bookdown_0.25          zlibbioc_1.40.0        purrr_0.3.4           </span>
-<span class="co">#&gt; [25] scales_1.1.1           intergraph_2.0-2       tibble_3.1.6          </span>
-<span class="co">#&gt; [28] mgcv_1.8-40            generics_0.1.2         IRanges_2.28.0        </span>
-<span class="co">#&gt; [31] ggplot2_3.3.5          ellipsis_0.3.2         cachem_1.0.6          </span>
-<span class="co">#&gt; [34] BiocGenerics_0.40.0    cli_3.2.0              magrittr_2.0.3        </span>
-<span class="co">#&gt; [37] crayon_1.5.1           statnet.common_4.5.0   memoise_2.0.1         </span>
-<span class="co">#&gt; [40] evaluate_0.15          fs_1.5.2               fansi_1.0.3           </span>
-<span class="co">#&gt; [43] nlme_3.1-157           MASS_7.3-56            vegan_2.5-7           </span>
-<span class="co">#&gt; [46] textshaping_0.3.6      tools_4.1.3            lifecycle_1.0.1       </span>
-<span class="co">#&gt; [49] stringr_1.4.0          S4Vectors_0.32.4       munsell_0.5.0         </span>
-<span class="co">#&gt; [52] cluster_2.1.3          Biostrings_2.62.0      networkD3_0.4         </span>
-<span class="co">#&gt; [55] compiler_4.1.3         pkgdown_2.0.2          jquerylib_0.1.4       </span>
-<span class="co">#&gt; [58] GenomeInfoDb_1.30.1    systemfonts_1.0.4      rlang_1.0.2           </span>
-<span class="co">#&gt; [61] grid_4.1.3             RCurl_1.98-1.6         htmlwidgets_1.5.4     </span>
-<span class="co">#&gt; [64] igraph_1.3.0           bitops_1.0-7           rmarkdown_2.13        </span>
-<span class="co">#&gt; [67] gtable_0.3.0           R6_2.5.1               knitr_1.38            </span>
-<span class="co">#&gt; [70] dplyr_1.0.8            fastmap_1.1.0          utf8_1.2.2            </span>
-<span class="co">#&gt; [73] rprojroot_2.0.3        ragg_1.2.2             permute_0.9-7         </span>
-<span class="co">#&gt; [76] desc_1.4.1             ggnetwork_0.5.10       stringi_1.7.6         </span>
-<span class="co">#&gt; [79] parallel_4.1.3         vctrs_0.4.0            tidyselect_1.1.2      </span>
-<span class="co">#&gt; [82] xfun_0.30              coda_0.19-4</span></code></pre></div>
+<span class="co">#&gt;  [1] nlme_3.1-157           bitops_1.0-7           fs_1.5.2              </span>
+<span class="co">#&gt;  [4] RColorBrewer_1.1-3     rprojroot_2.0.3        GenomeInfoDb_1.30.1   </span>
+<span class="co">#&gt;  [7] tools_4.1.3            bslib_0.3.1            utf8_1.2.2            </span>
+<span class="co">#&gt; [10] R6_2.5.1               vegan_2.5-7            lazyeval_0.2.2        </span>
+<span class="co">#&gt; [13] BiocGenerics_0.40.0    mgcv_1.8-40            colorspace_2.0-3      </span>
+<span class="co">#&gt; [16] permute_0.9-7          tidyselect_1.1.2       compiler_4.1.3        </span>
+<span class="co">#&gt; [19] textshaping_0.3.6      cli_3.2.0              intergraph_2.0-2      </span>
+<span class="co">#&gt; [22] network_1.17.1         desc_1.4.1             labeling_0.4.2        </span>
+<span class="co">#&gt; [25] bookdown_0.25          sass_0.4.1             scales_1.1.1          </span>
+<span class="co">#&gt; [28] pkgdown_2.0.2          yulab.utils_0.0.4      systemfonts_1.0.4     </span>
+<span class="co">#&gt; [31] stringr_1.4.0          digest_0.6.29          rmarkdown_2.13        </span>
+<span class="co">#&gt; [34] XVector_0.34.0         pkgconfig_2.0.3        htmltools_0.5.2       </span>
+<span class="co">#&gt; [37] fastmap_1.1.0          highr_0.9              htmlwidgets_1.5.4     </span>
+<span class="co">#&gt; [40] rlang_1.0.2            gridGraphics_0.5-1     jquerylib_0.1.4       </span>
+<span class="co">#&gt; [43] generics_0.1.2         farver_2.1.0           jsonlite_1.8.0        </span>
+<span class="co">#&gt; [46] statnet.common_4.5.0   dplyr_1.0.8            RCurl_1.98-1.6        </span>
+<span class="co">#&gt; [49] magrittr_2.0.3         ggplotify_0.1.0        ggnetwork_0.5.10      </span>
+<span class="co">#&gt; [52] GenomeInfoDbData_1.2.7 patchwork_1.1.1        Matrix_1.4-1          </span>
+<span class="co">#&gt; [55] Rcpp_1.0.8.3           munsell_0.5.0          S4Vectors_0.32.4      </span>
+<span class="co">#&gt; [58] fansi_1.0.3            ape_5.6-2              lifecycle_1.0.1       </span>
+<span class="co">#&gt; [61] stringi_1.7.6          yaml_2.3.5             MASS_7.3-56           </span>
+<span class="co">#&gt; [64] zlibbioc_1.40.0        grid_4.1.3             parallel_4.1.3        </span>
+<span class="co">#&gt; [67] crayon_1.5.1           lattice_0.20-45        Biostrings_2.62.0     </span>
+<span class="co">#&gt; [70] splines_4.1.3          knitr_1.38             pillar_1.7.0          </span>
+<span class="co">#&gt; [73] igraph_1.3.0           GenomicRanges_1.46.1   stats4_4.1.3          </span>
+<span class="co">#&gt; [76] glue_1.6.2             evaluate_0.15          ggfun_0.0.6           </span>
+<span class="co">#&gt; [79] BiocManager_1.30.16    treeio_1.18.1          vctrs_0.4.0           </span>
+<span class="co">#&gt; [82] networkD3_0.4          tidyr_1.2.0            gtable_0.3.0          </span>
+<span class="co">#&gt; [85] purrr_0.3.4            cachem_1.0.6           ggplot2_3.3.5         </span>
+<span class="co">#&gt; [88] xfun_0.30              tidytree_0.3.9         coda_0.19-4           </span>
+<span class="co">#&gt; [91] ragg_1.2.2             tibble_3.1.6           pheatmap_1.0.12       </span>
+<span class="co">#&gt; [94] aplot_0.1.3            memoise_2.0.1          IRanges_2.28.0        </span>
+<span class="co">#&gt; [97] cluster_2.1.3          ellipsis_0.3.2</span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-altschul1997gapped" class="csl-entry">
+Altschul, Stephen F, Thomas L Madden, Alejandro A Schäffer, Jinghui
+Zhang, Zheng Zhang, Webb Miller, and David J Lipman. 1997. <span>“Gapped
+BLAST and PSI-BLAST: A New Generation of Protein Database Search
+Programs.”</span> <em>Nucleic Acids Research</em> 25 (17): 3389–3402.
+</div>
+<div id="ref-buchfink2021sensitive" class="csl-entry">
+Buchfink, Benjamin, Klaus Reuter, and Hajk-Georg Drost. 2021.
+<span>“Sensitive Protein Alignments at Tree-of-Life Scale Using
+DIAMOND.”</span> <em>Nature Methods</em> 18 (4): 366–68.
+</div>
+<div id="ref-vandepoele2013pico" class="csl-entry">
+Vandepoele, Klaas, Michiel Van Bel, Guilhem Richard, Sofie Van
+Landeghem, Bram Verhelst, Hervé Moreau, Yves Van de Peer, Nigel
+Grimsley, and Gwenael Piganeau. 2013. <span>“Pico-PLAZA, a Genome
+Database of Microbial Photosynthetic Eukaryotes.”</span>
+<em>Environmental Microbiology</em> 15 (8): 2147–53.
+</div>
+<div id="ref-wang2020treeio" class="csl-entry">
+Wang, Li-Gen, Tommy Tsan-Yuk Lam, Shuangbin Xu, Zehan Dai, Lang Zhou,
+Tingze Feng, Pingfan Guo, et al. 2020. <span>“Treeio: An r Package for
+Phylogenetic Tree Input and Output with Richly Annotated and Associated
+Data.”</span> <em>Molecular Biology and Evolution</em> 37 (2): 599–603.
+</div>
+<div id="ref-yu2017ggtree" class="csl-entry">
+Yu, Guangchuang, David K Smith, Huachen Zhu, Yi Guan, and Tommy Tsan-Yuk
+Lam. 2017. <span>“Ggtree: An r Package for Visualization and Annotation
+of Phylogenetic Trees with Their Covariates and Other Associated
+Data.”</span> <em>Methods in Ecology and Evolution</em> 8 (1): 28–36.
+</div>
+<div id="ref-zhao2019network" class="csl-entry">
+Zhao, Tao, and M Eric Schranz. 2019. <span>“Network-Based Microsynteny
+Analysis Identifies Major Differences and Genomic Outliers in Mammalian
+and Angiosperm Genomes.”</span> <em>Proceedings of the National Academy
+of Sciences</em> 116 (6): 2165–74.
+</div>
+<div id="ref-zhao2021whole" class="csl-entry">
+Zhao, Tao, Arthur Zwaenepoel, Jia-Yu Xue, Shu-Min Kao, Zhen Li, M Eric
+Schranz, and Yves Van de Peer. 2021. <span>“Whole-Genome
+Microsynteny-Based Phylogeny of Angiosperms.”</span> <em>Nature
+Communications</em> 12 (1): 1–14.
+</div>
+</div>
+</div>
+<div class="footnotes footnotes-end-of-document">
+<hr>
+<ol>
+<li id="fn1"><p><strong>Friendly tip:</strong> To read the proteomes in
+a FASTA file, use the function <code>readAAStringSet()</code> from the
+Bioconductor package <em>Biostrings</em>. To read gene annotation from a
+GFF/GTF file, use the function <code>import()</code> from the
+Bioconductor package <em>rtracklayer</em>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+</ol>
 </div>
   </div>
 
