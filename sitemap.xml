@@ -52,10 +52,16 @@
     <loc>/reference/infer_microsynteny_phylogeny.html</loc>
   </url>
   <url>
+    <loc>/reference/infer_syntenet.html</loc>
+  </url>
+  <url>
     <loc>/reference/iqtree_is_installed.html</loc>
   </url>
   <url>
     <loc>/reference/network.html</loc>
+  </url>
+  <url>
+    <loc>/reference/parse_collinearity.html</loc>
   </url>
   <url>
     <loc>/reference/phylogenomic_profile.html</loc>
