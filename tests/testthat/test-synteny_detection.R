@@ -21,4 +21,10 @@ test_that("run_diamond() runs DIAMOND on the background", {
     expect_equal(class(diamond[[1]]), "data.frame")
 })
 
-
+test_that("parse_collinearity() reads MCScanX output", {
+    file <- system.file("extdata", "Olu.collinearity", package = "syntenet")
+    net <- parse_collinearity(file)
+    
+    expect_equal(class(net), "data.frame")
+    expect_equal(ncol(net), 2)
+})

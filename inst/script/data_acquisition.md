@@ -318,3 +318,26 @@ angiosperm_phylogeny$tip.label <- stringr::str_replace_all(
 
 usethis::use_data(angiosperm_phylogeny, compress = "xz", overwrite = TRUE)
 ```
+
+# Data in inst/extdata
+
+## Olu.collinearity
+
+``` r
+data(proteomes)
+data(annotation)
+processed <- process_input(proteomes, annotation) 
+seq <- processed$seq
+annotation <- processed$annotation
+if(diamond_is_installed()) {
+    blast_list <- run_diamond(seq)
+}
+
+net <- infer_syntenet(blast_list, annotation)
+
+# Move file
+olu_col <- file.path(tempdir(), "intraspecies_synteny", "Olu.collinearity")
+out <- here::here("inst", "extdata")
+
+fs::file_move(path = olu_col, new_path = out)
+```

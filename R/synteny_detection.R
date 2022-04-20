@@ -79,3 +79,115 @@ run_diamond <- function(seq = NULL, top_hits = 5, verbose = FALSE,
     return(final_list)
 }
 
+
+
+#' Parse .collinearity files into an edge list
+#'
+#' @param collinearity_paths Character vector of paths to .collinearity files.
+#'
+#' @return A 2-column data frame with each gene from the anchor pair in each
+#' column.
+#'
+#' @importFrom utils read.table
+#' @export
+#' @rdname parse_collinearity
+#' @examples 
+#' collinearity_paths <- system.file("extdata", "Olu.collinearity", 
+#'                                   package = "syntenet")
+#' net <- parse_collinearity(collinearity_paths)
+parse_collinearity <- function(collinearity_paths = NULL) {
+    
+    fname <- gsub("\\.collinearity", "", basename(collinearity_paths))
+    names(collinearity_paths) <- fname
+    
+    netdb <- lapply(seq_along(collinearity_paths), function(x) {
+        df <- read.table(collinearity_paths[x], sep = "\t", comment.char = "#")
+        df <- df[, c(2,3)]
+        names(df) <- c("Anchor1", "Anchor2")
+        return(df)
+    })
+    netdb <- Reduce(rbind, netdb)
+    return(netdb)
+}
+
+
+#' Infer synteny network
+#' 
+#' @param blast_list A list of data frames, each data frame having 
+#' the tabular output of BLASTp or similar programs, such as DIAMOND. 
+#' This is the output of the function \code{run_diamond()}. If you performed
+#' pairwise comparisons on the command line, you can read the tabular output
+#' as data frames and combine them in a list. List names must be have species
+#' names separated by underscore. For instance, if the first list element is
+#' a data frame containing the comparison of speciesA (query) 
+#' against speciesB (database), its name must be "speciesA_speciesB".
+#' @param annotation A processed GRangesList or CompressedGRangesList object 
+#' as returned by \code{process_input()}. 
+#' @param outdir Path to the output directory. Default: tempdir().
+#' @param anchors Numeric indicating the minimum required number of genes
+#' to call a syntenic block. Default: 5.
+#' @param max_gaps Numeric indicating the number of upstream and downstream
+#' genes to search for anchors. Default: 25.
+#' @param verbose Logical indicating if log messages should be printed on
+#' screen. Default: FALSE.
+#' 
+#' @return A network represented as an edge list.
+#'
+#' @export
+#' @rdname infer_syntenet
+#' @importFrom utils write.table
+#' @examples
+#' data(proteomes)
+#' data(annotation)
+#' processed <- process_input(proteomes, annotation) 
+#' seq <- processed$seq
+#' annotation <- processed$annotation
+#' if(diamond_is_installed()) {
+#'     blast_list <- run_diamond(seq)
+#'     net <- infer_syntenet(blast_list, annotation)
+#' }
+infer_syntenet <- function(blast_list = NULL, annotation = NULL,
+                           outdir = tempdir(),
+                           anchors = 5, max_gaps = 25,
+                           verbose = FALSE) {
+
+    annot_dfs <- lapply(annotation, function(x) {
+        return(as.data.frame(x)[, c("seqnames", "gene", "start", "end")])
+    })
+    names(annot_dfs) <- unlist(lapply(annotation, function(x) {
+        return(gsub("_.*", "", x$gene[1]))
+    }))
+
+    # Separate intra from interspecies
+    species <- names(annotation)
+    equal_comp <- vapply(species, function(x) paste0(x, "_", x), character(1))
+    idx_equal <- which(names(blast_list) %in% equal_comp)
+    
+    #---- 1) Intraspecies synteny detection------------------------------------
+    intra_dir <- file.path(outdir, "intraspecies_synteny")
+    if(!dir.exists(intra_dir)) { dir.create(intra_dir, recursive = TRUE) }
+    blast_intra <- blast_list[idx_equal]
+    
+    intraspecies <- intraspecies_synteny(blast_intra, intra_dir, annot_dfs,
+                                         anchors, max_gaps, verbose)
+    
+    #---- 2) Interspecies synteny detection------------------------------------
+    inter_dir <- file.path(outdir, "interspecies_synteny")
+    if(!dir.exists(inter_dir)) { dir.create(inter_dir, recursive = TRUE) }
+    blast_inter <- blast_list[-idx_equal]
+    
+    interspecies <- interspecies_synteny(blast_inter, annotation, inter_dir,
+                                         anchors, max_gaps, verbose)
+    
+    # Create edge list
+    syn_files <- c(intraspecies, interspecies)
+    edges <- parse_collinearity(syn_files)
+    return(edges)
+}
+
+
+
+
+
+
+
