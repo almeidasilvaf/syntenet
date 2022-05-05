@@ -185,7 +185,7 @@ is_valid <- function(cmd = NULL, args = NULL) {
 #' @examples
 #' diamond_is_installed()
 diamond_is_installed <- function() {
-    valid <- is_valid(cmd = "diamond", args = "-h")
+    valid <- is_valid(cmd = "diamond", args = "help")
     return(valid)
 }
 

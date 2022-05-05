@@ -8,6 +8,9 @@ author:
   - name: Tao Zhao
     affiliation:
     - State Key Laboratory of Crop Stress Biology for Arid Areas/Shaanxi Key Laboratory of Apple, College of Horticulture, Northwest A&F University, Yangling, China
+  - name: Kristian K Ullrich
+    affiliation:
+    - Department of Evolutionary Biology, Max Planck Institute For Evolutionary Biology, Ploen, Germany
   - name: Yves Van de Peer
     affiliation: 
     - VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
@@ -171,8 +174,12 @@ use the function `diamond_is_installed()`.
 
 ```{r run_diamond}
 if(diamond_is_installed()) {
-    diamond <- run_diamond(seq = pdata$seq)
+    blast_list <- run_diamond(seq = pdata$seq)
 }
+```
+
+```{r}
+net <- infer_syntenet(blast_list, pdata$annotation)
 ```
 
 

@@ -2,6 +2,15 @@
 .Rhistory
 .RData
 .Ruserdata
+src/*.o
+src/*.so
+src/*.dll
+*.o
+*.so
+*.dylib
+*.dll
+*_cache/
+/cache/
 *.Rproj
 inst/doc
 
