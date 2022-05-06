@@ -10,7 +10,8 @@ infer_syntenet(
   outdir = tempdir(),
   anchors = 5,
   max_gaps = 25,
-  verbose = FALSE
+  verbose = FALSE,
+  ...
 )
 }
 \arguments{
@@ -36,6 +37,9 @@ genes to search for anchors. Default: 25.}
 
 \item{verbose}{Logical indicating if log messages should be printed on
 screen. Default: FALSE.}
+
+\item{...}{Any additional arguments to
+\code{mcscanx}.}
 }
 \value{
 A network represented as an edge list.
