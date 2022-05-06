@@ -174,9 +174,10 @@ __attribute__((format(printf, 1, 2)));
 /* Open a file or die */
 FILE *mustOpen(const char *fileName, const char *mode);
 
-void read_blast(const std::string &prefix_fn);
-void read_mcl(const std::string &prefix_fn);
-void read_gff(const std::string &prefix_fn, int gff_flag=1);
+//void read_blast(const std::string &blast_fn);
+void read_blast(const std::string blast_infile);
+//void read_gff(const std::string &gff_fn, int gff_flag=1);
+void read_gff(const std::string gff_infile);
 void feed_dag(const std::string &mol_pair);
 void dag_main(std::vector<Score_t> &score, const std::string &mol_pair);
 

@@ -159,8 +159,6 @@ FILE *mustOpen(const char *fileName, const char *mode)
     return f;
 }
 
-// read_data.cpp
-
 // incremental sorting y coord
 static bool cmp_y (const Score_t& t1, const Score_t& t2){
     return t1.y < t2.y || (t1.y == t2.y && t1.x < t2.x);
@@ -171,24 +169,65 @@ static bool cmp_ev (const Score_t& t1, const Score_t& t2){
     return t1.score < t2.score;
 }
 
+//void read_gff(const char *prefix_fn){
+//void read_gff(const char *gff_fn){
+void read_gff(const string gff_infile){
+    string mol;
+    string gn;
+    string line;
+    string word;
+    char gfn[LABEL_LEN];
+    Gene_feat gf;
+    const char *gff_fn = gff_infile.c_str();
+    sprintf(gfn,"%s",gff_fn);
+    ifstream in(gfn);
+    cout<<"Reading GFF file and pre-processing"<<endl;
+    while (!in.eof()){
+        getline(in,line);
+        if (line==""){
+            break;
+        }
+        istringstream test(line);
+        getline(test,mol,'\t');
+        gf.mol = mol;
+        getline(test,gn,'\t');
+        gf.name = gn;
+        getline(test,word,'\t');
+        gf.mid = atoi(word.c_str());
+        gene_map[gf.name] = gf;
+    }
+    in.close();
+}
+
 // filter the blast -m8 output by the following threshold:
 // lexically sorted, gene #1 < gene #2
 // non-self blast match
 // both be present in the mcl output file and in the same group
 //void read_blast(const char *prefix_fn, bool gff_flag=true){
-void read_blast(const char *blast_fn, bool gff_flag=true){
-    //char fn[LABEL_LEN], g1[LABEL_LEN], g2[LABEL_LEN];
-    char fn[LABEL_LEN];
-    //sprintf(fn,"%s.blast",prefix_fn);
-    sprintf(fn,"%s",blast_fn);
-    ifstream in(fn);
+//void read_blast(const char *blast_fn, bool gff_flag=true){
+//void read_blast(const char *blast_fn){
+void read_blast(const string blast_infile){
     int i;
-    int total_num=0;
-    string line,word,geneids,gene1,gene2;
     double evalue;
+    string line;
+    string word;
+    string geneids;
+    string gene1;
+    string gene2;
+    char bfn[LABEL_LEN];
+    Blast_record br;
     map<string, double> blast_map;
-    map<string, double>::iterator it;
+    map<string, double>::iterator it01;
+    map<string, Gene_feat>::iterator it02, it03;
+    Gene_feat *gf1;
+    Gene_feat *gf2;
+    int total_num=0;
+    int selected_num=0;
+    int pair_id=0;
     cout<<"Reading BLAST file and pre-processing"<<endl;
+    const char *blast_fn = blast_infile.c_str();
+    sprintf(bfn,"%s",blast_fn);
+    ifstream in(bfn);
     while (!in.eof()){
         getline(in,line);
         if (line==""){
@@ -216,33 +255,28 @@ void read_blast(const char *blast_fn, bool gff_flag=true){
         }else{
             geneids=gene2+"&"+gene1;
         }
-        it = blast_map.find(geneids);
-        if (it==blast_map.end()){
+        it01 = blast_map.find(geneids);
+        if (it01==blast_map.end()){
             blast_map[geneids]=evalue;
         }else{
-            if (evalue<it->second){
-                it->second=evalue;
+            if (evalue<it01->second){
+                it01->second=evalue;
             }
         }
         total_num++;
     }
     in.close();
-    //double score;
-    Blast_record br;
-    int pair_id = 0;
-    map<string, Gene_feat>::iterator it1, it2;
-    Gene_feat *gf1, *gf2;
     cout<<"Generating BLAST list"<<endl;
-    for (it=blast_map.begin(); it!=blast_map.end(); it++){
-        istringstream test(it->first);
+    for (it01=blast_map.begin(); it01!=blast_map.end(); it01++){
+        istringstream test(it01->first);
         getline(test,gene1,'&');
         getline(test,gene2,'&');
-        it1 = gene_map.find(gene1);
-        it2 = gene_map.find(gene2);
-        if (it1==gene_map.end() || it2==gene_map.end()){
+        it02 = gene_map.find(gene1);
+        it03 = gene_map.find(gene2);
+        if (it02==gene_map.end() || it03==gene_map.end()){
             continue;
         }
-        gf1 = &(it1->second), gf2 = &(it2->second);
+        gf1 = &(it02->second), gf2 = &(it03->second);
         if (gf1->mol.empty() || gf2->mol.empty()){
             continue;
         }
@@ -275,57 +309,53 @@ void read_blast(const char *blast_fn, bool gff_flag=true){
             mol_pairs[br.mol_pair]++;
         }
         br.pair_id = pair_id++;
-        br.score = it->second;
+        br.score = it01->second;
         match_list.push_back(br);
     }
-    int selected_num = match_list.size();
+    selected_num = match_list.size();
+    cout<<"match_list.size: "<<match_list.size()<<endl;
     progress("%d matches imported (%d discarded)",
              selected_num, total_num - selected_num);
+    blast_map.clear();
+    selected_num=0;
+    total_num=0;
+    pair_id=0;
 }
 
-//void read_gff(const char *prefix_fn){
-void read_gff(const char *gff_fn){
-    char fn[LABEL_LEN];
-    string mol,gn,line,word;
-    Gene_feat gf;
-    //sprintf(fn, "%s.gff", gff_fn);
-    sprintf(fn,"%s",gff_fn);
-    ifstream in(fn);
-    while (!in.eof()){
-        getline(in,line);
-        if (line==""){
-            break;
-        }
-        istringstream test(line);
-        getline(test,mol,'\t');
-        gf.mol = mol;
-        getline(test,gn,'\t');
-        gf.name = gn;
-        getline(test,word,'\t');
-        gf.mid = atoi(word.c_str());
-        gene_map[gf.name] = gf;
+void fill_allg(){
+    int i=0;
+    Gene_feat *gf3;
+    map<string, Gene_feat>::iterator it04;
+    geneSet::const_iterator itc01;
+    for (it04=gene_map.begin(); it04!=gene_map.end(); it04++){
+        gf3 = &(it04->second);
+        allg.insert(gf3);
     }
-    in.close();
+    for (itc01=allg.begin(); itc01!=allg.end(); itc01++){
+        (*itc01)->gene_id=i;
+        i++;
+    }
+    i=0;
 }
 
 static void filter_matches_x (){
     // match_bin is a list of records that are potentially repetitive
     vector<Score_t> match_bin, score_cpy;
-    vector<Score_t>::const_iterator it, prev_rec;
+    vector<Score_t>::const_iterator itc02, prev_rec;
     sort(score.begin(), score.end());
-    prev_rec = it = score.begin();
-    it++;
+    prev_rec = itc02 = score.begin();
+    itc02++;
     match_bin.push_back(*(prev_rec));
-    for (; it != score.end(); it++){
+    for (; itc02 != score.end(); itc02++){
         // scan whether it has a linking window with previous one
-        if ((prev_rec->x != it->x) || (it->y - prev_rec->y) > OVERLAP_WINDOW){
+        if ((prev_rec->x != itc02->x) || (itc02->y - prev_rec->y) > OVERLAP_WINDOW){
             // record last match_bin, take only least e-value
             score_cpy.push_back(*min_element(match_bin.begin(), match_bin.end(), cmp_ev));
             // start a new match_bin
             match_bin.clear();
         }
-        match_bin.push_back(*it);
-        prev_rec = it;
+        match_bin.push_back(*itc02);
+        prev_rec = itc02;
     }
     // don't forget the last match_bin
     score_cpy.push_back(*min_element(match_bin.begin(), match_bin.end(), cmp_ev));
@@ -339,21 +369,21 @@ static void filter_matches_x (){
 static void filter_matches_y (){
     // match_bin is a list of records that are potentially repetitive
     vector<Score_t> match_bin, score_cpy;
-    vector<Score_t>::const_iterator it, prev_rec;
+    vector<Score_t>::const_iterator itc03, prev_rec;
     sort(score.begin(), score.end(), cmp_y);
-    prev_rec = it = score.begin();
-    it++;
+    prev_rec = itc03 = score.begin();
+    itc03++;
     match_bin.push_back(*(prev_rec));
-    for (; it != score.end(); it++){
+    for (; itc03 != score.end(); itc03++){
         // scan whether it has a linking window with previous one
-        if ((prev_rec->y != it->y) || (it->x - prev_rec->x) > OVERLAP_WINDOW){
+        if ((prev_rec->y != itc03->y) || (itc03->x - prev_rec->x) > OVERLAP_WINDOW){
             // record last match_bin, take only least e-value
             score_cpy.push_back(*min_element(match_bin.begin(), match_bin.end(), cmp_ev));
             // start a new match_bin
             match_bin.clear();
         }
-        match_bin.push_back(*it);
-        prev_rec = it;
+        match_bin.push_back(*itc03);
+        prev_rec = itc03;
     }
     // don't forget the last match_bin
     score_cpy.push_back(*min_element(match_bin.begin(), match_bin.end(), cmp_ev));
@@ -364,22 +394,21 @@ static void filter_matches_y (){
     score_cpy.clear();
 }
 
-// feed into dagchainer
 void feed_dag(const string &mol_pair){
     // two additional filters will be applied here
     // best hsp (least e-value)
     // non-repetitive in a window of 50kb region
-    vector<Blast_record>::const_iterator it;
+    vector<Blast_record>::const_iterator itc04;
     Score_t cur_score;
-    for (it = match_list.begin(); it < match_list.end(); it++){
-        if (it->mol_pair != mol_pair){
+    for (itc04 = match_list.begin(); itc04 < match_list.end(); itc04++){
+        if (itc04->mol_pair != mol_pair){
             continue;
         }
-        cur_score.pairID = it->pair_id;
-        cur_score.x = gene_map[it->gene1].gene_id;
-        cur_score.y = gene_map[it->gene2].gene_id;
-        cur_score.gene1=it->gene1;
-        cur_score.gene2=it->gene2;
+        cur_score.pairID = itc04->pair_id;
+        cur_score.x = gene_map[itc04->gene1].gene_id;
+        cur_score.y = gene_map[itc04->gene2].gene_id;
+        cur_score.gene1=itc04->gene1;
+        cur_score.gene2=itc04->gene2;
         cur_score.score = MATCH_SCORE;
         score.push_back(cur_score);
     }
@@ -389,8 +418,6 @@ void feed_dag(const string &mol_pair){
     filter_matches_y();
     dag_main(score, mol_pair);
 }
-
-// permutation.cpp
 
 static double fact(int x)
 /* returns factorial of x */
@@ -437,8 +464,6 @@ double ln_comb(int n, int k)
     return ln_fact(n) - ln_fact(k) - ln_fact(n-k);
 }
 
-// dagchainer.cpp
-
 // check whether an alignment overlap (tandem alignment)
 static bool check_overlap(vector<int>& xx, vector<int>& yy){
     int xmin = *min_element(xx.begin(), xx.end());
@@ -466,9 +491,9 @@ static bool is_significant(Seg_feat *sf, vector<Score_t>& score){
     /* calculate m, number of anchor points */
     m = sf->pids.size();
     /* calculate N, number of matches in the defined region*/
-    vector<Score_t>::const_iterator it;
-    for (it=score.begin(); it!=score.end(); it++){
-        if (it->x >=s1_a && it->x <=s1_b && it->y >=s2_a && it->y <=s2_b){
+    vector<Score_t>::const_iterator itc05;
+    for (itc05=score.begin(); itc05!=score.end(); itc05++){
+        if (itc05->x >=s1_a && itc05->x <=s1_b && itc05->y >=s2_a && itc05->y <=s2_b){
             N++;
         }
     }
@@ -644,19 +669,16 @@ void dag_main(vector<Score_t> &score, const string &mol_pair){
     score.clear();
 }
 
-// out_utils.cpp
-void print_align(FILE* fw)
-/* print pair-wise alignment */
-{
-    int i, j, pid;
+void print_align(FILE* fw){
+    int i;
+    int j;
+    int pid;
     int nseg = seg_list.size(), nanchor;
     Seg_feat *s;
-
     print_params(fw);
 //////////////////////////////////////////////////
     set<string> colgenes;
-    for (i=0; i<nseg; i++)
-    {
+    for (i=0; i<nseg; i++){
         s = &seg_list[i];
         nanchor = s->pids.size();
         for (j=0; j<nanchor; j++)
@@ -672,15 +694,13 @@ void print_align(FILE* fw)
     fprintf(fw,"# Number of all genes: %d\n", (int)gene_map.size());
     fprintf( fw, "##########################################\n");
 //////////////////////////////////////////////////
-    for (i=0; i<nseg; i++)
-    {
+    for (i=0; i<nseg; i++){
         s = &seg_list[i];
         nanchor = s->pids.size();
         fprintf(fw, "## Alignment %d: score=%.1f e_value=%.2g N=%d %s %s\n",
                 i, s->score, s->e_value, nanchor, s->mol_pair.c_str(),
                 s->sameStrand?"plus":"minus");
-        for (j=0; j<nanchor; j++)
-        {
+        for (j=0; j<nanchor; j++){
             pid = s->pids[j];
             fprintf(fw, "%3d-%3d:\t%s\t%s\t%7.1g\n",
                     i, j, match_list[pid].gene1.c_str(),
@@ -689,9 +709,7 @@ void print_align(FILE* fw)
     }
 }
 
-void print_params(FILE *fw)
-/* print parameters */
-{
+void print_params(FILE *fw){
     fprintf( fw, "############### Parameters ###############\n");
     fprintf( fw, "# MATCH_SCORE: %d\n", MATCH_SCORE );
     fprintf( fw, "# GAP_PENALTY: %d\n", GAP_PENALTY );
@@ -703,16 +721,13 @@ void print_params(FILE *fw)
     fprintf( fw, "# IN_SYNTENY: %d\n", IN_SYNTENY );
 }
 
-// out_homology.cpp
-
-void print_align_homology(FILE* fw)
-/* print pair-wise alignment */
-{
-    int i, j, pid;
+void print_align_homology(FILE* fw){
+    int i;
+    int j;
+    int pid;
     int nseg = seg_list.size(), nanchor;
     Seg_feat *s;
     string sp1,sp2,spc;
-
     print_params(fw);
     //////////////////////////////////////////////////
     set<string> colgenes;
@@ -733,8 +748,6 @@ void print_align_homology(FILE* fw)
     fprintf(fw,"# Number of all genes: %d\n", (int)gene_map.size());
     fprintf( fw, "##########################################\n");
 //////////////////////////////////////////////////
-
-
     for (i=0; i<nseg; i++)
     {
         s = &seg_list[i];
@@ -757,9 +770,7 @@ void print_align_homology(FILE* fw)
     }
 }
 
-void print_params_homology(FILE *fw)
-/* print parameters */
-{
+void print_params_homology(FILE *fw){
     fprintf( fw, "############### Parameters ###############\n");
     fprintf( fw, "# MATCH_SCORE: %d\n", MATCH_SCORE );
     fprintf( fw, "# GAP_PENALTY: %d\n", GAP_PENALTY );
@@ -771,20 +782,15 @@ void print_params_homology(FILE *fw)
     fprintf( fw, "# IN_SYNTENY: %d\n", IN_SYNTENY );
 }
 
-// msa.cpp
-
-void get_endpoints()
-{
+void get_endpoints(){
     int n=seg_list.size();
     int i;
     //int j;
     Seg_feat *s;
-    for (i=0;i<n;i++)
-    {
+    for (i=0;i<n;i++){
         s = &seg_list[i];
         s->index=i;
         New_endpoint ep;
-
         ep.n=s->s1;
         ep.index=2*i;
         ep.start=true;
@@ -795,7 +801,6 @@ void get_endpoints()
         ep.start=false;
         ep.e=s->s1;
         endpoints.push_back(ep);
-
         ep.n=s->s2;
         ep.index=2*i+1;
         ep.start=true;
@@ -810,125 +815,101 @@ void get_endpoints()
     sort(endpoints.begin(), endpoints.end());
 }
 
-void add_block(Gene_feat* s, Gene_feat* t, int level)
-{
+void add_block(Gene_feat* s, Gene_feat* t, int level){
     int i,j;
     i=0;
-    geneSet::iterator it,it1,it11;
-    it=allg.find(s);
-    it1=allg.find(t);
-    it11=allg.end();
-    it11--;
-    for (;(*it)->mid<=(*it1)->mid&&(*it)->mol==(*it1)->mol;it++)
-    {
-        i=(*it)->cursor.size();
-        if (i<level)
-        {
-            for (j=i+1;j<level;j++)
-            {
-                (*it)->cursor.push_back(0);
+    geneSet::iterator it05,it06,it07;
+    it05=allg.find(s);
+    it06=allg.find(t);
+    it07=allg.end();
+    it07--;
+    for (;(*it05)->mid<=(*it06)->mid&&(*it05)->mol==(*it06)->mol;it05++){
+        i=(*it05)->cursor.size();
+        if (i<level){
+            for (j=i+1;j<level;j++){
+                (*it05)->cursor.push_back(0);
             }
-            (*it)->cursor.push_back(1);
+            (*it05)->cursor.push_back(1);
+        }else{
+            (*it05)->cursor[level-1]=1;
         }
-        else
-        {
-            (*it)->cursor[level-1]=1;
-        }
-        if (it==it11)
-        {
+        if (it05==it07){
             break;
         }
     }
 }
 
-void add_matchpoints(int seg_index,int level)
-{
+void add_matchpoints(int seg_index,int level){
     Seg_feat *s;
     int i;
     int j;
     //int k;
-    map<string, Gene_feat>::iterator it5;
+    map<string, Gene_feat>::iterator it08;
     i=(int)(seg_index/2);
     s=&seg_list[i];
-    if (seg_index%2==0)
-    {
-        for (j=0;j<s->pids.size();j++)
-        {
-            it5=gene_map.find(match_list[s->pids[j]].gene1);
-            if (it5->second.cursor.size()>=level)
-                it5->second.cursor[level-1]=s->pids[j]+2;
+    if (seg_index%2==0){
+        for (j=0;j<s->pids.size();j++){
+            it08=gene_map.find(match_list[s->pids[j]].gene1);
+            if (it08->second.cursor.size()>=level){
+                it08->second.cursor[level-1]=s->pids[j]+2;
+            }
         }
-    }
-    else
-    {
-        for (j=0;j<s->pids.size();j++)
-        {
-            it5=gene_map.find(match_list[s->pids[j]].gene2);
-            if (it5->second.cursor.size()>=level)
-                it5->second.cursor[level-1]=-(s->pids[j]+2);
+    }else{
+        for (j=0;j<s->pids.size();j++){
+            it08=gene_map.find(match_list[s->pids[j]].gene2);
+            if (it08->second.cursor.size()>=level){
+                it08->second.cursor[level-1]=-(s->pids[j]+2);
+            }
         }
     }
 }
 
-void traverse()
-{
+void traverse(){
     int i,j,k,lev;
     Gene_feat gf4;
     //char* temp;
-    map<string, Gene_feat>::iterator it4;
-    for (i=0;i<endpoints.size();i++)
-    {
-        if (endpoints[i].start==1)
-        {
-            it4=gene_map.find(endpoints[i].n->name);
-            gf4=it4->second;
+    map<string, Gene_feat>::iterator it09;
+    for (i=0;i<endpoints.size();i++){
+        if (endpoints[i].start==1){
+            it09=gene_map.find(endpoints[i].n->name);
+            gf4=it09->second;
             k=gf4.cursor.size();
-            if (k==0)
-            {
+            if (k==0){
                 add_block(endpoints[i].n,endpoints[i].e,1);
                 add_matchpoints(endpoints[i].index,1);
-            }
-
-            else
-            {
-                for (j=0;j<k;j++)
-                {
-                    if (gf4.cursor[j]==0)
-                    {
+            }else{
+                for (j=0;j<k;j++){
+                    if (gf4.cursor[j]==0){
                         lev=j+1;
                         break;
                     }
                 }
-                if (j==k)
+                if (j==k){
                     lev=j+1;
+                }
                 add_block(endpoints[i].n,endpoints[i].e,lev);
                 add_matchpoints(endpoints[i].index,lev);
-                if (lev>max_level)
+                if (lev>max_level){
                     max_level=lev;
+                }
             }
-        }
-        else
-        {
+        }else{
             ;
         }
     }
 }
 
-void mark_tandem(const char *prefix_fn)
-{
+void mark_tandem(const char *prefix_fn){
     int i,j;
     i=0;
-    geneSet::const_iterator it7=allg.begin();
+    geneSet::const_iterator itc06;
     more_feat mf;
-    for (; it7!=allg.end(); it7++)
-    {
+    for (itc06=allg.begin(); itc06!=allg.end(); itc06++){
         //(*it7)->gene_id=i;
         mf.depth=0;
         mf.tandem=0;
-        for (j=0;j<(*it7)->cursor.size();j++)
-        {
-            if ((*it7)->cursor[j]!=0)
-            {
+        for (j=0;j<(*itc06)->cursor.size();j++){
+            if ((*itc06)->cursor[j]!=0){
                 mf.depth++;
             }
         }
@@ -937,37 +918,32 @@ void mark_tandem(const char *prefix_fn)
     }
     vector<string>tpair1;
     vector<string>tpair2;
-    map<string, Gene_feat>::iterator it8,it9;
-    for (i=0;i<match_list.size();i++)
-    {
-        it8=gene_map.find(match_list[i].gene1);
-        it9=gene_map.find(match_list[i].gene2);
-        if (fabs(it8->second.gene_id-it9->second.gene_id)==1&&it8->second.mol==it9->second.mol)
-        {
-            gene_more[it8->second.gene_id].tandem=1;
-            gene_more[it9->second.gene_id].tandem=1;
-            tpair1.push_back(it8->second.name);
-            tpair2.push_back(it9->second.name);
+    map<string, Gene_feat>::iterator it10,it11;
+    for (i=0;i<match_list.size();i++){
+        it10=gene_map.find(match_list[i].gene1);
+        it11=gene_map.find(match_list[i].gene2);
+        if (fabs(it10->second.gene_id-it11->second.gene_id)==1&&it10->second.mol==it11->second.mol){
+            gene_more[it10->second.gene_id].tandem=1;
+            gene_more[it11->second.gene_id].tandem=1;
+            tpair1.push_back(it10->second.name);
+            tpair2.push_back(it11->second.name);
         }
     }
-    if(tpair1.size()>0)
-    {
-    ofstream result;
-    char fn[LABEL_LEN];
-    sprintf(fn,"%s.tandem",prefix_fn);
-    cout<<"Tandem pairs written to "<<fn<<endl;
-    result.open(fn,ios::out);   
-    for(i=0;i<tpair1.size();i++)
-    {
-    //cout<<tpair1[i]<<","<<tpair2[i]<<endl;
-    result<<tpair1[i]<<","<<tpair2[i]<<endl;
-    }
-    result.close();
+    if(tpair1.size()>0){
+        ofstream result;
+        char fn[LABEL_LEN];
+        sprintf(fn,"%s.tandem",prefix_fn);
+        cout<<"Tandem pairs written to "<<fn<<endl;
+        result.open(fn,ios::out);   
+        for(i=0;i<tpair1.size();i++){
+            //cout<<tpair1[i]<<","<<tpair2[i]<<endl;
+            result<<tpair1[i]<<","<<tpair2[i]<<endl;
+        }
+        result.close();
     }
 }
 
-void print_html()
-{
+void print_html(){
     int i;
     int j;
     //int k;
@@ -976,15 +952,12 @@ void print_html()
     string prev_mol="";
     Gene_feat *n;
     char result_dir[200];
-    geneSet::iterator it6;
+    geneSet::iterator it12;
     i=0;
-    for (it6=allg.begin();it6!=allg.end();it6++)
-    {
-        n=(*it6);
-        if (n->mol!=prev_mol)
-        {
-            if (i>0)
-            {
+    for (it12=allg.begin();it12!=allg.end();it12++){
+        n=(*it12);
+        if (n->mol!=prev_mol){
+            if (i>0){
                 result<<"</table></html>";
                 result.close();
             }
@@ -999,33 +972,27 @@ void print_html()
             i++;
         }
         color="'#dddddd'";
-        if (gene_more[n->gene_id].tandem)
+        if (gene_more[n->gene_id].tandem){
             color="'#ee0000'";
+        }
 //if(gene_more[n->gene_id].break_point)
 //color="'#0000ee'";
         result<<"<tr align='center'><td>"<<gene_more[n->gene_id].depth<<"</td><td bgcolor="<<color<<">"<<n->name<<"</td>";
-        for (j=0;j<n->cursor.size();j++)
-        {
+        for (j=0;j<n->cursor.size();j++){
             result<<"<td>&nbsp;&nbsp;</td>";
-            if (n->cursor[j]==0)
-            {
+            if (n->cursor[j]==0){
                 result<<"<td>&nbsp;</td>";
             }
-            else if (n->cursor[j]==1)
-            {
+            else if (n->cursor[j]==1){
                 result<<"<td>|&nbsp;|</td>";
             }
-            else if (n->cursor[j]>1)
-            {
+            else if (n->cursor[j]>1){
                 result<<"<td bgcolor='#ffff99'>"<<match_list[n->cursor[j]-2].gene2<<"</td>";
-            }
-            else
-            {
+            }else{
                 result<<"<td bgcolor='#ffff99'>"<<match_list[-n->cursor[j]-2].gene1<<"</td>";
             }
         }
-        for (j=n->cursor.size();j<max_level;j++)
-        {
+        for (j=n->cursor.size();j<max_level;j++){
             result<<"<td>&nbsp;</td>";
         }
         result<<"</tr>"<<endl;
@@ -1034,22 +1001,7 @@ void print_html()
     result.close();
 }
 
-void print_test()
-{
-    int j=0;
-    geneSet::const_iterator i=allg.begin();
-    for (; i!=allg.end(); i++)
-    {
-        cout<<(*i)->name.c_str()<<" "<<(*i)->cursor.size()<<endl;
-        j++;
-        if (j>1000)
-            break;
-    }
-
-}
-
-void msa_main(const char *prefix_fn)
-{
+void msa_main(const char *prefix_fn){
     max_level=1;
 //    fill_allg();
     get_endpoints();
@@ -1063,24 +1015,6 @@ void msa_main(const char *prefix_fn)
         chdir(html_fn);
     }
     print_html();
-}
-
-void fill_allg()
-{
-    Gene_feat *gf1;
-    map<string, Gene_feat>::iterator it;
-    for (it=gene_map.begin(); it!=gene_map.end(); it++)
-    {
-        gf1 = &(it->second);
-        allg.insert(gf1);
-    }
-    int i=0;
-    geneSet::const_iterator it77=allg.begin();   
-    for (; it77!=allg.end(); it77++)
-    {
-    (*it77)->gene_id=i;
-    i++;
-    }
 }
 
 //' @useDynLib syntenet, .registration = TRUE
@@ -1129,6 +1063,14 @@ int rcpp_mcscanx_file(
     int overlap_window=5,
     bool is_pairwise=false,
     int in_synteny=0){
+    gene_map.clear();
+    mol_pairs.clear();
+    seg_list.clear();
+    match_list.clear();
+    gene_more.clear();
+    score.clear();
+    endpoints.clear();
+    allg.clear();
     char curwd[256];
     getcwd(curwd, 256);
     MATCH_SCORE = match_score;
@@ -1140,15 +1082,23 @@ int rcpp_mcscanx_file(
     IS_PAIRWISE = is_pairwise;
     IN_SYNTENY = in_synteny;
     CUTOFF_SCORE = MATCH_SCORE*MATCH_SIZE;
-    /* Start the timer */
     uglyTime(NULL);
+    map<string, int>::const_iterator ip;
     char align_fn[LABEL_LEN];
     FILE *fw;
-    const char *prefix_fn = prefix.c_str();
-    const char *blast_fn = blast_file.c_str();
-    const char *gff_fn = gff_file.c_str();
-    read_gff(gff_fn);
-    read_blast(blast_fn);
+    //const char *gff_fn = gff_file.c_str();
+    //read_gff(gff_fn);
+    read_gff(gff_file);
+    //const char *blast_fn = blast_file.c_str();
+    //read_blast(blast_fn);
+    read_blast(blast_file);
+    progress("%d pairwise comparisons", (int) mol_pairs.size());
+    fill_allg();
+    for (ip=mol_pairs.begin(); ip!=mol_pairs.end(); ip++)
+    {
+        if (ip->second >= MATCH_SIZE) feed_dag(string(ip->first));
+    }
+    progress("%d alignments generated", (int) seg_list.size());
     if (outdir!=""){
         const char *outdir_fn = outdir.c_str();
         if (chdir(outdir_fn)<0){
@@ -1156,41 +1106,37 @@ int rcpp_mcscanx_file(
             chdir(outdir_fn);
         }
     }
+    const char *prefix_fn = prefix.c_str();
     sprintf(align_fn, "%s.collinearity", prefix_fn);
     fw = mustOpen(align_fn, "w");
-
-    progress("%d pairwise comparisons", (int) mol_pairs.size());
-    fill_allg();
-    map<string, int>::const_iterator ip;
-    for (ip=mol_pairs.begin(); ip!=mol_pairs.end(); ip++)
-    {
-        if (ip->second >= MATCH_SIZE) feed_dag(string(ip->first));
-    }
-
-    progress("%d alignments generated", (int) seg_list.size());
     print_align(fw);
     fclose(fw);
     uglyTime("Pairwise collinear blocks written to %s", align_fn);
-
     if (IS_PAIRWISE){
+        cmp_sp.clear();
+        gene_map.clear();
+        mol_pairs.clear();
         seg_list.clear();
         match_list.clear();
         gene_more.clear();
         score.clear();
         endpoints.clear();
+        allg.clear();
         chdir(curwd);
-        /* End the timer */
         uglyTime("Done!");
         return 0;
     }
     msa_main(prefix_fn);
+    cmp_sp.clear();
+    gene_map.clear();
+    mol_pairs.clear();
     seg_list.clear();
     match_list.clear();
     gene_more.clear();
     score.clear();
     endpoints.clear();
+    allg.clear();
     chdir(curwd);
-    /* End the timer */
     uglyTime("Done!");
     return 0;
 }
