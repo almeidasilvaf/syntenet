@@ -19,7 +19,13 @@ sequence data and analyze them. Anchor pairs from synteny analyses are
 treated as an undirected unweighted graph (i.e., a synteny network), and
 users can perform:
 
--   **Synteny network inference**;
+-   **Synteny detection** using a native implementation of the [MCScanX
+    algorithm](https://doi.org/10.1093/nar/gkr1293), a C++ program that
+    has been modified and ported to R with Rcpp. This way, users do not
+    need to install MCScanX beforehand, because `magrene` has its own
+    implementation of the same algorithm.
+-   **Synteny network inference** by treating anchor pairs as edges of a
+    graph;
 -   **Network clustering** using the Infomap algorithm;
 -   **Phylogenomic profiling**, which consists in identifying which
     species contain which clusters. This analysis can reveal highly
@@ -61,15 +67,15 @@ print(citation('syntenet'), bibtex = TRUE)
 #> 
 #> To cite package 'syntenet' in publications use:
 #> 
-#>   Fabrício Almeida-Silva, Tao Zhao and Yves Van de Peer (2022).
-#>   syntenet: Inference And Analysis Of Synteny Networks. R package
-#>   version 0.99.0. https://github.com/almeidasilvaf/syntenet
+#>   Almeida-Silva F, Zhao T, Ullrich K, Van de Peer Y (2022). _syntenet:
+#>   Inference And Analysis Of Synteny Networks_. R package version
+#>   0.99.0, <https://github.com/almeidasilvaf/syntenet>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
 #>   @Manual{,
 #>     title = {syntenet: Inference And Analysis Of Synteny Networks},
-#>     author = {Fabrício Almeida-Silva and Tao Zhao and Yves {Van de Peer}},
+#>     author = {Fabrício Almeida-Silva and Tao Zhao and Kristian K Ullrich and Yves {Van de Peer}},
 #>     year = {2022},
 #>     note = {R package version 0.99.0},
 #>     url = {https://github.com/almeidasilvaf/syntenet},
@@ -95,7 +101,7 @@ contributing to this project, you agree to abide by its terms.
     *[rcmdcheck](https://CRAN.R-project.org/package=rcmdcheck)*
     customized to use [Bioconductor’s docker
     containers](https://www.bioconductor.org/help/docker/) and
-    *[BiocCheck](https://bioconductor.org/packages/3.14/BiocCheck)*.
+    *[BiocCheck](https://bioconductor.org/packages/3.15/BiocCheck)*.
 -   Code coverage assessment is possible thanks to
     [codecov](https://codecov.io/gh) and
     *[covr](https://CRAN.R-project.org/package=covr)*.
@@ -111,4 +117,4 @@ contributing to this project, you agree to abide by its terms.
 For more details, check the `dev` directory.
 
 This package was developed using
-*[biocthis](https://bioconductor.org/packages/3.14/biocthis)*.
+*[biocthis](https://bioconductor.org/packages/3.15/biocthis)*.
