@@ -46,6 +46,26 @@ usethis::use_data(
 )
 ```
 
+## blast_list.rda
+
+This object contains the blast list inferred from the example data, and
+it is used in the vignette.
+
+``` r
+# Load data
+data(proteomes)
+data(annotation)
+
+# Process data
+pdata <- process_input(proteomes, annotation)
+
+# Get blast list
+blast_list <- run_diamond(seq = pdata$seq)
+
+# Save object
+usethis::use_data(blast_list, compress = "xz")
+```
+
 ## network.rda
 
 The synteny network for BUSCO genes was downloaded from [this Dataverse

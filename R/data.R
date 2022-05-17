@@ -37,6 +37,20 @@
 "annotation"
 
 
+#' List of data frames containing BLAST-like tabular output
+#'
+#' The object was created using the example code, exactly as described
+#' in the vignette.
+#' 
+#' @name blast_list
+#' @format A list of data frames containing the pairwise comparisons between
+#' proteomes.
+#' @examples 
+#' data(blast_list)
+#' @usage data(blast_list)
+"blast_list"
+
+
 #' Synteny network of BUSCO genes for 25 eudicot species
 #'
 #' @name network

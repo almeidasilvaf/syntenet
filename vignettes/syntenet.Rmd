@@ -39,7 +39,33 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-Intro.
+The analysis of synteny (i.e., conserved gene content and order in a genomic
+segment across species) can help understand the trajectory of duplicated 
+genes through evolution. In particular, synteny analyses are widely used to
+investigate the evolution of genes derived from whole-genome duplication (WGD)
+events, as they can reveal genomic rearrangements that happened following the
+duplication of all chromosomes. However, synteny analysis are typically
+performed in a pairwise manner, which can be difficult to explore and interpret
+when comparing several species. To understand global patterns of synteny,
+@zhao2017network proposed a network-based approach to analyze synteny. 
+In synteny networks, genes in a given syntenic block are represented as nodes
+connected by an edge. Synteny networks have been used to explore, among others,
+global synteny patterns in mammalian and angiosperm genomes [@zhao2019network], 
+the evolution of MADS-box transcription factors [@zhao2017phylogenomic], 
+and infer a microsynteny-based phylogeny for angiosperms [@zhao2021whole].
+`syntenet` is a package that can be used to infer synteny networks from
+protein sequences and perform downstream network analyses that include:
+
+- **Network clustering**;
+
+- **Phylogenomic profiling**, which consists in identifying which species 
+contain which clusters. This analysis can reveal highly conserved synteny 
+clusters and taxon-specific ones (e.g., family- and order-specific clusters);
+
+- **Microsynteny-based phylogeny reconstruction** with maximum likelihood, 
+which can be achieved by inferring a phylogeny from a binary matrix of 
+phylogenomic profiles with IQTREE.
+
 
 # Installation
 
@@ -173,15 +199,46 @@ and in your PATH to run this function. To check if you have DIAMOND installed,
 use the function `diamond_is_installed()`.
 
 ```{r run_diamond}
+data(blast_list)
 if(diamond_is_installed()) {
     blast_list <- run_diamond(seq = pdata$seq)
 }
 ```
 
-```{r}
-net <- infer_syntenet(blast_list, pdata$annotation)
+The output of `run_diamond()` is a list of data frames containing the tabular
+output of pairwise BLAST-like searches. Let's take a look at it.
+
+```{r blast_inspect}
+# List names
+names(blast_list)
+
+# Inspect first data frame
+head(blast_list$Olucimarinus_Olucimarinus)
 ```
 
+Now we can use this list of BLAST-like data frames to detect synteny. Here,
+we reimplemented the popular MCScanX algorithm [@wang2012mcscanx], originally
+written in C++, using the Rcpp [@eddelbuettel2011rcpp] framework 
+for R and C++ integration. This means that `syntenet` comes with a native 
+version of MCScanX, so you can run MCScanX in R without
+having to install it yourself. Amazing, huh?
+
+To detect synteny and infer the synteny network, use the 
+function `infer_syntenet()`. The output is a network represented as a
+so-called **edge list** (i.e., a 2-column data frame with node 1 and node 2
+in columns 1 and 2, respectively). 
+
+```{r infer_syntenet}
+# Infer synteny network
+net <- infer_syntenet(blast_list, pdata$annotation)
+
+# Look at the output
+head(net)
+```
+
+In a synteny network, each row of the edge list represents an anchor pair. 
+In the edge list above, for example, the genes `net[1,1]` and `net[1,2]` are
+in the same syntenic block.
 
 # Phylogenomic profiling
 
@@ -189,13 +246,11 @@ After inferring the synteny network, the first thing you would want to do is
 cluster your network and identify which phylogenetic groups are contained
 in each cluster. This is what we call **phylogenomic profiling**. This way,
 you can identify clade-specific clusters, and highly conserved clusters,
-for instance.
+for instance. Here, we will use an example network of BUSCO genes for 
+25 eudicot species, which was obtained from @zhao2019network. 
 
 To obtain the phylogenomic profiles, you first need to cluster your network.
-`syntenet` identifies network clusters using the infomap algorithm.
-Here, we will cluster a network of BUSCO (Best Universal Single-Copy 
-Orthologous) genes for some angiosperm genomes. 
-The original dataset was obtained from @zhao2019network.
+This can be done with `cluster_network()`.
 
 ```{r cluster_network}
 # Load example data and take a look at it
