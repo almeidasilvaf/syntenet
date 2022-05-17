@@ -56,6 +56,7 @@ int IN_SYNTENY;
 int N_PROXIMAL;
 int e_mode;
 bool IS_PAIRWISE;
+bool VERBOSE;
 enum { DIAG, UP, LEFT, DEL };
 int ali_ct = 0;
 int Best_g = -1;
@@ -67,7 +68,8 @@ int max_level;
 /***** VOID *****/
 
 /* Print progress message */
-void progress(const char *format, ...)
+/*
+ void progress(const char *format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -75,9 +77,11 @@ void progress(const char *format, ...)
     fprintf(stdout, "\n");
     va_end(args);
 }
+*/
 
 /* Print error message but do not exit */
-void err(const char *format, ...)
+/*
+ void err(const char *format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -86,8 +90,10 @@ void err(const char *format, ...)
     fprintf(stderr, "\n");
     va_end(args);
 }
+*/
 
 /* Print error message but do not exit */
+/*
 void warn(const char *format, ...)
 {
     va_list args;
@@ -97,9 +103,11 @@ void warn(const char *format, ...)
     fprintf(stderr, "\n");
     va_end(args);
 }
+*/
 
-void errAbort(const char *format, ...)
 /* Print error message and exit */
+/*
+void errAbort(const char *format, ...)
 {
     va_list args;
     va_start(args, format);
@@ -109,6 +117,7 @@ void errAbort(const char *format, ...)
     va_end(args);
     exit(1);
 }
+*/
 
 long clock1000()
 /* A millisecond clock. */
@@ -154,7 +163,8 @@ FILE *mustOpen(const char *fileName, const char *mode)
             else if (mode[0] == 'w') modeName = (char *)" to write";
             else if (mode[0] == 'a') modeName = (char *)" to append";
         }
-        errAbort("Can't open %s%s: %s", fileName, modeName, strerror(errno));
+        //errAbort("Can't open %s%s: %s", fileName, modeName, strerror(errno));
+        Rcpp::stop("Can't open %s%s: %s", fileName, modeName, strerror(errno));
     }
     return f;
 }
@@ -181,7 +191,9 @@ void read_gff(const string gff_infile){
     const char *gff_fn = gff_infile.c_str();
     sprintf(gfn,"%s",gff_fn);
     ifstream in(gfn);
-    cout<<"Reading GFF file and pre-processing"<<endl;
+    if(VERBOSE){
+        Rcpp::Rcout<<"Reading GFF file and pre-processing"<<endl;
+    }
     while (!in.eof()){
         getline(in,line);
         if (line==""){
@@ -224,7 +236,9 @@ void read_blast(const string blast_infile){
     int total_num=0;
     int selected_num=0;
     int pair_id=0;
-    cout<<"Reading BLAST file and pre-processing"<<endl;
+    if(VERBOSE){
+        Rcpp::Rcout<<"Reading BLAST file and pre-processing"<<endl;
+    }
     const char *blast_fn = blast_infile.c_str();
     sprintf(bfn,"%s",blast_fn);
     ifstream in(bfn);
@@ -266,7 +280,9 @@ void read_blast(const string blast_infile){
         total_num++;
     }
     in.close();
-    cout<<"Generating BLAST list"<<endl;
+    if(VERBOSE){
+        Rcpp::Rcout<<"Generating BLAST list"<<endl;
+    }
     for (it01=blast_map.begin(); it01!=blast_map.end(); it01++){
         istringstream test(it01->first);
         getline(test,gene1,'&');
@@ -313,9 +329,13 @@ void read_blast(const string blast_infile){
         match_list.push_back(br);
     }
     selected_num = match_list.size();
-    cout<<"match_list.size: "<<match_list.size()<<endl;
-    progress("%d matches imported (%d discarded)",
-             selected_num, total_num - selected_num);
+    if(VERBOSE){
+        Rcpp::Rcout<<"match_list.size: "<<match_list.size()<<endl;
+        //progress("%d matches imported (%d discarded)",
+        //    selected_num, total_num - selected_num);
+        Rprintf("%d matches imported (%d discarded)\n",
+            selected_num, total_num - selected_num);
+    }
     blast_map.clear();
     selected_num=0;
     total_num=0;
@@ -933,10 +953,11 @@ void mark_tandem(const char *prefix_fn){
         ofstream result;
         char fn[LABEL_LEN];
         sprintf(fn,"%s.tandem",prefix_fn);
-        cout<<"Tandem pairs written to "<<fn<<endl;
+        if(VERBOSE){
+            Rcpp::Rcout<<"Tandem pairs written to "<<fn<<endl;
+        }
         result.open(fn,ios::out);   
         for(i=0;i<tpair1.size();i++){
-            //cout<<tpair1[i]<<","<<tpair2[i]<<endl;
             result<<tpair1[i]<<","<<tpair2[i]<<endl;
         }
         result.close();
@@ -963,7 +984,9 @@ void print_html(){
             }
 //sprintf(result_dir,"%s.html/%s.html",prefix_fn,n->mol.c_str());
             sprintf(result_dir,"%s.html",n->mol.c_str());
-            cout<<result_dir<<endl;
+            if(VERBOSE){
+                Rcpp::Rcout<<result_dir<<endl;
+            }
             result.open(result_dir,ios::out);
             result<<"<html><table cellspacing='0' cellpadding='0' align='left'>";
             result<<"<tr align='center'><td>Duplication depth</td><td>&nbsp;&nbsp;Reference chromosome</td><td align='left' colspan='"<<2*max_level<<"'>&nbsp;&nbsp;Collinear blocks</td></tr>"<<endl;
@@ -1008,7 +1031,10 @@ void msa_main(const char *prefix_fn){
     traverse();
     mark_tandem(prefix_fn);
     char html_fn[LABEL_LEN];
-    printf("Writing multiple syntenic blocks to HTML files\n");
+    if(VERBOSE){
+        //printf("Writing multiple syntenic blocks to HTML files\n");
+        Rprintf("Writing multiple syntenic blocks to HTML files\n");
+    }
     sprintf(html_fn,"%s.html",prefix_fn);
     if (chdir(html_fn)<0){
         mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
@@ -1039,8 +1065,9 @@ void msa_main(const char *prefix_fn){
 //' @param overlap_window overlap window (default: 5)
 //' @param is_pairwise specify if only pairwise blocks should be reported
 //' (default: FALSE)
-//' @param is_synteny specify patterns of collinear blocks.
+//' @param in_synteny specify patterns of collinear blocks.
 //' 0: intra- and inter-species (default); 1: intra-species; 2: inter-species
+//' @param verbose specify if verbose output (default: FALSE)
 //' @references Wang et al. (2012) MCScanX: a toolkit for detection and
 //' evolutionary analysis of gene synteny and collinearity.
 //' \emph{Nucleic acids research}. \bold{40.7}, e49-e49.
@@ -1062,7 +1089,8 @@ int rcpp_mcscanx_file(
     int max_gaps=25,
     int overlap_window=5,
     bool is_pairwise=false,
-    int in_synteny=0){
+    int in_synteny=0,
+    bool verbose=false){
     gene_map.clear();
     mol_pairs.clear();
     seg_list.clear();
@@ -1082,6 +1110,7 @@ int rcpp_mcscanx_file(
     IS_PAIRWISE = is_pairwise;
     IN_SYNTENY = in_synteny;
     CUTOFF_SCORE = MATCH_SCORE*MATCH_SIZE;
+    VERBOSE = verbose;
     uglyTime(NULL);
     map<string, int>::const_iterator ip;
     char align_fn[LABEL_LEN];
@@ -1092,13 +1121,19 @@ int rcpp_mcscanx_file(
     //const char *blast_fn = blast_file.c_str();
     //read_blast(blast_fn);
     read_blast(blast_file);
-    progress("%d pairwise comparisons", (int) mol_pairs.size());
+    if(VERBOSE){
+        //progress("%d pairwise comparisons", (int) mol_pairs.size());
+        Rprintf("%d pairwise comparisons\n", (int) mol_pairs.size());
+    }
     fill_allg();
     for (ip=mol_pairs.begin(); ip!=mol_pairs.end(); ip++)
     {
         if (ip->second >= MATCH_SIZE) feed_dag(string(ip->first));
     }
-    progress("%d alignments generated", (int) seg_list.size());
+    if(VERBOSE){
+        //progress("%d alignments generated", (int) seg_list.size());
+        Rprintf("%d alignments generated\n", (int) seg_list.size());
+    }
     if (outdir!=""){
         const char *outdir_fn = outdir.c_str();
         if (chdir(outdir_fn)<0){
@@ -1111,7 +1146,9 @@ int rcpp_mcscanx_file(
     fw = mustOpen(align_fn, "w");
     print_align(fw);
     fclose(fw);
-    uglyTime("Pairwise collinear blocks written to %s", align_fn);
+    if(VERBOSE){
+        uglyTime("Pairwise collinear blocks written to %s", align_fn);
+    }
     if (IS_PAIRWISE){
         cmp_sp.clear();
         gene_map.clear();
@@ -1123,7 +1160,9 @@ int rcpp_mcscanx_file(
         endpoints.clear();
         allg.clear();
         chdir(curwd);
-        uglyTime("Done!");
+        if(VERBOSE){
+            uglyTime("Done!");
+        }
         return 0;
     }
     msa_main(prefix_fn);
@@ -1137,7 +1176,9 @@ int rcpp_mcscanx_file(
     endpoints.clear();
     allg.clear();
     chdir(curwd);
-    uglyTime("Done!");
+    if(VERBOSE){
+        uglyTime("Done!");
+    }
     return 0;
 }
 

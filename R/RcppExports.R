@@ -23,8 +23,9 @@
 #' @param overlap_window overlap window (default: 5)
 #' @param is_pairwise specify if only pairwise blocks should be reported
 #' (default: FALSE)
-#' @param is_synteny specify patterns of collinear blocks.
+#' @param in_synteny specify patterns of collinear blocks.
 #' 0: intra- and inter-species (default); 1: intra-species; 2: inter-species
+#' @param verbose specify if verbose output (default: FALSE)
 #' @references Wang et al. (2012) MCScanX: a toolkit for detection and
 #' evolutionary analysis of gene synteny and collinearity.
 #' \emph{Nucleic acids research}. \bold{40.7}, e49-e49.
@@ -33,7 +34,7 @@
 #' 3643-3646.
 #' @export rcpp_mcscanx_file
 #' @author Kristian K Ullrich
-rcpp_mcscanx_file <- function(blast_file, gff_file, prefix = "out", outdir = "", match_score = 50L, gap_penalty = -1L, match_size = 5L, e_value = 1e-5, max_gaps = 25L, overlap_window = 5L, is_pairwise = FALSE, in_synteny = 0L) {
-    .Call(`_syntenet_rcpp_mcscanx_file`, blast_file, gff_file, prefix, outdir, match_score, gap_penalty, match_size, e_value, max_gaps, overlap_window, is_pairwise, in_synteny)
+rcpp_mcscanx_file <- function(blast_file, gff_file, prefix = "out", outdir = "", match_score = 50L, gap_penalty = -1L, match_size = 5L, e_value = 1e-5, max_gaps = 25L, overlap_window = 5L, is_pairwise = FALSE, in_synteny = 0L, verbose = FALSE) {
+    .Call(`_syntenet_rcpp_mcscanx_file`, blast_file, gff_file, prefix, outdir, match_score, gap_penalty, match_size, e_value, max_gaps, overlap_window, is_pairwise, in_synteny, verbose)
 }
 

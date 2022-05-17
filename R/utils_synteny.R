@@ -33,12 +33,12 @@ intraspecies_synteny <- function(blast_intra = NULL, intra_dir = NULL,
         
         # Detect synteny
         input <- file.path(intra_dir, sp)
-        if(verbose) { verbose <- "" }
+        #if(verbose) { verbose <- "" }
         #syn_args <- c(input, "-s ", anchors, "-m ", max_gaps)
         #syn <- system2("MCScanX", args = syn_args, stdout = verbose)
         rcpp_mcscanx_file(blast_file=blast_file, gff_file=gff_file, prefix=sp,
             outdir=intra_dir, match_size=anchors, max_gaps=max_gaps,
-            is_pairwise=TRUE, in_synteny=1, ...)
+            is_pairwise=TRUE, in_synteny=1, verbose=verbose, ...)
         
         # Delete intermediate files
         unlink(c(blast_file, gff_file))
@@ -69,6 +69,7 @@ intraspecies_synteny <- function(blast_intra = NULL, intra_dir = NULL,
 #'
 #' @return Paths to .collinearity files.
 #' @noRd
+#' @importFrom utils combn
 interspecies_synteny <- function(blast_inter = NULL, annotation = NULL,
                                  inter_dir = NULL, anchors = 5, 
                                  max_gaps = 25, verbose = FALSE, ...) {
@@ -105,12 +106,12 @@ interspecies_synteny <- function(blast_inter = NULL, annotation = NULL,
         
         # Detect synteny
         input <- file.path(inter_dir, sp)
-        if(verbose) { verbose <- "" }
+        #if(verbose) { verbose <- "" }
         #syn_args <- c("-a -b 2 ", input, "-s ", anchors, "-m ", max_gaps)
         #syn <- system2("MCScanX", args = syn_args, stdout = verbose)
         rcpp_mcscanx_file(blast_file=blast_file, gff_file=gff_file, prefix=sp,
             outdir=inter_dir, match_size=5, max_gaps=max_gaps, is_pairwise=TRUE,
-            in_synteny=2, ...)
+            in_synteny=2, verbose=verbose, ...)
         
         # Delete intermediate files
         unlink(c(blast_file, gff_file))

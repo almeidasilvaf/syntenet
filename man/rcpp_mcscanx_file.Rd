@@ -16,7 +16,8 @@ rcpp_mcscanx_file(
   max_gaps = 25L,
   overlap_window = 5L,
   is_pairwise = FALSE,
-  in_synteny = 0L
+  in_synteny = 0L,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -43,8 +44,10 @@ rcpp_mcscanx_file(
 \item{is_pairwise}{specify if only pairwise blocks should be reported
 (default: FALSE)}
 
-\item{is_synteny}{specify patterns of collinear blocks.
+\item{in_synteny}{specify patterns of collinear blocks.
 0: intra- and inter-species (default); 1: intra-species; 2: inter-species}
+
+\item{verbose}{specify if verbose output (default: FALSE)}
 }
 \value{
 list
