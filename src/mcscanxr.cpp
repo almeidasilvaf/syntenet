@@ -1036,9 +1036,13 @@ void msa_main(const char *prefix_fn){
         Rprintf("Writing multiple syntenic blocks to HTML files\n");
     }
     sprintf(html_fn,"%s.html",prefix_fn);
-    if (chdir(html_fn)<0){
+    auto html_fn_res = chdir(html_fn);
+    //if (chdir(html_fn)<0){
+    if (html_fn_res<0){
         mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
-        chdir(html_fn);
+        //chdir(html_fn_res);
+        auto html_fn_res = chdir(html_fn);
+        if(html_fn_res){}
     }
     print_html();
 }
@@ -1100,7 +1104,8 @@ int rcpp_mcscanx_file(
     endpoints.clear();
     allg.clear();
     char curwd[256];
-    getcwd(curwd, 256);
+    auto getwcd_res = getcwd(curwd, 256);
+    if(getwcd_res){}
     MATCH_SCORE = match_score;
     GAP_PENALTY = gap_penalty;
     MATCH_SIZE = match_size;
@@ -1136,9 +1141,13 @@ int rcpp_mcscanx_file(
     }
     if (outdir!=""){
         const char *outdir_fn = outdir.c_str();
-        if (chdir(outdir_fn)<0){
+        auto outdir_fn_res = chdir(outdir_fn);
+        //if (chdir(outdir_fn)<0){
+        if (outdir_fn_res<0){
             mkdir(outdir_fn,S_IRWXU|S_IRGRP|S_IXGRP);
-            chdir(outdir_fn);
+            //chdir(outdir_fn);
+            auto outdir_fn_res = chdir(outdir_fn);
+            if(outdir_fn_res){}
         }
     }
     const char *prefix_fn = prefix.c_str();
@@ -1159,7 +1168,8 @@ int rcpp_mcscanx_file(
         score.clear();
         endpoints.clear();
         allg.clear();
-        chdir(curwd);
+        auto curwd_res = chdir(curwd);
+        if(curwd_res){}
         if(VERBOSE){
             uglyTime("Done!");
         }
@@ -1175,7 +1185,8 @@ int rcpp_mcscanx_file(
     score.clear();
     endpoints.clear();
     allg.clear();
-    chdir(curwd);
+    auto curwd_res = chdir(curwd);
+    if(curwd_res){}
     if(VERBOSE){
         uglyTime("Done!");
     }
