@@ -78,32 +78,23 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The goal of <code>syntenet</code> is to infer synteny networks from
-protein sequence data and analyze them. Anchor pairs from synteny
-analyses are treated as an undirected unweighted graph (i.e., a synteny
-network), and users can perform:</p>
+<p>The goal of <code>syntenet</code> is to infer synteny networks from protein sequence data and analyze them. Anchor pairs from synteny analyses are treated as an undirected unweighted graph (i.e., a synteny network), and users can perform:</p>
 <ul>
 <li>
-<strong>Synteny network inference</strong>;</li>
+<strong>Synteny detection</strong> using a native implementation of the <a href="https://doi.org/10.1093/nar/gkr1293" class="external-link">MCScanX algorithm</a>, a C++ program that has been modified and ported to R with Rcpp. This way, users do not need to install MCScanX beforehand, because <code>magrene</code> has its own implementation of the same algorithm.</li>
 <li>
-<strong>Network clustering</strong> using the Infomap
-algorithm;</li>
+<strong>Synteny network inference</strong> by treating anchor pairs as edges of a graph;</li>
 <li>
-<strong>Phylogenomic profiling</strong>, which consists in
-identifying which species contain which clusters. This analysis can
-reveal highly conserved synteny clusters and taxon-specific ones (e.g.,
-family- and order-specific clusters);</li>
+<strong>Network clustering</strong> using the Infomap algorithm;</li>
 <li>
-<strong>Microsynteny-based phylogeny reconstruction</strong> with
-maximum likelihood, which can be achieved by inferring a phylogeny from
-a binary matrix of phylogenomic profiles with IQTREE.</li>
+<strong>Phylogenomic profiling</strong>, which consists in identifying which species contain which clusters. This analysis can reveal highly conserved synteny clusters and taxon-specific ones (e.g., family- and order-specific clusters);</li>
+<li>
+<strong>Microsynteny-based phylogeny reconstruction</strong> with maximum likelihood, which can be achieved by inferring a phylogeny from a binary matrix of phylogenomic profiles with IQTREE.</li>
 </ul>
 <div class="section level2">
 <h2 id="installation-instructions">Installation instructions<a class="anchor" aria-label="anchor" href="#installation-instructions"></a>
 </h2>
-<p>Get the latest stable <code>R</code> release from <a href="http://cran.r-project.org/" class="external-link">CRAN</a>. Then install
-<code>syntenet</code> from <a href="http://bioconductor.org/" class="external-link">Bioconductor</a> using the following
-code:</p>
+<p>Get the latest stable <code>R</code> release from <a href="http://cran.r-project.org/" class="external-link">CRAN</a>. Then install <code>syntenet</code> from <a href="http://bioconductor.org/" class="external-link">Bioconductor</a> using the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">"BiocManager"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span>
     <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"BiocManager"</span><span class="op">)</span>
@@ -117,59 +108,44 @@ code:</p>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>Below is the citation output from using
-<code>citation('syntenet')</code> in R. Please run this yourself to
-check for any updates on how to cite <strong>syntenet</strong>.</p>
+<p>Below is the citation output from using <code>citation('syntenet')</code> in R. Please run this yourself to check for any updates on how to cite <strong>syntenet</strong>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/citation.html" class="external-link">citation</a></span><span class="op">(</span><span class="st">'syntenet'</span><span class="op">)</span>, bibtex <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; To cite package 'syntenet' in publications use:</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;   Fabrício Almeida-Silva, Tao Zhao and Yves Van de Peer (2022).</span>
-<span class="co">#&gt;   syntenet: Inference And Analysis Of Synteny Networks. R package</span>
-<span class="co">#&gt;   version 0.99.0. https://github.com/almeidasilvaf/syntenet</span>
+<span class="co">#&gt;   Almeida-Silva F, Zhao T, Ullrich K, Van de Peer Y (2022). _syntenet:</span>
+<span class="co">#&gt;   Inference And Analysis Of Synteny Networks_. R package version</span>
+<span class="co">#&gt;   0.99.0, &lt;https://github.com/almeidasilvaf/syntenet&gt;.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; A BibTeX entry for LaTeX users is</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;   @Manual{,</span>
 <span class="co">#&gt;     title = {syntenet: Inference And Analysis Of Synteny Networks},</span>
-<span class="co">#&gt;     author = {Fabrício Almeida-Silva and Tao Zhao and Yves {Van de Peer}},</span>
+<span class="co">#&gt;     author = {Fabrício Almeida-Silva and Tao Zhao and Kristian K Ullrich and Yves {Van de Peer}},</span>
 <span class="co">#&gt;     year = {2022},</span>
 <span class="co">#&gt;     note = {R package version 0.99.0},</span>
 <span class="co">#&gt;     url = {https://github.com/almeidasilvaf/syntenet},</span>
 <span class="co">#&gt;   }</span></code></pre></div>
-<p>Please note that the <code>syntenet</code> was only made possible
-thanks to many other R and bioinformatics software authors, which are
-cited either in the vignettes and/or the paper(s) describing this
-package.</p>
+<p>Please note that the <code>syntenet</code> was only made possible thanks to many other R and bioinformatics software authors, which are cited either in the vignettes and/or the paper(s) describing this package.</p>
 </div>
 <div class="section level2">
 <h2 id="code-of-conduct">Code of Conduct<a class="anchor" aria-label="anchor" href="#code-of-conduct"></a>
 </h2>
-<p>Please note that the <code>syntenet</code> project is released with a
-<a href="http://bioconductor.org/about/code-of-conduct/" class="external-link">Contributor
-Code of Conduct</a>. By contributing to this project, you agree to abide
-by its terms.</p>
+<p>Please note that the <code>syntenet</code> project is released with a <a href="http://bioconductor.org/about/code-of-conduct/" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 <div class="section level2">
 <h2 id="development-tools">Development tools<a class="anchor" aria-label="anchor" href="#development-tools"></a>
 </h2>
 <ul>
-<li>Continuous code testing is possible thanks to <a href="https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/" class="external-link">GitHub
-actions</a> through <em><a href="https://CRAN.R-project.org/package=usethis" class="external-link">usethis</a></em>,
-<em><a href="https://CRAN.R-project.org/package=remotes" class="external-link">remotes</a></em>, and
-<em><a href="https://CRAN.R-project.org/package=rcmdcheck" class="external-link">rcmdcheck</a></em>
-customized to use <a href="https://www.bioconductor.org/help/docker/" class="external-link">Bioconductor’s docker
-containers</a> and <em><a href="https://bioconductor.org/packages/3.14/BiocCheck" class="external-link">BiocCheck</a></em>.</li>
+<li>Continuous code testing is possible thanks to <a href="https://www.tidyverse.org/blog/2020/04/usethis-1-6-0/" class="external-link">GitHub actions</a> through <em><a href="https://CRAN.R-project.org/package=usethis" class="external-link">usethis</a></em>, <em><a href="https://CRAN.R-project.org/package=remotes" class="external-link">remotes</a></em>, and <em><a href="https://CRAN.R-project.org/package=rcmdcheck" class="external-link">rcmdcheck</a></em> customized to use <a href="https://www.bioconductor.org/help/docker/" class="external-link">Bioconductor’s docker containers</a> and <em><a href="https://bioconductor.org/packages/3.15/BiocCheck" class="external-link">BiocCheck</a></em>.</li>
 <li>Code coverage assessment is possible thanks to <a href="https://codecov.io/gh" class="external-link">codecov</a> and <em><a href="https://CRAN.R-project.org/package=covr" class="external-link">covr</a></em>.</li>
-<li>The <a href="http://almeidasilvaf.github.io/syntenet" class="external-link">documentation
-website</a> is automatically updated thanks to <em><a href="https://CRAN.R-project.org/package=pkgdown" class="external-link">pkgdown</a></em>.</li>
+<li>The <a href="http://almeidasilvaf.github.io/syntenet" class="external-link">documentation website</a> is automatically updated thanks to <em><a href="https://CRAN.R-project.org/package=pkgdown" class="external-link">pkgdown</a></em>.</li>
 <li>The code is styled automatically thanks to <em><a href="https://CRAN.R-project.org/package=styler" class="external-link">styler</a></em>.</li>
-<li>The documentation is formatted thanks to <em><a href="https://CRAN.R-project.org/package=devtools" class="external-link">devtools</a></em> and
-<em><a href="https://CRAN.R-project.org/package=roxygen2" class="external-link">roxygen2</a></em>.</li>
+<li>The documentation is formatted thanks to <em><a href="https://CRAN.R-project.org/package=devtools" class="external-link">devtools</a></em> and <em><a href="https://CRAN.R-project.org/package=roxygen2" class="external-link">roxygen2</a></em>.</li>
 </ul>
 <p>For more details, check the <code>dev</code> directory.</p>
-<p>This package was developed using <em><a href="https://bioconductor.org/packages/3.14/biocthis" class="external-link">biocthis</a></em>.</p>
+<p>This package was developed using <em><a href="https://bioconductor.org/packages/3.15/biocthis" class="external-link">biocthis</a></em>.</p>
 </div>
 </div>
   </div>
@@ -209,6 +185,7 @@ website</a> is automatically updated thanks to <em><a href="https://CRAN.R-proje
 <ul class="list-unstyled">
 <li>Fabrício Almeida-Silva <br><small class="roles"> Author, maintainer </small> <a href="https://orcid.org/0000-0002-5314-2964" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Tao Zhao <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0001-7302-6445" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
+<li>Kristian K Ullrich <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4308-9626" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 <li>Yves Van de Peer <br><small class="roles"> Author </small> <a href="https://orcid.org/0000-0003-4327-3730" target="orcid.widget" aria-label="ORCID" class="external-link"><span class="fab fa-orcid orcid" aria-hidden="true"></span></a> </li>
 </ul>
 </div>
@@ -229,13 +206,12 @@ website</a> is automatically updated thanks to <em><a href="https://CRAN.R-proje
 
       <footer><div class="copyright">
   <p></p>
-<p>Developed by Fabrício Almeida-Silva, Tao Zhao, Yves Van de Peer.</p>
+<p>Developed by Fabrício Almeida-Silva, Tao Zhao, Kristian K Ullrich, Yves Van de Peer.</p>
 </div>
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
       </footer>
