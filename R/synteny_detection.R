@@ -101,9 +101,15 @@ parse_collinearity <- function(collinearity_paths = NULL) {
     names(collinearity_paths) <- fname
     
     netdb <- lapply(seq_along(collinearity_paths), function(x) {
-        df <- read.table(collinearity_paths[x], sep = "\t", comment.char = "#")
-        df <- df[, c(2,3)]
-        names(df) <- c("Anchor1", "Anchor2")
+        lines <- readLines(collinearity_paths[x])
+        nlines <- length(lines[!startsWith(lines, "#")])
+        
+        df <- NULL
+        if(nlines > 0) {
+            df <- read.table(collinearity_paths[x], sep = "\t", comment.char = "#")
+            df <- df[, c(2,3)]
+            names(df) <- c("Anchor1", "Anchor2")
+        }
         return(df)
     })
     netdb <- Reduce(rbind, netdb)
