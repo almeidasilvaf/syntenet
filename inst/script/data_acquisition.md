@@ -3,46 +3,90 @@ Data acquisition
 
 # Data in data/
 
-## proteomes.rda
-
-The protein sequences of the *Ostreococcus sp.* algae species (from
-primary transcripts only) were obtained from Pico-PLAZA 3.0 and stored
-in a list of AAStringSet object.
-
-``` r
-links <- c(
-    Olucimarinus = "ftp://ftp.psb.ugent.be/pub/plaza/plaza_pico_03/Fasta/proteome.selected_transcript.olu.fasta.gz",
-    Osp_RCC809 = "ftp://ftp.psb.ugent.be/pub/plaza/plaza_pico_03/Fasta/proteome.selected_transcript.orcc809.fasta.gz"
-)
-
-proteomes <- lapply(links, function(x) {
-    seq <- Biostrings::readAAStringSet(x)
-    names(seq) <- gsub("\\.[0-9] .*", "", names(seq))
-    return(seq)
-})
-
-
-usethis::use_data(
-    proteomes, compress = "xz", overwrite = TRUE
-)
-```
-
 ## annotation.rda
 
+Here, we will get the annotation for the *Ostreococcus sp.* algae
+species from Pico-PLAZA 3.0 and filter them to include only chromosomes
+1, 2, and 3 for these species for package size issues.
+
 ``` r
+library(GenomicRanges)
 links <- c(
     Olucimarinus = "ftp://ftp.psb.ugent.be/pub/plaza/plaza_pico_03/GFF/olu/annotation.selected_transcript.all_features.olu.gff3.gz",
-    Osp_RCC809 = "ftp://ftp.psb.ugent.be/pub/plaza/plaza_pico_03/GFF/orcc809/annotation.selected_transcript.all_features.orcc809.gff3.gz"
+    OspRCC809 = "ftp://ftp.psb.ugent.be/pub/plaza/plaza_pico_03/GFF/orcc809/annotation.selected_transcript.all_features.orcc809.gff3.gz"
 )
 
 annotation <- lapply(links, rtracklayer::import)
 annotation <- lapply(annotation, function(x) {
-    return(x[x$type == "gene", ])
+    a <- x[x$type == "gene", ]
+    a$Parent <- NULL
+    a$name <- NULL
+    a$phase <- NULL
+    a$score <- NULL
+    a$source <- NULL
+    a$pid <- NULL
+    if("chr_1" %in% seqnames(a)) {
+        a <- keepSeqlevels(a, c("chr_1", "chr_2", "chr_3"),
+                           pruning.mode = "coarse")
+    } else {
+        a <- keepSeqlevels(a, c("Chr_1", "Chr_2", "Chr_3"),
+                           pruning.mode = "coarse")
+    }
+    return(a)
 })
 annotation <- GenomicRanges::GRangesList(annotation)
 
 usethis::use_data(
     annotation, compress = "xz", overwrite = TRUE
+)
+```
+
+## proteomes.rda
+
+The protein sequences of the *Ostreococcus sp.* algae species (from
+primary transcripts only) were obtained from Pico-PLAZA 3.0 and stored
+in a list of AAStringSet objects. As above, only chromosomes 1, 2, and 3
+were kept.
+
+``` r
+links <- c(
+    Olucimarinus = "ftp://ftp.psb.ugent.be/pub/plaza/plaza_pico_03/Fasta/proteome.selected_transcript.olu.fasta.gz",
+    OspRCC809 = "ftp://ftp.psb.ugent.be/pub/plaza/plaza_pico_03/Fasta/proteome.selected_transcript.orcc809.fasta.gz"
+)
+
+filt_genes <- unlist(lapply(annotation, function(x) return(x$gene_id)))
+
+proteomes <- lapply(links, function(x) {
+    seq <- Biostrings::readAAStringSet(x)
+    names(seq) <- gsub("\\.[0-9] .*", "", names(seq))
+    seq <- seq[names(seq) %in% filt_genes]
+    return(seq)
+})
+
+usethis::use_data(
+    proteomes, compress = "xz", overwrite = TRUE
+)
+
+# For some reason, the dramatic reduction in gene number does not affect
+# much the size of the proteomes.rda file. Let's solve it by exporting 
+# each sequence to a file, reading them, and saving again.
+library(Biostrings)
+data("proteomes")
+dir <- tempdir()
+seq1 <- proteomes$Olucimarinus
+seq2 <- proteomes$OspRCC809
+
+# Save .fa.gz files to tempdir
+writeXStringSet(seq1, filepath = file.path(dir, "seq1.fa"), compress = "gzip")
+writeXStringSet(seq2, filepath = file.path(dir, "seq2.fa"), compress = "gzip")
+
+# Read files as AAStringSet objetcs and save them to a list
+aa1 <- readAAStringSet(file.path(dir, "seq1.fa"))
+aa2 <- readAAStringSet(file.path(dir, "seq2.fa"))
+proteomes <- list(Olucimarinus = aa1, OspRCC809 = aa2)
+
+usethis::use_data(
+    proteomes, compress = "xz", overwrite = TRUE
 )
 ```
 
@@ -61,9 +105,10 @@ pdata <- process_input(proteomes, annotation)
 
 # Get blast list
 blast_list <- run_diamond(seq = pdata$seq)
+blast_list <- lapply(blast_list, function(x) return(x[x$perc_identity >= 50, ]))
 
 # Save object
-usethis::use_data(blast_list, compress = "xz")
+usethis::use_data(blast_list, compress = "xz", overwrite = TRUE)
 ```
 
 ## network.rda

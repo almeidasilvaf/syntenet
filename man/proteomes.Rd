@@ -4,7 +4,7 @@
 \name{proteomes}
 \alias{proteomes}
 \alias{annotation}
-\title{Proteomes of Ostreococcus sp. species}
+\title{Filtered proteomes of Ostreococcus sp. species}
 \format{
 A list of AAStringSet objects containing
 the elements \code{Olucimarinus}, \code{Osp_RCC809}, and \code{Otauri}.
@@ -19,10 +19,10 @@ data(annotation)
 }
 \description{
 Data obtained from Pico-PLAZA 3.0. Only the translated sequences of primary
-transcripts were included.
+transcripts were included, and only genes from chromosomes 1, 2, and 3.
 
 Data obtained from Pico-PLAZA 3.0. Only annotation data for primary
-transcripts were included.
+transcripts were included, and only genes for chromosomes 1, 2, and 3.
 }
 \examples{
 data(proteomes)

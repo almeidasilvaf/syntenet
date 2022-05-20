@@ -13,7 +13,7 @@ data(blast_list)
 }
 \description{
 The object was created using the example code, exactly as described
-in the vignette.
+in the vignette. Hits with <50\% identity were filtered out.
 }
 \examples{
 data(blast_list)

@@ -1,8 +1,8 @@
 
-#' Proteomes of Ostreococcus sp. species
+#' Filtered proteomes of Ostreococcus sp. species
 #'
 #' Data obtained from Pico-PLAZA 3.0. Only the translated sequences of primary
-#' transcripts were included.
+#' transcripts were included, and only genes from chromosomes 1, 2, and 3.
 #'
 #' @name proteomes
 #' @format A list of AAStringSet objects containing 
@@ -18,10 +18,10 @@
 "proteomes"
 
 
-#' Genome annotation for Ostreococcus sp. species
+#' Filtered genome annotation for Ostreococcus sp. species
 #'
 #' Data obtained from Pico-PLAZA 3.0. Only annotation data for primary
-#' transcripts were included.
+#' transcripts were included, and only genes for chromosomes 1, 2, and 3.
 #'
 #' @name proteomes
 #' @format A CompressedGRangesList containing 
@@ -40,7 +40,7 @@
 #' List of data frames containing BLAST-like tabular output
 #'
 #' The object was created using the example code, exactly as described
-#' in the vignette.
+#' in the vignette. Hits with <50% identity were filtered out.
 #' 
 #' @name blast_list
 #' @format A list of data frames containing the pairwise comparisons between
@@ -65,7 +65,6 @@
 #' data(network)
 #' @usage data(network)
 "network"
-
 
 
 #' Synteny network clusters of BUSCO genes for 25 eudicot species
