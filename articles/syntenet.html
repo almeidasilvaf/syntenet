@@ -485,7 +485,7 @@ and highly conserved clusters, for instance. Here, we will use an
 example network of BUSCO genes for 25 eudicot species, which was
 obtained from <span class="citation">Zhao and Schranz (2019)</span>.</p>
 <p>To obtain the phylogenomic profiles, you first need to cluster your
-network. This can be done with <code><a href="../reference/cluster_network.html">cluster_network()</a></code>.</p>
+network. This can be done with <code><a href="../reference/cluster_network.html">cluster_network()</a></code>. <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a></p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Load example data and take a look at it</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">network</span><span class="op">)</span>
@@ -525,15 +525,15 @@ matrix.</p></li>
 <span class="co"># Exploring the output</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">)</span>
 <span class="co">#&gt; List of 2</span>
-<span class="co">#&gt;  $ profile_matrix: int [1:2410, 1:25] 1 1 1 1 1 1 1 1 1 1 ...</span>
+<span class="co">#&gt;  $ profile_matrix: int [1:2411, 1:25] 1 1 1 1 1 1 1 1 1 1 ...</span>
 <span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span>
-<span class="co">#&gt;   .. ..$ : chr [1:2410] "335" "262" "1142" "1202" ...</span>
+<span class="co">#&gt;   .. ..$ : chr [1:2411] "335" "262" "1142" "1202" ...</span>
 <span class="co">#&gt;   .. ..$ : chr [1:25] "adu" "car" "cca" "fve" ...</span>
 <span class="co">#&gt;  $ hclust        :List of 7</span>
-<span class="co">#&gt;   ..$ merge      : int [1:2409, 1:2] -18 -1125 -21 -1010 -36 -83 -1174 -115 -125 -127 ...</span>
-<span class="co">#&gt;   ..$ height     : num [1:2409] 0 0 0 0 0 0 0 0 0 0 ...</span>
-<span class="co">#&gt;   ..$ order      : int [1:2410] 335 262 1142 1202 1258 395 1392 663 599 595 ...</span>
-<span class="co">#&gt;   ..$ labels     : chr [1:2410] "1" "2" "3" "4" ...</span>
+<span class="co">#&gt;   ..$ merge      : int [1:2410, 1:2] -18 -1125 -21 -1010 -36 -83 -1174 -115 -125 -127 ...</span>
+<span class="co">#&gt;   ..$ height     : num [1:2410] 0 0 0 0 0 0 0 0 0 0 ...</span>
+<span class="co">#&gt;   ..$ order      : int [1:2411] 335 262 1142 1202 1258 395 1393 663 599 595 ...</span>
+<span class="co">#&gt;   ..$ labels     : chr [1:2411] "1" "2" "3" "4" ...</span>
 <span class="co">#&gt;   ..$ method     : chr "ward.D"</span>
 <span class="co">#&gt;   ..$ call       : language stats::hclust(d = dist_mat, method = "ward.D")</span>
 <span class="co">#&gt;   ..$ dist.method: chr "jaccard"</span>
@@ -606,10 +606,10 @@ annotation (i.e., species groups).</p>
 <span class="co">#&gt;        Group Percentage Cluster</span>
 <span class="co">#&gt; 2   Fabaceae      90.91    1156</span>
 <span class="co">#&gt; 21  Fabaceae      81.82    1170</span>
-<span class="co">#&gt; 5  Ramnaceae     100.00    1278</span>
-<span class="co">#&gt; 22  Fabaceae      90.91    1304</span>
-<span class="co">#&gt; 23  Fabaceae      81.82    1308</span>
-<span class="co">#&gt; 24  Fabaceae      90.91    1309</span>
+<span class="co">#&gt; 5  Ramnaceae     100.00    1279</span>
+<span class="co">#&gt; 22  Fabaceae      90.91    1305</span>
+<span class="co">#&gt; 23  Fabaceae      81.82    1309</span>
+<span class="co">#&gt; 24  Fabaceae      90.91    1310</span>
 
 <span class="co"># How many family-specific clusters are there?</span>
 <span class="fu"><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow</a></span><span class="op">(</span><span class="va">gs_clusters</span><span class="op">)</span>
@@ -633,19 +633,13 @@ network. Let’s plot a heatmap of group-specific clusters only.</p>
 with the function <code><a href="../reference/plot_network.html">plot_network()</a></code>. For example, let’s
 visualize the group-specific clusters.</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># 1) Plot first GS cluster</span>
-<span class="va">id</span> <span class="op">&lt;-</span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span>
+<code class="sourceCode R"><span class="co"># 1) Visualize a network of first 5 GS-clusters</span>
+<span class="va">id</span> <span class="op">&lt;-</span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span>
 <span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></code></pre></div>
 <p><img src="syntenet_files/figure-html/plot_network-1.png" width="700"></p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="co"># 2) A combination of clusters</span>
-<span class="va">id</span> <span class="op">&lt;-</span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span>
-<span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></code></pre></div>
-<p><img src="syntenet_files/figure-html/plot_network-2.png" width="700"></p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R">
-<span class="co"># 3) Coloring nodes by family</span>
+<span class="co"># 2) Coloring nodes by family</span>
 <span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">network</span><span class="op">$</span><span class="va">node1</span>, <span class="va">network</span><span class="op">$</span><span class="va">node2</span><span class="op">)</span><span class="op">)</span>
 <span class="va">gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>
     Gene <span class="op">=</span> <span class="va">genes</span>,
@@ -662,14 +656,14 @@ visualize the group-specific clusters.</p>
 <span class="co">#&gt; 6 adu_Aradu.PLM7U Fabaceae</span>
 
 <span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, color_by <span class="op">=</span> <span class="va">gene_df</span><span class="op">)</span></code></pre></div>
-<p><img src="syntenet_files/figure-html/plot_network-3.png" width="700"></p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<p><img src="syntenet_files/figure-html/plot_network-2.png" width="700"></p>
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="co"># 4) Interactive visualization</span>
+<span class="co"># 3) Interactive visualization</span>
 <span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, 
-             interactive <span class="op">=</span> <span class="cn">TRUE</span>, dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">400</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-a7cd8f9be20a70bec276" style="width:500px;height:400px;" class="forceNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-a7cd8f9be20a70bec276">{"x":{"links":{"source":[8,2,1,4,7,0,3,6,10,2,16,6,8,9,3,7,12,4,1,11,5,14,0,7,21,4,12,22,11,23,1,6,18,16,26,7,13,21,27,22,12,4,10,2,17,3,15,20,17,33,2,10,8,19,9,16,30,18,6,33,35,10,5,24,29,3,20,34,15,36,9,8,19,8,19,36,9,41,24,39,5,0,14,25,28,1,23,11,22,27,32,4,12,19,36,8,9,42,41,43,39,24,40,34,20,3,18,6,16,30,37,31,7,21,13,26,33,35,38,17,2,10,20,3,40,15,49,34,30,50,6,18,16,37,47,8,9,41,36,42,39,24,5,43,48,0,25,44,14,21,31,51,26,7,13,46,27,32,22,12,4,11,28,23,45,1,26,7,58,31,51,21,4,22,59,46,12,27,32,1,11,28,60,45,23,18,54,6,30,50,37,16,10,38,35,2,17,52,33,47,19,41,36,9,42,8,24,43,56,5,39,48,34,53,20,49,40,3,57,44,25,0,14,24,67,56,48,39,43,5,61,13,7,31,21,26,58,51,12,59,4,62,27,22,46,32,18,6,37,16,30,64,50,54,53,11,63,45,23,1,60,28,36,47,55,41,9,66,42,8,19,4,72,22,12,46,62,59,32,27,21,71,58,61,7,51,31,26,52,33,35,10,65,43,56,48,67,70,5,24,39,75,45,11,1,63,23,60,28,18,37,50,73,16,30,54,64,6,23,28,11,60,45,63,81,1,75,20,34,3,68,49,53,40,41,66,55,8,42,47,19,9,76,36,26,58,51,71,21,31,61,7,78,46,27,12,77,32,22,62,72,4,59,6,50,64,37,82,18,30,73,16,54,52,35,10,79,33,65,67,56,24,70,5,43,39,48,80,91],"target":[9,10,11,12,13,14,15,16,17,17,18,18,19,19,20,21,22,22,23,23,24,25,25,26,26,27,27,27,28,28,28,30,30,30,31,31,31,31,32,32,32,32,33,33,33,34,34,34,35,35,35,35,36,36,36,37,37,37,37,38,38,38,39,39,39,40,40,40,40,41,41,41,41,42,42,42,42,42,43,43,43,44,44,44,45,45,45,45,46,46,46,46,46,47,47,47,47,47,47,48,48,48,49,49,49,49,50,50,50,50,50,51,51,51,51,51,52,52,52,52,52,52,53,53,53,53,53,53,54,54,54,54,54,54,55,55,55,55,55,55,56,56,56,56,56,57,57,57,57,58,58,58,58,58,58,59,59,59,59,59,59,60,60,60,60,60,61,61,61,61,61,61,62,62,62,62,62,62,62,63,63,63,63,63,63,64,64,64,64,64,64,64,65,65,65,65,65,65,65,66,66,66,66,66,66,66,67,67,67,67,67,67,68,68,68,68,68,68,69,69,69,69,69,70,70,70,70,70,70,70,71,71,71,71,71,71,71,71,72,72,72,72,72,72,72,72,73,73,73,73,73,73,73,73,74,75,75,75,75,75,75,75,76,76,76,76,76,76,76,76,76,77,77,77,77,77,77,77,77,77,78,78,78,78,78,78,78,78,79,79,79,79,79,80,80,80,80,80,80,80,80,81,81,81,81,81,81,81,81,82,82,82,82,82,82,82,82,82,83,83,83,83,83,83,83,83,83,84,84,84,84,84,84,84,85,85,85,85,85,85,85,85,85,85,86,86,86,86,86,86,86,86,86,87,87,87,87,87,87,87,87,87,87,88,88,88,88,88,88,88,88,88,88,89,89,89,89,89,89,90,90,90,90,90,90,90,90,90,92],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.2RW34","adu_Aradu.69509","adu_Aradu.AV6RW","adu_Aradu.CCF7R","adu_Aradu.DLL0U","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.K4FRV","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_15808.1","car_16250.1","car_16254.1","car_16284.1","car_17177.1","car_19495.1","cca_02211","cca_04052","cca_05788","cca_21129","cca_23316","cca_23319","cca_23498","gma_03G097900","gma_05G151000","gma_05G155700","gma_05G155900","gma_05G189200","gma_07G124000","gma_07G238400","gma_08G113500","gma_08G113800","gma_10G041100","gma_11G109300","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355583","Lang_109355854","Lang_109359285","Lang_109362187","Lang_109362745","Lang_109362916","lja_0g3v0036869.1lja","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_3g3v3639380.1lja","lja_4g3v2263980.1lja","lja_4g3v2603960.1lja","mtr_1g069385","mtr_4g078190","mtr_4g122270","mtr_5g090150","mtr_8g009900","mtr_8g083220","mtr_8g085640","mtr_8g085700","mtr_8g093080","pvu_002G235800","pvu_002G236200","pvu_002G269900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","pvu_011G018400","tpr_gene11890","tpr_gene17355","tpr_gene24369","tpr_gene24371","tpr_gene25402","tpr_gene28023","tpr_gene37318","van_01g01830.1","van_0217s00330.1","van_0217s00360.1","van_06g14500.1","van_08g06220.1","van_10g04530.1","van_11g16300.1","vra_01g10980","vra_02g01410","vra_06g02600","vra_07g16870","vra_07g16900","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1311","1309","1308","1314","1313","1170","1304","1312","1156","1156","1308","1309","1313","1312","1311","1314","1304","1308","1304","1156","1314","1312","1313","1309","1170","1311","1312","1313","1309","1170","1304","1312","1313","1308","1314","1308","1156","1304","1308","1170","1314","1156","1156","1170","1311","1309","1313","1156","1170","1314","1304","1312","1308","1314","1304","1156","1170","1311","1312","1313","1309","1312","1313","1309","1304","1308","1156","1170","1314","1311","1170","1312","1313","1304","1314","1309","1156","1313","1312","1308","1170","1309","1304","1309","1314","1156","1312","1313","1304","1308","1170","1278","1278"],"nodesize":[" 5"," 9"," 6"," 8","10"," 8","10","10","10","10"," 9"," 9","10"," 5"," 5"," 4","10"," 6","10"," 9"," 7"," 9","10"," 9"," 9"," 5"," 9","10"," 9"," 1","10","10","10"," 9"," 8"," 9","10","10"," 5","10"," 8","10","10"," 9"," 5"," 9","10","10"," 8"," 7","10","10"," 9"," 9","10"," 8"," 9"," 5","10","10"," 9"," 9","10"," 9","10"," 9"," 9"," 9"," 7"," 5"," 9","10","10","10"," 1"," 9","10","10"," 9"," 6"," 9"," 9","10"," 9"," 7","10"," 9","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Class","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-30,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
+             interactive <span class="op">=</span> <span class="cn">TRUE</span>, dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">300</span><span class="op">)</span><span class="op">)</span></code></pre></div>
+<div id="htmlwidget-0367d31e927d7abe5cd1" style="width:500px;height:300px;" class="forceNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-0367d31e927d7abe5cd1">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Class","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-30,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="microsynteny-based-phylogeny-reconstruction">Microsynteny-based phylogeny reconstruction<a class="anchor" aria-label="anchor" href="#microsynteny-based-phylogeny-reconstruction"></a>
@@ -679,7 +673,7 @@ in each species to reconstruct a microsynteny-based phylogeny.</p>
 <p>To do that, you first need to binarize the profiles matrix (0s and 1s
 representing absence and presence, respectively) and transpose it. This
 can be done with <code>binarize_and_tranpose()</code>.</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">bt_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binarize_and_transpose.html">binarize_and_transpose</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span>
 
 <span class="co"># Looking at the first 5 rows and 5 columns of the matrix</span>
@@ -714,7 +708,7 @@ species). However, we’re only using this filtered data set for speed
 issues. For real-life applications, the best thing to do is to
 <strong>include phylogenomic profiles for all genes</strong> (not only
 BUSCO genes).</p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Leave only 6 legume species and P. mume as an outgroup for testing purposes</span>
 <span class="va">included</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gma"</span>, <span class="st">"pvu"</span>, <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"cca"</span>, <span class="st">"pmu"</span><span class="op">)</span>
 <span class="va">bt_mat</span> <span class="op">&lt;-</span> <span class="va">bt_mat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">bt_mat</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">included</span>, <span class="op">]</span>
@@ -737,7 +731,7 @@ and visualizing it with the ggtree Bioc package <span class="citation">(Yu et al
 microsynteny-based phylogeny for 123 angiosperm species, whose
 phylogenomic profiles were obtained from <span class="citation">Zhao et
 al. (2021)</span>.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">angiosperm_phylogeny</span><span class="op">)</span>
 
 <span class="co"># Plotting the tree</span>
@@ -751,7 +745,7 @@ al. (2021)</span>.</p>
 <h2 class="unnumbered" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
 <p>This document was created under the following conditions:</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span>
 <span class="co">#&gt; R version 4.2.0 (2022-04-22)</span>
 <span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span>
@@ -802,7 +796,7 @@ al. (2021)</span>.</p>
 <span class="co">#&gt; [70] splines_4.2.0          knitr_1.39             pillar_1.7.0          </span>
 <span class="co">#&gt; [73] igraph_1.3.1           GenomicRanges_1.48.0   stats4_4.2.0          </span>
 <span class="co">#&gt; [76] glue_1.6.2             evaluate_0.15          ggfun_0.0.6           </span>
-<span class="co">#&gt; [79] BiocManager_1.30.17    treeio_1.20.0          vctrs_0.4.1           </span>
+<span class="co">#&gt; [79] BiocManager_1.30.18    treeio_1.20.0          vctrs_0.4.1           </span>
 <span class="co">#&gt; [82] networkD3_0.4          tidyr_1.2.0            gtable_0.3.0          </span>
 <span class="co">#&gt; [85] purrr_0.3.4            cachem_1.0.6           ggplot2_3.3.6         </span>
 <span class="co">#&gt; [88] xfun_0.31              tidytree_0.3.9         coda_0.19-4           </span>
@@ -829,6 +823,12 @@ DIAMOND.”</span> <em>Nature Methods</em> 18 (4): 366–68.
 Eddelbuettel, Dirk, and Romain François. 2011. <span>“Rcpp: Seamless r
 and c++ Integration.”</span> <em>Journal of Statistical Software</em>
 40: 1–18.
+</div>
+<div id="ref-lange2021cliquepercolation" class="csl-entry">
+Lange, Jens. 2021. <span>“CliquePercolation: An r Package for Conducting
+and Visualizing Results of the Clique Percolation Network Community
+Detection Algorithm.”</span> <em>Journal of Open Source Software</em> 6
+(62): 3210.
 </div>
 <div id="ref-vandepoele2013pico" class="csl-entry">
 Vandepoele, Klaas, Michiel Van Bel, Guilhem Richard, Sofie Van
@@ -890,6 +890,15 @@ a FASTA file, use the function <code>readAAStringSet()</code> from the
 Bioconductor package <em>Biostrings</em>. To read gene annotation from a
 GFF/GTF file, use the function <code>import()</code> from the
 Bioconductor package <em>rtracklayer</em>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p><strong>Friendly tip:</strong> <code>syntenet</code>
+uses the <em>Infomap</em> algorithm to cluster networks, which has been
+shown to have the best performance <span class="citation">(Zhao and
+Schranz 2019)</span>. This algorithm assigns each gene to a single
+cluster. However, for some cases (e.g., detection of tandem arrays), you
+may want to use an algorithm that allows community overlap (i.e., a gene
+can be part of more than one cluster). If this is your case, we
+recommend the <em>clique percolation</em> algorithm, which is
+implemented in the R package CliquePercolation <span class="citation">(Lange 2021)</span>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>

@@ -105,13 +105,11 @@ screen. Default: FALSE.</p></dd>
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">proteomes</span><span class="op">)</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">annotation</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">blast_list</span><span class="op">)</span></span>
 <span class="r-in"><span class="va">processed</span> <span class="op">&lt;-</span> <span class="fu"><a href="process_input.html">process_input</a></span><span class="op">(</span><span class="va">proteomes</span>, <span class="va">annotation</span><span class="op">)</span> </span>
 <span class="r-in"><span class="va">seq</span> <span class="op">&lt;-</span> <span class="va">processed</span><span class="op">$</span><span class="va">seq</span></span>
 <span class="r-in"><span class="va">annotation</span> <span class="op">&lt;-</span> <span class="va">processed</span><span class="op">$</span><span class="va">annotation</span></span>
-<span class="r-in"><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="diamond_is_installed.html">diamond_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span class="r-in">    <span class="va">blast_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="run_diamond.html">run_diamond</a></span><span class="op">(</span><span class="va">seq</span><span class="op">)</span></span>
-<span class="r-in">    <span class="va">net</span> <span class="op">&lt;-</span> <span class="fu">infer_syntenet</span><span class="op">(</span><span class="va">blast_list</span>, <span class="va">annotation</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">}</span></span>
+<span class="r-in"><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu">infer_syntenet</span><span class="op">(</span><span class="va">blast_list</span>, <span class="va">annotation</span><span class="op">)</span></span>
 </code></pre></div>
     </div>
   </div>
