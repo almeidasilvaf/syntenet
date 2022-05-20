@@ -250,7 +250,18 @@ for instance. Here, we will use an example network of BUSCO genes for
 25 eudicot species, which was obtained from @zhao2019network. 
 
 To obtain the phylogenomic profiles, you first need to cluster your network.
-This can be done with `cluster_network()`.
+This can be done with `cluster_network()`. [^2]
+
+[^2]: **Friendly tip:** `syntenet` uses the *Infomap* algorithm
+to cluster networks, which has been shown to have the best performance 
+[@zhao2019network]. This algorithm assigns each gene to a single cluster. 
+However, for some cases (e.g., detection of tandem arrays), 
+you may want to use an algorithm that allows community overlap 
+(i.e., a gene can be part of more than one cluster). 
+If this is your case, we recommend the *clique percolation* algorithm, 
+which is implemented in the R package 
+CliquePercolation [@lange2021cliquepercolation].
+
 
 ```{r cluster_network}
 # Load example data and take a look at it
@@ -353,15 +364,11 @@ the function `plot_network()`. For example, let's visualize the
 group-specific clusters.
 
 ```{r plot_network}
-# 1) Plot first GS cluster
-id <- gs_clusters$Cluster[1]
+# 1) Visualize a network of first 5 GS-clusters
+id <- gs_clusters$Cluster[1:5]
 plot_network(network, clusters, cluster_id = id)
 
-# 2) A combination of clusters
-id <- gs_clusters$Cluster[1:10]
-plot_network(network, clusters, cluster_id = id)
-
-# 3) Coloring nodes by family
+# 2) Coloring nodes by family
 genes <- unique(c(network$node1, network$node2))
 gene_df <- data.frame(
     Gene = genes,
@@ -372,9 +379,9 @@ head(gene_df)
 
 plot_network(network, clusters, cluster_id = id, color_by = gene_df)
 
-# 4) Interactive visualization
+# 3) Interactive visualization
 plot_network(network, clusters, cluster_id = id, 
-             interactive = TRUE, dim_interactive = c(500, 400))
+             interactive = TRUE, dim_interactive = c(500, 300))
 ```
 
 # Microsynteny-based phylogeny reconstruction

@@ -50,11 +50,9 @@ Infer synteny network
 \examples{
 data(proteomes)
 data(annotation)
+data(blast_list)
 processed <- process_input(proteomes, annotation) 
 seq <- processed$seq
 annotation <- processed$annotation
-if(diamond_is_installed()) {
-    blast_list <- run_diamond(seq)
-    net <- infer_syntenet(blast_list, annotation)
-}
+net <- infer_syntenet(blast_list, annotation)
 }

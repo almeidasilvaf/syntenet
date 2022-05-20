@@ -147,13 +147,11 @@ parse_collinearity <- function(collinearity_paths = NULL) {
 #' @examples
 #' data(proteomes)
 #' data(annotation)
+#' data(blast_list)
 #' processed <- process_input(proteomes, annotation) 
 #' seq <- processed$seq
 #' annotation <- processed$annotation
-#' if(diamond_is_installed()) {
-#'     blast_list <- run_diamond(seq)
-#'     net <- infer_syntenet(blast_list, annotation)
-#' }
+#' net <- infer_syntenet(blast_list, annotation)
 infer_syntenet <- function(blast_list = NULL, annotation = NULL,
                            outdir = tempdir(),
                            anchors = 5, max_gaps = 25,
