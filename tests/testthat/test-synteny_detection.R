@@ -2,6 +2,8 @@
 #----Setup----------------------------------------------------------------------
 data(proteomes)
 data(annotation)
+data(blast_list)
+data(edges)
 
 #----Start tests----------------------------------------------------------------
 test_that("run_diamond() runs DIAMOND on the background", {
@@ -27,4 +29,13 @@ test_that("parse_collinearity() reads MCScanX output", {
     
     expect_equal(class(net), "data.frame")
     expect_equal(ncol(net), 2)
+})
+
+test_that("infer_syntenet() on example set find anchors", {
+    processed <- process_input(proteomes, annotation) 
+    seq <- processed$seq
+    annotation <- processed$annotation
+    net <- infer_syntenet(blast_list, annotation)
+    
+    expect_equal(net, edges)
 })

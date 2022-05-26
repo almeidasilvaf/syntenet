@@ -3,7 +3,7 @@
  *
  * Modified by Author: Yupeng Wang <wyp1125@uga.edu>, Mar 31, 2011
  *
- * Modified by Author: Kristian Ullrich <ullrich@evolbio.mpg.de>, May 5, 2022
+ * Modified by Author: Kristian Ullrich <ullrich@evolbio.mpg.de>, May 26, 2022
  * 
  * Original files can be found here: https://github.com/wyp1125/MCScanX
  * 
@@ -19,10 +19,26 @@
 */
 
 #include <Rcpp.h>
+#include <testthat.h>
 using namespace Rcpp;
 using namespace std;
 
 #include "mcscanxr.h"
+
+// Initialize a unit test context. This is similar to how you
+// might begin an R test file with 'context()', expect the
+// associated context should be wrapped in braced.
+context("Sample unit tests inside") {
+
+  // The format for specifying tests is similar to that of
+  // testthat's R functions. Use 'test_that()' to define a
+  // unit test, and use 'expect_true()' and 'expect_false()'
+  // to test the desired conditions.
+  // test_that("two plus two equals four") {
+    // expect_true(twoPlusTwo() == 4);
+  // }
+
+}
 
 /***** MAP *****/
 map<string, ortho_stat> cmp_sp;
@@ -119,8 +135,9 @@ void errAbort(const char *format, ...)
 }
 */
 
-long clock1000()
 /* A millisecond clock. */
+/*
+long clock1000()
 {
     struct timeval tv;
     static long origSec;
@@ -128,10 +145,12 @@ long clock1000()
     if (origSec == 0) origSec = tv.tv_sec;
     return (tv.tv_sec-origSec)*1000 + tv.tv_usec / 1000;
 }
+*/
 
-void uglyTime(const char *label, ...)
 /* Print label and how long it's been since last call.  Call with
  * a NULL label to initialize. */
+/*
+void uglyTime(const char *label, ...)
 {
     static long lastTime = 0;
     long time = clock1000();
@@ -145,6 +164,7 @@ void uglyTime(const char *label, ...)
     lastTime = time;
     va_end(args);
 }
+*/
 
 FILE *mustOpen(const char *fileName, const char *mode)
 /* Open a file or die */
@@ -153,8 +173,8 @@ FILE *mustOpen(const char *fileName, const char *mode)
     /* gcc 4.2 has "deprecated conversion from string constant" problem"*/
     char *modeName = (char *)"";
 
-    if (sameString(fileName, "stdin")) return stdin;
-    if (sameString(fileName, "stdout")) return stdout;
+    // if (sameString(fileName, "stdin")) return stdin;
+    // if (sameString(fileName, "stdout")) return stdout;
     if ((f = fopen(fileName, mode)) == NULL)
     {
         if (mode)
@@ -1116,7 +1136,7 @@ int rcpp_mcscanx_file(
     IN_SYNTENY = in_synteny;
     CUTOFF_SCORE = MATCH_SCORE*MATCH_SIZE;
     VERBOSE = verbose;
-    uglyTime(NULL);
+    //uglyTime(NULL);
     map<string, int>::const_iterator ip;
     char align_fn[LABEL_LEN];
     FILE *fw;
@@ -1155,9 +1175,11 @@ int rcpp_mcscanx_file(
     fw = mustOpen(align_fn, "w");
     print_align(fw);
     fclose(fw);
+    /*
     if(VERBOSE){
         uglyTime("Pairwise collinear blocks written to %s", align_fn);
     }
+    */
     if (IS_PAIRWISE){
         cmp_sp.clear();
         gene_map.clear();
@@ -1170,9 +1192,11 @@ int rcpp_mcscanx_file(
         allg.clear();
         auto curwd_res = chdir(curwd);
         if(curwd_res){}
+        /*
         if(VERBOSE){
             uglyTime("Done!");
         }
+        */
         return 0;
     }
     msa_main(prefix_fn);
@@ -1187,9 +1211,11 @@ int rcpp_mcscanx_file(
     allg.clear();
     auto curwd_res = chdir(curwd);
     if(curwd_res){}
+    /*
     if(VERBOSE){
         uglyTime("Done!");
     }
+    */
     return 0;
 }
 

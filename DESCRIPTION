@@ -67,10 +67,13 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    xml2
 Config/testthat/edition: 3
 VignetteBuilder: knitr
-LinkingTo: Rcpp
+LinkingTo:
+    Rcpp,
+    testthat
 NeedsCompilation: yes
 Depends: 
     R (>= 4.2)

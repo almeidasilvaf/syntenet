@@ -110,8 +110,8 @@ interspecies_synteny <- function(blast_inter = NULL, annotation = NULL,
         #syn_args <- c("-a -b 2 ", input, "-s ", anchors, "-m ", max_gaps)
         #syn <- system2("MCScanX", args = syn_args, stdout = verbose)
         rcpp_mcscanx_file(blast_file=blast_file, gff_file=gff_file, prefix=sp,
-            outdir=inter_dir, match_size=5, max_gaps=max_gaps, is_pairwise=TRUE,
-            in_synteny=2, verbose=verbose, ...)
+            outdir=inter_dir, match_size=anchors, max_gaps=max_gaps,
+            is_pairwise=TRUE, in_synteny=2, verbose=verbose, ...)
         
         # Delete intermediate files
         unlink(c(blast_file, gff_file))

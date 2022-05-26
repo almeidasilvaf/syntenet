@@ -51,6 +51,20 @@
 "blast_list"
 
 
+#' Data frame containing a network represented as an edge list
+#'
+#' The object was created using the example code, exactly as described
+#' in the vignette.
+#' 
+#' @name edges
+#' @format A data frame containing anchor between two
+#' proteomes.
+#' @examples 
+#' data(edges)
+#' @usage data(edges)
+"edges"
+
+
 #' Synteny network of BUSCO genes for 25 eudicot species
 #'
 #' @name network
