@@ -48,9 +48,11 @@ intraspecies_synteny <- function(blast_intra = NULL,
         
         # Detect synteny
         input <- file.path(intra_dir, sp)
-        rcpp_mcscanx_file(blast_file=blast_file, gff_file=gff_file, prefix=sp,
-            outdir=intra_dir, match_size=anchors, max_gaps=max_gaps,
-            is_pairwise=is_pairwise, in_synteny=1, verbose=verbose, ...)
+        rcpp_mcscanx_file(
+            blast_file = blast_file, gff_file = gff_file, prefix = sp,
+            outdir = intra_dir, match_size = anchors, max_gaps = max_gaps,
+            is_pairwise = is_pairwise, in_synteny = 1, verbose = verbose, ...
+        )
         
         # Delete intermediate files
         unlink(c(blast_file, gff_file))
@@ -67,7 +69,7 @@ intraspecies_synteny <- function(blast_intra = NULL,
 #' Detect interspecies synteny
 #'
 #' @param blast_inter A list of BLAST tables for interspecies comparisons.
-#' @param annotation A processed GRangesList or CompressedGRangesList object 
+#' @param annot_list A processed GRangesList or CompressedGRangesList object 
 #' as returned by \code{process_input()}. 
 #' @param inter_dir Output directory.
 #' @param anchors Numeric indicating the minimum required number of genes
@@ -82,20 +84,34 @@ intraspecies_synteny <- function(blast_intra = NULL,
 #' `mcscanx`.
 #'
 #' @return Paths to .collinearity files.
-#' @noRd
+#' 
 #' @importFrom utils combn
-interspecies_synteny <- function(blast_inter = NULL, annotation = NULL,
-                                 inter_dir = NULL, anchors = 5, 
+#' @rdname interspecies_synteny
+#' @export
+#' @examples 
+#' data(blast_list)
+#' data(annotation)
+#' blast_inter <- blast_list[2]
+#' annot_list <- lapply(annotation, function(x) {
+#'     x$gene <- x$gene_id
+#'     return(x)
+#' })
+#' intersyn <- interspecies_synteny(blast_inter, annot_list = annot_list)
+interspecies_synteny <- function(blast_inter = NULL, annot_list = NULL,
+                                 inter_dir = file.path(tempdir(), "inter"), 
+                                 anchors = 5, 
                                  max_gaps = 25, is_pairwise = TRUE,
                                  verbose = FALSE, ...) {
-    species <- names(annotation)
+    
+    if(!dir.exists(inter_dir)) { dir.create(inter_dir, recursive = TRUE) }
+    species <- names(annot_list)
     unique_comp <- combn(species, 2, simplify = FALSE)
     
     # Create BLAST tables and annotation data frames to export
     minter <- lapply(unique_comp, function(x) {
         n1 <- x[1]
         n2 <- x[2]
-        amerged <- suppressWarnings(c(annotation[[n1]], annotation[[n2]]))
+        amerged <- suppressWarnings(c(annot_list[[n1]], annot_list[[n2]]))
         amerged <- as.data.frame(amerged)
         amerged <- amerged[, c("seqnames", "gene", "start", "end")]
         blast1 <- paste0(n1, "_", n2)
@@ -121,12 +137,11 @@ interspecies_synteny <- function(blast_inter = NULL, annotation = NULL,
         
         # Detect synteny
         input <- file.path(inter_dir, sp)
-        #if(verbose) { verbose <- "" }
-        #syn_args <- c("-a -b 2 ", input, "-s ", anchors, "-m ", max_gaps)
-        #syn <- system2("MCScanX", args = syn_args, stdout = verbose)
-        rcpp_mcscanx_file(blast_file=blast_file, gff_file=gff_file, prefix=sp,
-            outdir=inter_dir, match_size=anchors, max_gaps=max_gaps,
-            is_pairwise=is_pairwise, in_synteny=2, verbose=verbose, ...)
+        rcpp_mcscanx_file(
+            blast_file = blast_file, gff_file = gff_file, prefix = sp,
+            outdir = inter_dir, match_size = anchors, max_gaps = max_gaps,
+            is_pairwise = is_pairwise, in_synteny = 2, verbose = verbose, ...
+        )
         
         # Delete intermediate files
         unlink(c(blast_file, gff_file))

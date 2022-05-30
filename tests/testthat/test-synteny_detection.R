@@ -35,6 +35,19 @@ test_that("intraspecies_synteny() detects intraspecies synteny", {
     expect_equal(length(intrasyn), 1)
 })
 
+test_that("interspecies_synteny() detects interspecies synteny", {
+    data(blast_list)
+    data(annotation)
+    blast_inter <- blast_list[2]
+    annot_list <- lapply(annotation, function(x) {
+        x$gene <- x$gene_id
+        return(x)
+    })
+    intersyn <- interspecies_synteny(blast_inter, annot_list = annot_list)
+    
+    expect_equal(class(intersyn), "character")
+    expect_equal(length(intersyn), 1)
+})
 
 test_that("parse_collinearity() reads MCScanX output", {
     file <- system.file("extdata", "Olu.collinearity", package = "syntenet")
