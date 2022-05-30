@@ -8,6 +8,8 @@
 #' to call a syntenic block. Default: 5.
 #' @param max_gaps Numeric indicating the number of upstream and downstream
 #' genes to search for anchors. Default: 25.
+#' @param is_pairwise specify if only pairwise blocks should be reported
+#' Default: TRUE.
 #' @param verbose Logical indicating if log messages should be printed on
 #' screen. Default: FALSE.
 #' @param ... Any additional arguments to
@@ -17,7 +19,8 @@
 #' @noRd
 intraspecies_synteny <- function(blast_intra = NULL, intra_dir = NULL,
                                  annot_dfs = NULL, anchors = 5, 
-                                 max_gaps = 25, verbose = FALSE, ...) {
+                                 max_gaps = 25, is_pairwise = TRUE,
+                                 verbose = FALSE, ...) {
     
     intrasyn <- unlist(lapply(blast_intra, function(x) {
         sp <- gsub("_.*", "", x[1, 1])
@@ -38,7 +41,7 @@ intraspecies_synteny <- function(blast_intra = NULL, intra_dir = NULL,
         #syn <- system2("MCScanX", args = syn_args, stdout = verbose)
         rcpp_mcscanx_file(blast_file=blast_file, gff_file=gff_file, prefix=sp,
             outdir=intra_dir, match_size=anchors, max_gaps=max_gaps,
-            is_pairwise=TRUE, in_synteny=1, verbose=verbose, ...)
+            is_pairwise=is_pairwise, in_synteny=1, verbose=verbose, ...)
         
         # Delete intermediate files
         unlink(c(blast_file, gff_file))
@@ -62,6 +65,8 @@ intraspecies_synteny <- function(blast_intra = NULL, intra_dir = NULL,
 #' to call a syntenic block. Default: 5.
 #' @param max_gaps Numeric indicating the number of upstream and downstream
 #' genes to search for anchors. Default: 25.
+#' @param is_pairwise specify if only pairwise blocks should be reported
+#' Default: TRUE.
 #' @param verbose Logical indicating if log messages should be printed on
 #' screen. Default: FALSE.
 #' @param ... Any additional arguments to
@@ -72,7 +77,8 @@ intraspecies_synteny <- function(blast_intra = NULL, intra_dir = NULL,
 #' @importFrom utils combn
 interspecies_synteny <- function(blast_inter = NULL, annotation = NULL,
                                  inter_dir = NULL, anchors = 5, 
-                                 max_gaps = 25, verbose = FALSE, ...) {
+                                 max_gaps = 25, is_pairwise = TRUE,
+                                 verbose = FALSE, ...) {
     species <- names(annotation)
     unique_comp <- combn(species, 2, simplify = FALSE)
     
@@ -111,7 +117,7 @@ interspecies_synteny <- function(blast_inter = NULL, annotation = NULL,
         #syn <- system2("MCScanX", args = syn_args, stdout = verbose)
         rcpp_mcscanx_file(blast_file=blast_file, gff_file=gff_file, prefix=sp,
             outdir=inter_dir, match_size=anchors, max_gaps=max_gaps,
-            is_pairwise=TRUE, in_synteny=2, verbose=verbose, ...)
+            is_pairwise=is_pairwise, in_synteny=2, verbose=verbose, ...)
         
         # Delete intermediate files
         unlink(c(blast_file, gff_file))
@@ -121,4 +127,3 @@ interspecies_synteny <- function(blast_inter = NULL, annotation = NULL,
     intersyn <- intersyn[!is.null(intersyn)]
     return(intersyn)
 }
-

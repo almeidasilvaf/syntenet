@@ -173,10 +173,3 @@ find_GS_clusters <- function(profile_matrix = NULL,
     }
     return(gs_df)
 }
-
-
-
-
-    
-    
-    

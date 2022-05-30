@@ -10,6 +10,7 @@ infer_syntenet(
   outdir = tempdir(),
   anchors = 5,
   max_gaps = 25,
+  is_pairwise = TRUE,
   verbose = FALSE,
   ...
 )
@@ -34,6 +35,9 @@ to call a syntenic block. Default: 5.}
 
 \item{max_gaps}{Numeric indicating the number of upstream and downstream
 genes to search for anchors. Default: 25.}
+
+\item{is_pairwise}{specify if only pairwise blocks should be reported
+Default: TRUE}
 
 \item{verbose}{Logical indicating if log messages should be printed on
 screen. Default: FALSE.}

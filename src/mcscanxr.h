@@ -3,7 +3,7 @@
  *
  * Modified by Author: Yupeng Wang <wyp1125@uga.edu>, Mar 31, 2011
  *
- * Modified by Author: Kristian Ullrich <ullrich@evolbio.mpg.de>, May 5, 2022
+ * Modified by Author: Kristian Ullrich <ullrich@evolbio.mpg.de>, May 29, 2022
  * 
  * Original files can be found here: https://github.com/wyp1125/MCScanX
  * 
@@ -111,8 +111,8 @@ struct Cell_t{
 };
 
 struct Score_t{
-    int pairID;  // identifier of match pair
-    int x, y;  // x,y coordinates
+    int pairID;
+    int x, y;
     float score;
     std::string gene1;
     std::string gene2;
@@ -123,7 +123,7 @@ struct Score_t{
 
 struct Path_t{
     float score;
-    int rc;  // sum of row and column of last entry
+    int rc;
     int sub;
 };
 
@@ -147,36 +147,9 @@ typedef std::set<Gene_feat *, geneCmp> geneSet;
 
 /***** Helper functions (Some from James Kent library) *****/
 
-/* Print progress message */
-void progress(const char *format, ...)
-__attribute__((format(printf, 1, 2)));
-
-/* Print error message but do not exit */
-void err(const char *format, ...)
-__attribute__((format(printf, 1, 2)));
-
-/* Print error message but do not exit */
-void warn(const char *format, ...)
-__attribute__((format(printf, 1, 2)));
-
-/* Print error message to stderr and exit */
-void errAbort(const char *format, ...)
-__attribute__((noreturn, format(printf, 1, 2)));
-
-/* A millisecond clock. */
-long clock1000();
-
-/* Print label and how long it's been since last call.  Call with
- * a NULL label to initialize. */
-void uglyTime(const char *label, ...)
-__attribute__((format(printf, 1, 2)));
-
-/* Open a file or die */
 FILE *mustOpen(const char *fileName, const char *mode);
 
-//void read_blast(const std::string &blast_fn);
 void read_blast(const std::string blast_infile);
-//void read_gff(const std::string &gff_fn, int gff_flag=1);
 void read_gff(const std::string gff_infile);
 void feed_dag(const std::string &mol_pair);
 void dag_main(std::vector<Score_t> &score, const std::string &mol_pair);
