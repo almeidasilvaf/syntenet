@@ -13,5 +13,5 @@ src/*.dll
 /cache/
 *.Rproj
 inst/doc
-
 inst/script/*.Rmd
+tests/testthat/*.pdf

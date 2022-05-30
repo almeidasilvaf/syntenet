@@ -24,6 +24,18 @@ test_that("run_diamond() runs DIAMOND on the background", {
 })
 
 
+test_that("intraspecies_synteny() detects intraspecies synteny", {
+    blast_intra <- blast_list[1]
+    annot <- as.data.frame(annotation[[1]])
+    annot <- annot[, c("seqnames", "gene_id", "start", "end")]
+    annot_list <- list(Olucimarinus = annot)
+    intrasyn <- intraspecies_synteny(blast_intra, annot_list = annot_list)
+    
+    expect_equal(class(intrasyn), "character")
+    expect_equal(length(intrasyn), 1)
+})
+
+
 test_that("parse_collinearity() reads MCScanX output", {
     file <- system.file("extdata", "Olu.collinearity", package = "syntenet")
     net <- parse_collinearity(file)
