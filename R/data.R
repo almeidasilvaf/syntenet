@@ -23,7 +23,7 @@
 #' Data obtained from Pico-PLAZA 3.0. Only annotation data for primary
 #' transcripts were included, and only genes for chromosomes 1, 2, and 3.
 #'
-#' @name proteomes
+#' @name annotation
 #' @format A CompressedGRangesList containing 
 #' the elements `Olucimarinus`, `Osp_RCC809`, and `Otauri`.
 #' @references

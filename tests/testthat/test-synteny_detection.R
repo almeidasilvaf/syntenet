@@ -23,6 +23,7 @@ test_that("run_diamond() runs DIAMOND on the background", {
     expect_equal(class(diamond[[1]]), "data.frame")
 })
 
+
 test_that("parse_collinearity() reads MCScanX output", {
     file <- system.file("extdata", "Olu.collinearity", package = "syntenet")
     net <- parse_collinearity(file)
@@ -31,9 +32,9 @@ test_that("parse_collinearity() reads MCScanX output", {
     expect_equal(ncol(net), 2)
 })
 
+
 test_that("infer_syntenet() on example set find anchors", {
     processed <- process_input(proteomes, annotation) 
-    seq <- processed$seq
     annotation <- processed$annotation
     net <- infer_syntenet(blast_list, annotation)
     

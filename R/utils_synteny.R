@@ -1,9 +1,9 @@
 
 #' Detect intraspecies synteny
 #'
-#' @param blast_intra A list of BLAST tables for intraspecies comparisons.
+#' @param blast_intra A list of BLAST data frames for intraspecies comparisons.
 #' @param intra_dir Output directory.
-#' @param annot_dfs A list of annotation data frames.
+#' @param annot_list A list of annotation data frames.
 #' @param anchors Numeric indicating the minimum required number of genes
 #' to call a syntenic block. Default: 5.
 #' @param max_gaps Numeric indicating the number of upstream and downstream
@@ -14,10 +14,22 @@
 #' `mcscanx`.
 #'
 #' @return Paths to .collinearity files.
-#' @noRd
-intraspecies_synteny <- function(blast_intra = NULL, intra_dir = NULL,
-                                 annot_dfs = NULL, anchors = 5, 
+#' @rdname intraspecies_synteny
+#' @export
+#' @examples 
+#' data(blast_list)
+#' data(annotation)
+#' blast_intra <- blast_list[1]
+#' annot <- as.data.frame(annotation[[1]])
+#' annot <- annot[, c("seqnames", "gene_id", "start", "end")]
+#' annot_list <- list(Olucimarinus = annot)
+#' intrasyn <- intraspecies_synteny(blast_intra, annot_list = annot_list)
+intraspecies_synteny <- function(blast_intra = NULL, 
+                                 intra_dir = file.path(tempdir(), "intra"),
+                                 annot_list = NULL, anchors = 5, 
                                  max_gaps = 25, verbose = FALSE, ...) {
+    
+    if(!dir.exists(intra_dir)) { dir.create(intra_dir, recursive = TRUE) }
     
     intrasyn <- unlist(lapply(blast_intra, function(x) {
         sp <- gsub("_.*", "", x[1, 1])
@@ -28,14 +40,11 @@ intraspecies_synteny <- function(blast_intra = NULL, intra_dir = NULL,
                     row.names = FALSE, col.names = FALSE, sep = "\t")
         
         gff_file <- file.path(intra_dir, paste0(sp, ".gff"))
-        write.table(annot_dfs[[sp]], file = gff_file, quote = FALSE,
+        write.table(annot_list[[sp]], file = gff_file, quote = FALSE,
                     row.names = FALSE, col.names = FALSE, sep = "\t")
         
         # Detect synteny
         input <- file.path(intra_dir, sp)
-        #if(verbose) { verbose <- "" }
-        #syn_args <- c(input, "-s ", anchors, "-m ", max_gaps)
-        #syn <- system2("MCScanX", args = syn_args, stdout = verbose)
         rcpp_mcscanx_file(blast_file=blast_file, gff_file=gff_file, prefix=sp,
             outdir=intra_dir, match_size=anchors, max_gaps=max_gaps,
             is_pairwise=TRUE, in_synteny=1, verbose=verbose, ...)
