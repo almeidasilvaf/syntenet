@@ -3,7 +3,7 @@
  *
  * Modified by Author: Yupeng Wang <wyp1125@uga.edu>, Mar 31, 2011
  *
- * Modified by Author: Kristian Ullrich <ullrich@evolbio.mpg.de>, May 26, 2022
+ * Modified by Author: Kristian Ullrich <ullrich@evolbio.mpg.de>, May 29, 2022
  * 
  * Original files can be found here: https://github.com/wyp1125/MCScanX
  * 
@@ -24,21 +24,6 @@ using namespace Rcpp;
 using namespace std;
 
 #include "mcscanxr.h"
-
-// Initialize a unit test context. This is similar to how you
-// might begin an R test file with 'context()', expect the
-// associated context should be wrapped in braced.
-context("Sample unit tests inside") {
-
-  // The format for specifying tests is similar to that of
-  // testthat's R functions. Use 'test_that()' to define a
-  // unit test, and use 'expect_true()' and 'expect_false()'
-  // to test the desired conditions.
-  // test_that("two plus two equals four") {
-    // expect_true(twoPlusTwo() == 4);
-  // }
-
-}
 
 /***** MAP *****/
 map<string, ortho_stat> cmp_sp;
@@ -83,16 +68,10 @@ int max_level;
 
 /***** VOID *****/
 
-/*
- * Open a file or die
- */
 FILE *mustOpen(const char *fileName, const char *mode)
 {
     FILE *f;
-    /* gcc 4.2 has "deprecated conversion from string constant" problem" */
     char *modeName = (char *)"";
-    // if (sameString(fileName, "stdin")) return stdin;
-    // if (sameString(fileName, "stdout")) return stdout;
     if ((f = fopen(fileName, mode))==NULL){
         if (mode){
             if (mode[0]=='r'){
@@ -108,23 +87,14 @@ FILE *mustOpen(const char *fileName, const char *mode)
     return f;
 }
 
-/*
- * incremental sorting y coord
- */
-static bool cmp_y (const Score_t& t1, const Score_t& t2){
+static bool cmp_y(const Score_t& t1, const Score_t& t2){
     return t1.y<t2.y || (t1.y==t2.y && t1.x<t2.x);
 }
 
-/*
- * incremental sorting e-value
- */
-static bool cmp_ev (const Score_t& t1, const Score_t& t2){
+static bool cmp_ev(const Score_t& t1, const Score_t& t2){
     return t1.score<t2.score;
 }
 
-/*
- * read GFF file
- */
 void read_gff(const string gff_infile){
     string mol;
     string gn;
@@ -144,24 +114,17 @@ void read_gff(const string gff_infile){
             break;
         }
         istringstream test(line);
-        getline(test,mol,'\t');
+        getline(test, mol,'\t');
         gf.mol = mol;
-        getline(test,gn,'\t');
+        getline(test, gn,'\t');
         gf.name = gn;
-        getline(test,word,'\t');
+        getline(test, word,'\t');
         gf.mid = atoi(word.c_str());
         gene_map[gf.name] = gf;
     }
     in.close();
 }
 
-/*
- * read blast output
- * filter the blast -m8 output by the following threshold:
- * lexically sorted, gene #1 < gene #2
- * non-self blast match
- * both be present in the mcl output file and in the same group
- */
 void read_blast(const string blast_infile){
     int i;
     double evalue;
@@ -239,9 +202,7 @@ void read_blast(const string blast_infile){
         if (IN_SYNTENY==1 && gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)){
             continue;
         }
-/////////////bug here/////////////
-        i=gf1->mol.compare(gf2->mol);
-//////////////////////////////////
+        i = gf1->mol.compare(gf2->mol);
         if (i<0){
             br.gene1=gene1;
             br.gene2=gene2;
@@ -260,7 +221,6 @@ void read_blast(const string blast_infile){
             br.gene2 = gene1;
             br.mol_pair = gf2->mol+"&"+gf1->mol;
         }
-//////////////////////////////////
         if(IN_SYNTENY!=2 || gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)){
             mol_pairs[br.mol_pair]++;
         }
@@ -293,13 +253,10 @@ void fill_allg(){
         (*itc01)->gene_id=i;
         i++;
     }
-    i=0;
+    i = 0;
 }
 
-/*
- * match_bin is a list of records that are potentially repetitive
- */
-static void filter_matches_x (){
+static void filter_matches_x(){
     vector<Score_t> match_bin, score_cpy;
     vector<Score_t>::const_iterator itc02, prev_rec;
     sort(score.begin(), score.end());
@@ -307,29 +264,21 @@ static void filter_matches_x (){
     itc02++;
     match_bin.push_back(*(prev_rec));
     for (; itc02!=score.end(); itc02++){
-        /* scan whether it has a linking window with previous one */
         if ((prev_rec->x!=itc02->x) || (itc02->y - prev_rec->y) > OVERLAP_WINDOW){
-            /* record last match_bin, take only least e-value */
             score_cpy.push_back(*min_element(match_bin.begin(), match_bin.end(), cmp_ev));
-            /* start a new match_bin*/
             match_bin.clear();
         }
         match_bin.push_back(*itc02);
         prev_rec = itc02;
     }
-    /* don't forget the last match_bin */
     score_cpy.push_back(*min_element(match_bin.begin(), match_bin.end(), cmp_ev));
     match_bin.clear();
-    /* copy into score */
     score.clear();
     score = score_cpy;
     score_cpy.clear();
 }
 
-/*
- * match_bin is a list of records that are potentially repetitive
- */
-static void filter_matches_y (){
+static void filter_matches_y(){
     vector<Score_t> match_bin, score_cpy;
     vector<Score_t>::const_iterator itc03, prev_rec;
     sort(score.begin(), score.end(), cmp_y);
@@ -337,30 +286,20 @@ static void filter_matches_y (){
     itc03++;
     match_bin.push_back(*(prev_rec));
     for (; itc03!=score.end(); itc03++){
-        /* scan whether it has a linking window with previous one */
         if ((prev_rec->y!=itc03->y) || (itc03->x - prev_rec->x) > OVERLAP_WINDOW){
-            /* record last match_bin, take only least e-value */
             score_cpy.push_back(*min_element(match_bin.begin(), match_bin.end(), cmp_ev));
-            /* start a new match_bin*/
             match_bin.clear();
         }
         match_bin.push_back(*itc03);
         prev_rec = itc03;
     }
-    /* don't forget the last match_bin */
     score_cpy.push_back(*min_element(match_bin.begin(), match_bin.end(), cmp_ev));
     match_bin.clear();
-    /* copy into score */
     score.clear();
     score = score_cpy;
     score_cpy.clear();
 }
 
-/*
- * two additional filters will be applied here
- * best hsp (least e-value)
- * non-repetitive in a window of 50kb region
- */
 void feed_dag(const string &mol_pair){
     vector<Blast_record>::const_iterator itc04;
     Score_t cur_score;
@@ -376,17 +315,11 @@ void feed_dag(const string &mol_pair){
         cur_score.score = MATCH_SCORE;
         score.push_back(cur_score);
     }
-    /* sort by both axis and remove redundant matches within
-     * a given window length (default 50kb)
-     */ 
     filter_matches_x();
     filter_matches_y();
     dag_main(score, mol_pair);
 }
 
-/*
- * returns factorial of x
- */
 static double fact(int x)
 {
     double ans = 1;
@@ -396,9 +329,6 @@ static double fact(int x)
     return ans;
 }
 
-/*
- * ln(x!) using Stirling's formula, see Knuth I: 111
- */
 static double ln_fact(int x)
 {
     double dx = x, invx, invx2, invx3, invx5, invx7, sum;
@@ -418,9 +348,6 @@ static double ln_fact(int x)
     }
 }
 
-/*
- * natural log of permutation number
- */
 double ln_perm(int n, int r)
 {
     if (r > n || r <= 0){
@@ -429,9 +356,6 @@ double ln_perm(int n, int r)
     return ln_fact(n) - ln_fact(n-r);
 }
 
-/*
- * natural log of combination number
- */
 double ln_comb(int n, int k)
 {
     if (k <= 0 || k >= n){
@@ -440,9 +364,6 @@ double ln_comb(int n, int k)
     return ln_fact(n) - ln_fact(k) - ln_fact(n-k);
 }
 
-/*
- * check whether an alignment overlap (tandem alignment)
- */
 static bool check_overlap(vector<int>& xx, vector<int>& yy){
     int xmin = *min_element(xx.begin(), xx.end());
     int xmax = *max_element(xx.begin(), xx.end());
@@ -451,35 +372,24 @@ static bool check_overlap(vector<int>& xx, vector<int>& yy){
     return xmin <= ymax && ymin <= xmax;
 }
 
-/*
- * returns pos1, pos2 for the blast pair
- */
 static void retrieve_pos(int pid, int *pos1, int *pos2){
     Blast_record *match_rec = &match_list[pid];
     *pos1 = gene_map[match_rec->gene1].mid;
     *pos2 = gene_map[match_rec->gene2].mid;
 }
 
-/*
- * test if a syntenic block is significant, see description in permutation.cc
- */
 static bool is_significant(Seg_feat *sf, vector<Score_t>& score){
-    /* see formula in permutation.cc, unknowns are m, N, L1, L2, l_1i l_2i */
     int s1_a, s1_b, s2_a, s2_b, m, N=0, L1, L2, i;
     double l1, l2, summation=0;
-    /* get the start and stop coordinates on each syntenic segment */
     s1_a = sf->s1->mid, s1_b = sf->t1->mid;
     s2_a = sf->s2->mid, s2_b = sf->t2->mid;
-    /* calculate m, number of anchor points */
     m = sf->pids.size();
-    /* calculate N, number of matches in the defined region */
     vector<Score_t>::const_iterator itc05;
     for (itc05=score.begin(); itc05!=score.end(); itc05++){
         if (itc05->x >=s1_a && itc05->x <=s1_b && itc05->y >=s2_a && itc05->y <=s2_b){
             N++;
         }
     }
-    /* calculate l1, l2, distance between successive anchor points */
     int l1_pos1, l1_pos2, l2_pos1, l2_pos2;
     retrieve_pos(sf->pids[0], &l1_pos1, &l2_pos1);
     for (i=1; i<m; i++){
@@ -490,9 +400,7 @@ static bool is_significant(Seg_feat *sf, vector<Score_t>& score){
         l2_pos1 = l2_pos2;
         summation += log(l1)+log(l2);
     }
-    /* calculate L1, L2, respective length of the matching region */
     L1 = s1_b - s1_a, L2 = s2_b - s2_a;
-    /* this is the formula */
     sf->e_value = exp(M_LN2 + ln_perm(N, m) + summation - (m-1)*(log(L1)+log(L2)));
     return sf->e_value < E_VALUE;
 }
@@ -501,17 +409,11 @@ static bool Descending_Score(const Path_t &a, const Path_t &b){
     return (a.score>b.score) || (a.score==b.score && a.rc>b.rc);
 }
 
-/*
- * whether a mol_pair is self comparison, e.g. "at1&at1"
- */
 static bool check_self (const string &s){
     int pos = s.find('&');
     return s.substr(0, pos)==s.substr(pos+1);
 }
 
-/*
- * Find and output highest scoring chains in score treating it as a DAG
- */
 static void print_chains(vector<Score_t>& score, const string &mol_pair){
     vector<float> path_score;
     vector<int> from, ans;
@@ -538,20 +440,14 @@ static void print_chains(vector<Score_t>& score, const string &mol_pair){
                 del_x = score[j].x - score[i].x - 1;
                 del_y = score[j].y - score[i].y - 1;
                 if  (del_x>=0 && del_y>=0){
-                    // if (del_x > EXTENSION_DIST && del_y > EXTENSION_DIST)
-                    //     break;
-                    // if (del_x > EXTENSION_DIST || del_y > EXTENSION_DIST)
-                    //     continue;
                     if (del_x>MAX_GAPS){
                         break;
                     }
                     if (del_y>MAX_GAPS){
                         continue;
                     }
-                    //num_gaps = MAX(del_x, del_y)/UNIT_DIST;
                     num_gaps = MAX(del_x, del_y);
                     x = path_score[i] + score[j].score;
-                    /* gap penalty */
                     if (num_gaps>0){
                         x += num_gaps*GAP_PENALTY;
                     }
@@ -603,20 +499,17 @@ static void print_chains(vector<Score_t>& score, const string &mol_pair){
                             br = &match_list[pid];
                             sf.pids.push_back(pid);
                         }
-                        /* start and stop positions for two sub-segments */
                         br = &match_list[sf.pids.front()];
                         sf.s1 = &gene_map[br->gene1];
                         sf.s2 = &gene_map[br->gene2];
                         br = &match_list[sf.pids.back()];
                         sf.t1 = &gene_map[br->gene1];
                         sf.t2 = &gene_map[br->gene2];
-                        /* determine the orientation of the alignment */
                         sf.sameStrand = *(sf.s2) < *(sf.t2);
                         if (!sf.sameStrand){
                             swap(sf.s2, sf.t2);
                         }
                         sf.mol_pair = mol_pair;
-                        /* significance testing */
                         if (is_significant(&sf, score)){
                             seg_list.push_back(sf);
                         }
@@ -642,15 +535,11 @@ static void print_chains(vector<Score_t>& score, const string &mol_pair){
 
 void dag_main(vector<Score_t> &score, const string &mol_pair){
     int i, n = score.size();
-    /* should be sorted by y incremental */
     Max_Y = score[n-1].y;
-    // forward direction
     print_chains(score, mol_pair);
-    /* reverse complement the second coordinate set */
     for (i=0; i<n; i++){
         score[i].y = Max_Y - score[i].y + 1;
     }
-    /* reverse direction */
     print_chains(score, mol_pair);
     score.clear();
 }
@@ -660,7 +549,6 @@ void print_align(FILE* fw){
     int nseg = seg_list.size(), nanchor;
     Seg_feat *s;
     print_params(fw);
-//////////////////////////////////
     set<string> colgenes;
     for (i=0; i<nseg; i++){
         s = &seg_list[i];
@@ -676,7 +564,6 @@ void print_align(FILE* fw){
     fprintf(fw, "# Number of collinear genes: %d, Percentage: %.2f\n",(int)colgenes.size(),temp);
     fprintf(fw, "# Number of all genes: %d\n", (int)gene_map.size());
     fprintf(fw, "##########################################\n");
-//////////////////////////////////
     for (i=0; i<nseg; i++){
         s = &seg_list[i];
         nanchor = s->pids.size();
@@ -710,7 +597,6 @@ void print_align_homology(FILE* fw){
     Seg_feat *s;
     string sp1, sp2, spc;
     print_params(fw);
-//////////////////////////////////
     set<string> colgenes;
     for (i=0; i<nseg; i++){
         s = &seg_list[i];
@@ -726,7 +612,6 @@ void print_align_homology(FILE* fw){
     fprintf(fw,"# Number of collinear genes: %d, Percentage: %.2f\n",(int)colgenes.size(),temp);
     fprintf(fw,"# Number of all genes: %d\n", (int)gene_map.size());
     fprintf(fw, "##########################################\n");
-//////////////////////////////////
     for (i=0; i<nseg; i++){
         s = &seg_list[i];
         nanchor = s->pids.size();
@@ -747,21 +632,8 @@ void print_align_homology(FILE* fw){
     }
 }
 
-void print_params_homology(FILE *fw){
-    fprintf(fw, "############### Parameters ###############\n");
-    fprintf(fw, "# MATCH_SCORE: %d\n", MATCH_SCORE );
-    fprintf(fw, "# GAP_PENALTY: %d\n", GAP_PENALTY );
-    fprintf(fw, "# MATCH_SIZE: %d\n", MATCH_SIZE );
-    fprintf(fw, "# OVERLAP_WINDOW: %d\n", OVERLAP_WINDOW );
-    fprintf(fw, "# E_VALUE: %lg\n", E_VALUE );
-    fprintf(fw, "# MAX GAPS: %d\n", MAX_GAPS );
-    fprintf(fw, "# IS_PAIRWISE: %d\n", IS_PAIRWISE );
-    fprintf(fw, "# IN_SYNTENY: %d\n", IN_SYNTENY );
-}
-
 void get_endpoints(){
     int i;
-    //int j;
     int n = seg_list.size();
     Seg_feat *s;
     for (i=0; i<n; i++){
@@ -817,7 +689,6 @@ void add_block(Gene_feat* s, Gene_feat* t, int level){
 
 void add_matchpoints(int seg_index,int level){
     int i, j;
-    // int k;
     Seg_feat *s;
     map<string, Gene_feat>::iterator it08;
     i = (int)(seg_index/2);
@@ -842,7 +713,6 @@ void add_matchpoints(int seg_index,int level){
 void traverse(){
     int i, j, k, lev;
     Gene_feat gf4;
-    //char* temp;
     map<string, Gene_feat>::iterator it09;
     for (i=0; i<endpoints.size(); i++){
         if (endpoints[i].start==1){
@@ -879,7 +749,6 @@ void mark_tandem(const char *prefix_fn){
     geneSet::const_iterator itc06;
     more_feat mf;
     for (itc06=allg.begin(); itc06!=allg.end(); itc06++){
-        //(*it7)->gene_id=i;
         mf.depth=0;
         mf.tandem=0;
         for (j=0; j<(*itc06)->cursor.size(); j++){
@@ -920,7 +789,6 @@ void mark_tandem(const char *prefix_fn){
 
 void print_html(){
     int i = 0, j;
-    //int k;
     string color;
     ofstream result;
     string prev_mol = "";
@@ -934,7 +802,6 @@ void print_html(){
                 result<<"</table></html>";
                 result.close();
             }
-            // sprintf(result_dir,"%s.html/%s.html",prefix_fn,n->mol.c_str());
             sprintf(result_dir, "%s.html", n->mol.c_str());
             if(VERBOSE){
                 Rcpp::Rcout<<result_dir<<endl;
@@ -949,8 +816,6 @@ void print_html(){
         if (gene_more[n->gene_id].tandem){
             color = "'#ee0000'";
         }
-        // if(gene_more[n->gene_id].break_point)
-        // color="'#0000ee'";
         result<<"<tr align='center'><td>"<<gene_more[n->gene_id].depth<<"</td><td bgcolor="<<color<<">"<<n->name<<"</td>";
         for (j=0; j<n->cursor.size(); j++){
             result<<"<td>&nbsp;&nbsp;</td>";
@@ -975,7 +840,6 @@ void print_html(){
 
 void msa_main(const char *prefix_fn){
     max_level = 1;
-    // fill_allg();
     get_endpoints();
     traverse();
     mark_tandem(prefix_fn);
@@ -985,14 +849,35 @@ void msa_main(const char *prefix_fn){
     }
     sprintf(html_fn,"%s.html",prefix_fn);
     auto html_fn_res = chdir(html_fn);
-    // if (chdir(html_fn)<0){
     if (html_fn_res<0){
         mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
-        // chdir(html_fn_res);
         auto html_fn_res = chdir(html_fn);
         if(html_fn_res){}
     }
     print_html();
+}
+
+context("cpp_tests"){
+    test_that("cmp_y"){
+        Score_t score1;
+        Score_t score2;
+        score1.pairID = 1;
+        score2.pairID = 1;
+        score1.x = 2;
+        score1.y = 2;
+        score2.x = 4;
+        score2.y = 4;
+        expect_true(cmp_y(score1, score2));
+    }
+    test_that("cmp_ev"){
+        Score_t score1;
+        Score_t score2;
+        score1.pairID = 1;
+        score2.pairID = 1;
+        score1.score = 2;
+        score2.score = 4;
+        expect_true(cmp_ev(score1, score2));
+    }
 }
 
 //' @useDynLib syntenet, .registration = TRUE
@@ -1131,4 +1016,3 @@ int rcpp_mcscanx_file(
     }
     return 0;
 }
-

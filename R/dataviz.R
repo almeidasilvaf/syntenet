@@ -208,7 +208,3 @@ plot_network <- function(network = NULL, clusters = NULL,
     }
     return(p)
 }
-
-
-
-

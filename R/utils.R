@@ -279,7 +279,3 @@ species_colors <- function(species_annotation) {
     )
     return(results)
 }
-
-
-
-

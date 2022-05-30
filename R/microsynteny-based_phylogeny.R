@@ -134,6 +134,3 @@ infer_microsynteny_phylogeny <- function(transposed_profiles = NULL,
                         full.names = TRUE)
     return(paths)
 }
-
-
-

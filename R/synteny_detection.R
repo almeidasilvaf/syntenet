@@ -134,6 +134,8 @@ parse_collinearity <- function(collinearity_paths = NULL) {
 #' to call a syntenic block. Default: 5.
 #' @param max_gaps Numeric indicating the number of upstream and downstream
 #' genes to search for anchors. Default: 25.
+#' @param is_pairwise specify if only pairwise blocks should be reported
+#' Default: TRUE
 #' @param verbose Logical indicating if log messages should be printed on
 #' screen. Default: FALSE.
 #' @param ... Any additional arguments to
@@ -155,7 +157,7 @@ parse_collinearity <- function(collinearity_paths = NULL) {
 infer_syntenet <- function(blast_list = NULL, annotation = NULL,
                            outdir = tempdir(),
                            anchors = 5, max_gaps = 25,
-                           verbose = FALSE, ...) {
+                           is_pairwise = TRUE, verbose = FALSE, ...) {
 
     annot_dfs <- lapply(annotation, function(x) {
         return(as.data.frame(x)[, c("seqnames", "gene", "start", "end")])
@@ -175,7 +177,8 @@ infer_syntenet <- function(blast_list = NULL, annotation = NULL,
     blast_intra <- blast_list[idx_equal]
     
     intraspecies <- intraspecies_synteny(blast_intra, intra_dir, annot_dfs,
-                                         anchors, max_gaps, verbose, ...)
+                                         anchors, max_gaps, is_pairwise,
+                                         verbose, ...)
     
     #---- 2) Interspecies synteny detection------------------------------------
     inter_dir <- file.path(outdir, "interspecies_synteny")
@@ -183,17 +186,11 @@ infer_syntenet <- function(blast_list = NULL, annotation = NULL,
     blast_inter <- blast_list[-idx_equal]
     
     interspecies <- interspecies_synteny(blast_inter, annotation, inter_dir,
-                                         anchors, max_gaps, verbose, ...)
+                                         anchors, max_gaps, is_pairwise,
+                                         verbose, ...)
     
     # Create edge list
     syn_files <- c(intraspecies, interspecies)
     edges <- parse_collinearity(syn_files)
     return(edges)
 }
-
-
-
-
-
-
-
