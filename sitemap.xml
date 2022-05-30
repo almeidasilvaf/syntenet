@@ -28,6 +28,9 @@
     <loc>/reference/angiosperm_phylogeny.html</loc>
   </url>
   <url>
+    <loc>/reference/annotation.html</loc>
+  </url>
+  <url>
     <loc>/reference/binarize_and_transpose.html</loc>
   </url>
   <url>
@@ -59,6 +62,9 @@
   </url>
   <url>
     <loc>/reference/infer_syntenet.html</loc>
+  </url>
+  <url>
+    <loc>/reference/intraspecies_synteny.html</loc>
   </url>
   <url>
     <loc>/reference/iqtree_is_installed.html</loc>
