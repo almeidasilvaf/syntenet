@@ -22,7 +22,7 @@ network), and users can perform:
 -   **Synteny detection** using a native implementation of the [MCScanX
     algorithm](https://doi.org/10.1093/nar/gkr1293), a C++ program that
     has been modified and ported to R with Rcpp. This way, users do not
-    need to install MCScanX beforehand, because `magrene` has its own
+    need to install MCScanX beforehand, because `syntenet` has its own
     implementation of the same algorithm.
 -   **Synteny network inference** by treating anchor pairs as edges of a
     graph;
