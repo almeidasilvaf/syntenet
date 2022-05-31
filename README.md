@@ -14,10 +14,10 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 coverage](https://codecov.io/gh/almeidasilvaf/syntenet/branch/master/graph/badge.svg)](https://codecov.io/gh/almeidasilvaf/syntenet?branch=master)
 <!-- badges: end -->
 
-The goal of `syntenet` is to infer synteny networks from protein
-sequence data and analyze them. Anchor pairs from synteny analyses are
-treated as an undirected unweighted graph (i.e., a synteny network), and
-users can perform:
+The goal of `syntenet` is to infer synteny networks from whole-genome
+protein sequence data and analyze them. Anchor pairs from synteny
+analyses are treated as an undirected unweighted graph (i.e., a synteny
+network), and users can perform:
 
 -   **Synteny detection** using a native implementation of the [MCScanX
     algorithm](https://doi.org/10.1093/nar/gkr1293), a C++ program that
