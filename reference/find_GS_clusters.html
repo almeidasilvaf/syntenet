@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">syntenet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
       </span>
     </div>
 
@@ -69,10 +69,14 @@
 <dd><p>A matrix with phylogenomic profiles, which can
 be obtained from the 1st element of the result list
 from <code>phylogenomic_profile</code>.</p></dd>
+
+
 <dt>species_annotation</dt>
 <dd><p>A 2-column data frame with species IDs in
 the first column (same as column names of profile matrix), and species
 annotation (e.g., higher-level taxonomic information) in the second column.</p></dd>
+
+
 <dt>min_percentage</dt>
 <dd><p>Numeric scalar with the minimum percentage of species
 in a group to consider group specificity. For instance,
@@ -81,10 +85,13 @@ than <strong>min_percentage</strong> of the species for this group, it will not
 be considered a group-specific cluster. This filtering criterion is useful
 to differentiate group-specific clusters (e.g., family-specific) from
 subgroup-specific clusters (e.g., genus-specific). Default: 50.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A data frame with the following variables:</p><dl><dt>Group</dt>
+    
+
+<p>A data frame with the following variables:</p><dl><dt>Group</dt>
 <dd><p>To which group of species the cluster is specific.</p></dd>
 
 <dt>Percentage</dt>
@@ -106,13 +113,13 @@ represented by the cluster.</p></dd>
 <span class="r-in"><span class="va">species_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span class="r-in">    <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"pvu"</span>, <span class="st">"gma"</span>, <span class="st">"cca"</span>, <span class="st">"tpr"</span>, <span class="st">"mtr"</span>, <span class="st">"adu"</span>, <span class="st">"lja"</span>,</span>
 <span class="r-in">    <span class="st">"Lang"</span>, <span class="st">"car"</span>, <span class="st">"pmu"</span>, <span class="st">"ppe"</span>, <span class="st">"pbr"</span>, <span class="st">"mdo"</span>, <span class="st">"roc"</span>, <span class="st">"fve"</span>,</span>
-<span class="r-in">    <span class="st">"Mnot"</span>, <span class="st">"Zjuj"</span>, <span class="st">"jcu"</span>, <span class="st">"mes"</span>, <span class="st">"rco"</span>, <span class="st">"lus"</span>, <span class="st">"ptr"</span></span>
-<span class="r-in"><span class="op">)</span> </span>
+<span class="r-in">    <span class="st">"Mnot"</span>, <span class="st">"Zjuj"</span>, <span class="st">"hlu"</span>, <span class="st">"jcu"</span>, <span class="st">"mes"</span>, <span class="st">"rco"</span>, <span class="st">"lus"</span>, <span class="st">"ptr"</span></span>
+<span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">species_annotation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span class="r-in">   Species <span class="op">=</span> <span class="va">species_order</span>,</span>
 <span class="r-in">   Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Fabaceae"</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Rosaceae"</span>, <span class="fl">6</span><span class="op">)</span>,</span>
-<span class="r-in">              <span class="st">"Moraceae"</span>, <span class="st">"Ramnaceae"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Euphorbiaceae"</span>, <span class="fl">3</span><span class="op">)</span>, </span>
-<span class="r-in">              <span class="st">"Linaceae"</span>, <span class="st">"Salicaceae"</span><span class="op">)</span></span>
+<span class="r-in">              <span class="st">"Moraceae"</span>, <span class="st">"Ramnaceae"</span>, <span class="st">"Cannabaceae"</span>,</span>
+<span class="r-in">               <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Euphorbiaceae"</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"Linaceae"</span>, <span class="st">"Salicaceae"</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"><span class="va">gs_clusters</span> <span class="op">&lt;-</span> <span class="fu">find_GS_clusters</span><span class="op">(</span><span class="va">profile_matrix</span>, <span class="va">species_annotation</span><span class="op">)</span></span>
 </code></pre></div>
@@ -129,7 +136,7 @@ represented by the cluster.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

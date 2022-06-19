@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">syntenet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
       </span>
     </div>
 
@@ -133,8 +133,8 @@ Synteny networks have been used to explore, among others, global synteny
 patterns in mammalian and angiosperm genomes <span class="citation">(Zhao and Schranz 2019)</span>, the evolution of
 MADS-box transcription factors <span class="citation">(Zhao et al.
 2017)</span>, and infer a microsynteny-based phylogeny for angiosperms
-<span class="citation">(Zhao et al. 2021)</span>. <code>syntenet</code>
-is a package that can be used to infer synteny networks from protein
+<span class="citation">(Zhao et al. 2021)</span>. <em><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></em> is a
+package that can be used to infer synteny networks from protein
 sequences and perform downstream network analyses that include:</p>
 <ul>
 <li><p><strong>Network clustering</strong>;</p></li>
@@ -267,16 +267,17 @@ sp RCC809</em>, which were obtained from Pico-PLAZA 3.0 <span class="citation">(
 <div class="section level2">
 <h2 id="data-preprocessing">Data preprocessing<a class="anchor" aria-label="anchor" href="#data-preprocessing"></a>
 </h2>
-<p>To detect synteny and infer synteny networks, <code>syntenet</code>
+<p>To detect synteny and infer synteny networks, <em><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></em>
 requires two objects as input:</p>
 <ul>
 <li>
-<strong>seq:</strong> A list of AAStringSet objects containing the
-translated sequences of primary transcripts for each species.</li>
+<strong>seq:</strong> A list of <code>AAStringSet</code> objects
+containing the translated sequences of primary transcripts for each
+species.</li>
 <li>
-<strong>annotation:</strong> A GRangesList or CompressedGRangesList
-object containing the coordinates for the genes in
-<strong>seq</strong>.</li>
+<strong>annotation:</strong> A <code>GRangesList</code> or
+<code>CompressedGRangesList</code> object containing the coordinates for
+the genes in <strong>seq</strong>.</li>
 </ul>
 <p>The first part of the pipeline consists in processing the data to
 make it match a standard structure. However, before processing the data
@@ -286,7 +287,7 @@ This function checks the input data for 3 required conditions:</p>
 <ol style="list-style-type: decimal">
 <li><p>Names of <strong>seq</strong> list (i.e.,
 <code>names(seq)</code>) match the names of <strong>annotation</strong>
-GRangesList/CompressedGRangesList (i.e.,
+<code>GRangesList</code>/<code>CompressedGRangesList</code> (i.e.,
 <code>names(annotation)</code>)</p></li>
 <li><p>For each species (list elements), the number of sequences in
 <strong>seq</strong> is not greater than the number of genes in
@@ -305,7 +306,7 @@ names in <code>annotation</code>.</p></li>
 <code class="sourceCode R"><span class="fu"><a href="../reference/check_input.html">check_input</a></span><span class="op">(</span><span class="va">proteomes</span>, <span class="va">annotation</span><span class="op">)</span>
 <span class="co">#&gt; [1] TRUE</span></code></pre></div>
 <p>As you can see, the data passed the checks. Now, let’s process them
-with the function <code>process_input</code>.</p>
+with the function <code><a href="../reference/process_input.html">process_input()</a></code>.</p>
 <p>This function processes the input sequences and annotation to:</p>
 <ol style="list-style-type: decimal">
 <li><p>Remove whitespace and anything after it in sequence names (i.e.,
@@ -324,10 +325,10 @@ to the beginning of each gene name (e.g., Atha_AT1G01010).</p></li>
 it.</p></li>
 <li><p>Add a unique species identifier (same as above) to gene and
 chromosome names of each element of the <strong>annotation</strong>
-GRangesList/CompressedGRangesList.</p></li>
+<code>GRangesList</code>/<code>CompressedGRangesList</code>.</p></li>
 <li><p>Filter each element of the <strong>annotation</strong>
-GRangesList/CompressedGRangesList to keep only seqnames, ranges, and
-gene ID.</p></li>
+<code>GRangesList</code>/<code>CompressedGRangesList</code> to keep only
+seqnames, ranges, and gene ID.</p></li>
 </ol>
 <p>Let’s process our input data:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
@@ -413,7 +414,7 @@ and Drost 2021)</span> or similar programs on the command line, saving
 the output in tabular format and reading the output table as a data
 frame (e.g., with the base R function
 <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table()</a></code>).</p></li>
-<li><p>Using a helper function in <code>syntenet</code> named
+<li><p>Using a helper function in <em><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></em> named
 <code><a href="../reference/run_diamond.html">run_diamond()</a></code>, which runs DIAMOND from the R session and
 automatically parses its output to a data frame.</p></li>
 </ol>
@@ -454,11 +455,10 @@ take a look at it.</p>
 <span class="co">#&gt; 8  361      1  361 1.72e-267      721</span></code></pre></div>
 <p>Now we can use this list of BLAST-like data frames to detect synteny.
 Here, we reimplemented the popular MCScanX algorithm <span class="citation">(Y. Wang et al. 2012)</span>, originally written in
-C++, using the Rcpp <span class="citation">(Eddelbuettel and François
-2011)</span> framework for R and C++ integration. This means that
-<code>syntenet</code> comes with a native version of MCScanX, so you can
-run MCScanX in R without having to install it yourself. Amazing,
-huh?</p>
+C++, using the <em><a href="https://CRAN.R-project.org/package=Rcpp" class="external-link">Rcpp</a></em> <span class="citation">(Eddelbuettel and François 2011)</span> framework for R
+and C++ integration. This means that <em><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></em> comes
+with a native version of MCScanX, so you can run MCScanX in R without
+having to install it yourself. Amazing, huh?</p>
 <p>To detect synteny and infer the synteny network, use the function
 <code><a href="../reference/infer_syntenet.html">infer_syntenet()</a></code>. The output is a network represented as a
 so-called <strong>edge list</strong> (i.e., a 2-column data frame with
@@ -477,9 +477,8 @@ node 1 and node 2 in columns 1 and 2, respectively).</p>
 <span class="co">#&gt; 5 Olu_OL01G00170 Osp_ORCC809_01G06400</span>
 <span class="co">#&gt; 6 Olu_OL01G00180 Osp_ORCC809_01G06390</span></code></pre></div>
 <p>In a synteny network, each row of the edge list represents an anchor
-pair. In the edge list above, for example, the genes
-<code>net[1,1]</code> and <code>net[1,2]</code> are in the same syntenic
-block.</p>
+pair. In the edge list above, for example, the genes Olu_OL01G00100 and
+Osp_ORCC809_01G06480 are in the same syntenic block.</p>
 </div>
 <div class="section level2">
 <h2 id="phylogenomic-profiling">Phylogenomic profiling<a class="anchor" aria-label="anchor" href="#phylogenomic-profiling"></a>
@@ -521,9 +520,9 @@ of 2 elements:</p>
 <ol style="list-style-type: decimal">
 <li><p>A matrix of phylogenomic profiles, with clusters in rows and
 species in columns.</p></li>
-<li><p>An hclust object containing the results of Ward’s clustering on a
-matrix of Jaccard distances obtained from the phylogenomic profiles
-matrix.</p></li>
+<li><p>An <code>hclust</code> object containing the results of Ward’s
+clustering on a matrix of Jaccard distances obtained from the
+phylogenomic profiles matrix.</p></li>
 </ol>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Phylogenomic profiling</span>
@@ -608,6 +607,8 @@ annotation (i.e., species groups).</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Find group-specific clusters</span>
 <span class="va">gs_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_GS_clusters.html">find_GS_clusters</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span>, <span class="va">species_annotation</span><span class="op">)</span>
+<span class="co">#&gt; Could not find annotation for species: </span>
+<span class="co">#&gt; hlu</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">gs_clusters</span><span class="op">)</span>
 <span class="co">#&gt;        Group Percentage Cluster</span>
@@ -626,8 +627,8 @@ network. Let’s plot a heatmap of group-specific clusters only.</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Filter profiles matrix to only include group-specific clusters</span>
 <span class="va">pgs</span> <span class="op">&lt;-</span> <span class="va">profiles</span>
-<span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span> <span class="op">&lt;-</span> <span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span>
-                                             <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span>, <span class="op">]</span>
+<span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span>
+<span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span> <span class="op">&lt;-</span> <span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">[</span><span class="va">idx</span>, <span class="op">]</span>
 
 <span class="co"># Plot heatmap</span>
 <span class="fu"><a href="../reference/plot_profiles.html">plot_profiles</a></span><span class="op">(</span>
@@ -666,11 +667,11 @@ visualize the group-specific clusters.</p>
 <p><img src="syntenet_files/figure-html/plot_network-2.png" width="700"></p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R">
-<span class="co"># 3) Interactive visualization</span>
+<span class="co"># 3) Interactive visualization (zoom out and in to explore it)</span>
 <span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, 
              interactive <span class="op">=</span> <span class="cn">TRUE</span>, dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">300</span><span class="op">)</span><span class="op">)</span></code></pre></div>
-<div id="htmlwidget-46414cb1623e7c38aad9" style="width:500px;height:300px;" class="forceNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-46414cb1623e7c38aad9">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Class","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-30,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-3d2655f380f8d3ac8fde" style="width:500px;height:300px;" class="forceNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3d2655f380f8d3ac8fde">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-10,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="microsynteny-based-phylogeny-reconstruction">Microsynteny-based phylogeny reconstruction<a class="anchor" aria-label="anchor" href="#microsynteny-based-phylogeny-reconstruction"></a>
@@ -693,8 +694,8 @@ can be done with <code>binarize_and_tranpose()</code>.</p>
 <span class="co">#&gt;   fve   0   0    0    1    0</span>
 <span class="co">#&gt;   gma   1   1    1    1    1</span></code></pre></div>
 <p>Now, you can use this transposed binary matrix as input to IQTREE
-[minh2020iq] to infer a phylogeny. Here, once again, we give you 2
-options:</p>
+<span class="citation">(Minh et al. 2020)</span> to infer a phylogeny.
+Here, once again, we give you 2 options:</p>
 <ol style="list-style-type: decimal">
 <li><p>Using <code><a href="../reference/profiles2phylip.html">profiles2phylip()</a></code> to write the transposed
 binary matrix to a PHYLIP file and running IQTREE from the command line.
@@ -734,10 +735,10 @@ species tree in Newick format, and it can be visualized with your
 favorite tree viewer. We strongly recommend using the
 <code><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree()</a></code> function from the Bioconductor package treeio
 <span class="citation">(L.-G. Wang et al. 2020)</span> to read the tree,
-and visualizing it with the ggtree Bioc package <span class="citation">(Yu et al. 2017)</span>. For example, let’s visualize a
-microsynteny-based phylogeny for 123 angiosperm species, whose
-phylogenomic profiles were obtained from <span class="citation">Zhao et
-al. (2021)</span>.</p>
+and visualizing it with the <em><a href="https://bioconductor.org/packages/3.15/ggtree" class="external-link">ggtree</a></em>
+Bioc package <span class="citation">(Yu et al. 2017)</span>. For
+example, let’s visualize a microsynteny-based phylogeny for 123
+angiosperm species, whose phylogenomic profiles were obtained from <span class="citation">Zhao et al. (2021)</span>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">angiosperm_phylogeny</span><span class="op">)</span>
 
@@ -774,10 +775,10 @@ al. (2021)</span>.</p>
 <span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; other attached packages:</span>
-<span class="co">#&gt; [1] ggtree_3.4.0     syntenet_0.99.0  BiocStyle_2.24.0</span>
+<span class="co">#&gt; [1] ggtree_3.4.0     syntenet_0.99.1  BiocStyle_2.24.0</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; loaded via a namespace (and not attached):</span>
-<span class="co">#&gt;  [1] nlme_3.1-157           bitops_1.0-7           fs_1.5.2              </span>
+<span class="co">#&gt;  [1] nlme_3.1-158           bitops_1.0-7           fs_1.5.2              </span>
 <span class="co">#&gt;  [4] RColorBrewer_1.1-3     rprojroot_2.0.3        GenomeInfoDb_1.32.2   </span>
 <span class="co">#&gt;  [7] tools_4.2.0            bslib_0.3.1            utf8_1.2.2            </span>
 <span class="co">#&gt; [10] R6_2.5.1               vegan_2.6-2            lazyeval_0.2.2        </span>
@@ -785,14 +786,14 @@ al. (2021)</span>.</p>
 <span class="co">#&gt; [16] permute_0.9-7          tidyselect_1.1.2       compiler_4.2.0        </span>
 <span class="co">#&gt; [19] textshaping_0.3.6      cli_3.3.0              intergraph_2.0-2      </span>
 <span class="co">#&gt; [22] network_1.17.2         desc_1.4.1             labeling_0.4.2        </span>
-<span class="co">#&gt; [25] bookdown_0.26          sass_0.4.1             scales_1.2.0          </span>
-<span class="co">#&gt; [28] pkgdown_2.0.3          yulab.utils_0.0.4      systemfonts_1.0.4     </span>
+<span class="co">#&gt; [25] bookdown_0.27          sass_0.4.1             scales_1.2.0          </span>
+<span class="co">#&gt; [28] pkgdown_2.0.4          yulab.utils_0.0.4      systemfonts_1.0.4     </span>
 <span class="co">#&gt; [31] stringr_1.4.0          digest_0.6.29          rmarkdown_2.14        </span>
 <span class="co">#&gt; [34] XVector_0.36.0         pkgconfig_2.0.3        htmltools_0.5.2       </span>
 <span class="co">#&gt; [37] fastmap_1.1.0          highr_0.9              htmlwidgets_1.5.4     </span>
 <span class="co">#&gt; [40] rlang_1.0.2            gridGraphics_0.5-1     jquerylib_0.1.4       </span>
 <span class="co">#&gt; [43] generics_0.1.2         farver_2.1.0           jsonlite_1.8.0        </span>
-<span class="co">#&gt; [46] statnet.common_4.6.0   dplyr_1.0.9            RCurl_1.98-1.6        </span>
+<span class="co">#&gt; [46] statnet.common_4.6.0   dplyr_1.0.9            RCurl_1.98-1.7        </span>
 <span class="co">#&gt; [49] magrittr_2.0.3         ggplotify_0.1.0        ggnetwork_0.5.10      </span>
 <span class="co">#&gt; [52] GenomeInfoDbData_1.2.8 patchwork_1.1.1        Matrix_1.4-1          </span>
 <span class="co">#&gt; [55] Rcpp_1.0.8.3           munsell_0.5.0          S4Vectors_0.34.0      </span>
@@ -801,14 +802,14 @@ al. (2021)</span>.</p>
 <span class="co">#&gt; [64] zlibbioc_1.42.0        grid_4.2.0             parallel_4.2.0        </span>
 <span class="co">#&gt; [67] crayon_1.5.1           lattice_0.20-45        Biostrings_2.64.0     </span>
 <span class="co">#&gt; [70] splines_4.2.0          knitr_1.39             pillar_1.7.0          </span>
-<span class="co">#&gt; [73] igraph_1.3.1           GenomicRanges_1.48.0   stats4_4.2.0          </span>
+<span class="co">#&gt; [73] igraph_1.3.2           GenomicRanges_1.48.0   stats4_4.2.0          </span>
 <span class="co">#&gt; [76] glue_1.6.2             evaluate_0.15          ggfun_0.0.6           </span>
 <span class="co">#&gt; [79] BiocManager_1.30.18    treeio_1.20.0          vctrs_0.4.1           </span>
 <span class="co">#&gt; [82] networkD3_0.4          tidyr_1.2.0            gtable_0.3.0          </span>
 <span class="co">#&gt; [85] purrr_0.3.4            cachem_1.0.6           ggplot2_3.3.6         </span>
 <span class="co">#&gt; [88] xfun_0.31              tidytree_0.3.9         coda_0.19-4           </span>
 <span class="co">#&gt; [91] ragg_1.2.2             tibble_3.1.7           pheatmap_1.0.12       </span>
-<span class="co">#&gt; [94] aplot_0.1.4            memoise_2.0.1          IRanges_2.30.0        </span>
+<span class="co">#&gt; [94] aplot_0.1.6            memoise_2.0.1          IRanges_2.30.0        </span>
 <span class="co">#&gt; [97] cluster_2.1.3          ellipsis_0.3.2</span></code></pre></div>
 </div>
 <div class="section level2">
@@ -836,6 +837,13 @@ Lange, Jens. 2021. <span>“CliquePercolation: An r Package for Conducting
 and Visualizing Results of the Clique Percolation Network Community
 Detection Algorithm.”</span> <em>Journal of Open Source Software</em> 6
 (62): 3210.
+</div>
+<div id="ref-minh2020iq" class="csl-entry">
+Minh, Bui Quang, Heiko A Schmidt, Olga Chernomor, Dominik Schrempf,
+Michael D Woodhams, Arndt Von Haeseler, and Robert Lanfear. 2020.
+<span>“IQ-TREE 2: New Models and Efficient Methods for Phylogenetic
+Inference in the Genomic Era.”</span> <em>Molecular Biology and
+Evolution</em> 37 (5): 1530–34.
 </div>
 <div id="ref-vandepoele2013pico" class="csl-entry">
 Vandepoele, Klaas, Michiel Van Bel, Guilhem Richard, Sofie Van
@@ -894,18 +902,19 @@ Communications</em> 12 (1): 1–14.
 <ol>
 <li id="fn1"><p><strong>Friendly tip:</strong> To read the proteomes in
 a FASTA file, use the function <code>readAAStringSet()</code> from the
-Bioconductor package <em>Biostrings</em>. To read gene annotation from a
-GFF/GTF file, use the function <code>import()</code> from the
-Bioconductor package <em>rtracklayer</em>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p><strong>Friendly tip:</strong> <code>syntenet</code>
-uses the <em>Infomap</em> algorithm to cluster networks, which has been
-shown to have the best performance <span class="citation">(Zhao and
-Schranz 2019)</span>. This algorithm assigns each gene to a single
-cluster. However, for some cases (e.g., detection of tandem arrays), you
-may want to use an algorithm that allows community overlap (i.e., a gene
-can be part of more than one cluster). If this is your case, we
-recommend the <em>clique percolation</em> algorithm, which is
-implemented in the R package CliquePercolation <span class="citation">(Lange 2021)</span>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+Bioconductor package <em><a href="https://bioconductor.org/packages/3.15/Biostrings" class="external-link">Biostrings</a></em>.
+To read gene annotation from a GFF/GTF file, use the function
+<code>import()</code> from the Bioconductor package <em><a href="https://bioconductor.org/packages/3.15/rtracklayer" class="external-link">rtracklayer</a></em>.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p><strong>Friendly tip:</strong> <em><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></em> uses
+the <em>Infomap</em> algorithm to cluster networks, which has been shown
+to have the best performance <span class="citation">(Zhao and Schranz
+2019)</span>. This algorithm assigns each gene to a single cluster.
+However, for some cases (e.g., detection of tandem arrays), you may want
+to use an algorithm that allows community overlap (i.e., a gene can be
+part of more than one cluster). If this is your case, we recommend the
+<em>clique percolation</em> algorithm, which is implemented in the R
+package <em><a href="https://CRAN.R-project.org/package=CliquePercolation" class="external-link">CliquePercolation</a></em>
+<span class="citation">(Lange 2021)</span>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>
@@ -927,7 +936,7 @@ implemented in the R package CliquePercolation <span class="citation">(Lange 202
 
 <div class="pkgdown">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer>

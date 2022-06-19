@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">syntenet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
       </span>
     </div>
 
@@ -63,7 +63,8 @@
   cluster_species <span class="op">=</span> <span class="cn">FALSE</span>,
   cluster_columns <span class="op">=</span> <span class="va">profiles</span><span class="op">$</span><span class="va">hclust</span>,
   show_colnames <span class="op">=</span> <span class="cn">FALSE</span>,
-  discretize <span class="op">=</span> <span class="cn">TRUE</span>
+  discretize <span class="op">=</span> <span class="cn">TRUE</span>,
+  <span class="va">...</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -72,13 +73,19 @@
     <dl><dt>profiles</dt>
 <dd><p>A list of phylogenomic profiles as returned
 by <code><a href="phylogenomic_profile.html">phylogenomic_profile()</a></code>.</p></dd>
+
+
 <dt>species_annotation</dt>
 <dd><p>A 2-column data frame with species IDs in
 the first column (same as column names of profile matrix), and species
 annotation (e.g., higher-level taxonomic information) in the second column.</p></dd>
+
+
 <dt>palette</dt>
 <dd><p>A character vector of colors or a character scalar with
 the name of an RColorBrewer palette. Default: "RdYlBu".</p></dd>
+
+
 <dt>cluster_species</dt>
 <dd><p>Either a logical scalar (TRUE or FALSE) or
 a character vector with the order of columns. Ideally, the character vector
@@ -86,22 +93,35 @@ should contain the order of species in a phylogenetically meaningful way.
 If users have a species tree, they can read it
 with <code><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">treeio::read.tree()</a></code> and get the species order
 with <code><a href="https://rdrr.io/pkg/ggtree/man/get_taxa_name.html" class="external-link">ggtree::get_taxa_name()</a></code>.</p></dd>
+
+
 <dt>cluster_columns</dt>
 <dd><p>Either a logical scalar (TRUE or FALSE) or an hclust
 object. Default: hclust object in the <strong>profiles</strong> list as returned
 by <code><a href="phylogenomic_profile.html">phylogenomic_profile()</a></code>.</p></dd>
+
+
 <dt>show_colnames</dt>
 <dd><p>Logical indicating whether to show column names (i.e.,
 cluster IDs) or not. Showing cluster IDs can be useful when visualizing
 a small subset of them. When visualizing all clusters, cluster IDs are
 impossible to read. Default: FALSE.</p></dd>
+
+
 <dt>discretize</dt>
 <dd><p>Logical indicating whether to discretize clusters in
 4 categories: 0, 1, 2, and 3+.</p></dd>
+
+
+<dt>...</dt>
+<dd><p>Additional parameters to <code><a href="https://rdrr.io/pkg/pheatmap/man/pheatmap.html" class="external-link">pheatmap::pheatmap()</a></code>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A pheatmap object.</p>
+    
+
+<p>A pheatmap object.</p>
     </div>
 
     <div id="ref-examples">
@@ -143,7 +163,7 @@ impossible to read. Default: FALSE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

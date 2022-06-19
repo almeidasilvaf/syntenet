@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">syntenet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
       </span>
     </div>
 
@@ -66,15 +66,20 @@
 protein sequences for a given species. This list must have names
 (not NULL), and names of each list element must match the names of
 list elements in <strong>annotation</strong>.</p></dd>
+
+
 <dt>annotation</dt>
-<dd><p>A GRangesList or CompressedGRangesList object
-with the annotation for the sequences in <strong>seq</strong>. This list must
+<dd><p>A GRangesList, CompressedGRangesList, or list of
+GRanges with the annotation for the sequences in <strong>seq</strong>. This list must
 have names (not NULL), and names of each list element must match the names
 of list elements in <strong>seq</strong>.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A list of 2 elements:</p><dl><dt>seq</dt>
+    
+
+<p>A list of 2 elements:</p><dl><dt>seq</dt>
 <dd><p>The processed list of AAStringSet objects from <strong>seq</strong>.</p></dd>
 
 <dt>annotation</dt>
@@ -126,7 +131,7 @@ gene ID.</p></li>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>

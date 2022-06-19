@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">syntenet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
       </span>
     </div>
 
@@ -71,28 +71,41 @@
     <dl><dt>network</dt>
 <dd><p>The synteny network represented as an edge list, which is
 a 2-column data frame with each member of the anchor pair in a column.</p></dd>
+
+
 <dt>clusters</dt>
 <dd><p>A 2-column data frame with the variables <strong>Gene</strong>
 and <strong>Cluster</strong> representing gene ID and cluster ID, respectively,
 exactly as returned by <code>cluster_network</code>.</p></dd>
+
+
 <dt>cluster_id</dt>
 <dd><p>Character scalar or vector with cluster ID. If more than one
 cluster is passed as input, clusters are colored differently.</p></dd>
+
+
 <dt>color_by</dt>
 <dd><p>Either "cluster" or a 2-column data frame with
 gene IDs in the first column and variable to be used for
 coloring (e.g., taxonomic information) in the second column.</p></dd>
+
+
 <dt>interactive</dt>
 <dd><p>Logical scalar indicating whether to display an
 interactive network or not. Default: FALSE.</p></dd>
+
+
 <dt>dim_interactive</dt>
 <dd><p>Numeric vector of length 2 with the window
 dimensions of the interactive plot. If <strong>interactive</strong> is set to FALSE,
 this parameter is ignored.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-    <p>A ggplot object with the network.</p>
+    
+
+<p>A ggplot object with the network.</p>
     </div>
 
     <div id="ref-examples">
@@ -144,7 +157,7 @@ this parameter is ignored.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
 </div>
 
       </footer></div>
