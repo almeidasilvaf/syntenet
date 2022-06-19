@@ -3,7 +3,8 @@
 #'
 #' @param blast_intra A list of BLAST data frames for intraspecies comparisons.
 #' @param intra_dir Output directory.
-#' @param annot_list A list of annotation data frames.
+#' @param annot_list A processed GRangesList or CompressedGRangesList object 
+#' as returned by \code{process_input()}. 
 #' @param anchors Numeric indicating the minimum required number of genes
 #' to call a syntenic block. Default: 5.
 #' @param max_gaps Numeric indicating the number of upstream and downstream
@@ -16,6 +17,7 @@
 #' `mcscanx`.
 #'
 #' @return Paths to .collinearity files.
+#' @importFrom methods is
 #' @rdname intraspecies_synteny
 #' @export
 #' @examples 
@@ -32,6 +34,7 @@ intraspecies_synteny <- function(blast_intra = NULL,
                                  max_gaps = 25, is_pairwise = TRUE,
                                  verbose = FALSE, ...) {
 
+    valid <- valid_blast(blast_intra) & valid_annot(annot_list)
     if(!dir.exists(intra_dir)) { dir.create(intra_dir, recursive = TRUE) }
     
     intrasyn <- unlist(lapply(blast_intra, function(x) {
@@ -86,6 +89,7 @@ intraspecies_synteny <- function(blast_intra = NULL,
 #' @return Paths to .collinearity files.
 #' 
 #' @importFrom utils combn
+#' @importFrom methods is
 #' @rdname interspecies_synteny
 #' @export
 #' @examples 
@@ -103,6 +107,7 @@ interspecies_synteny <- function(blast_inter = NULL, annot_list = NULL,
                                  max_gaps = 25, is_pairwise = TRUE,
                                  verbose = FALSE, ...) {
     
+    valid <- valid_blast(blast_inter) & valid_annot(annot_list)
     if(!dir.exists(inter_dir)) { dir.create(inter_dir, recursive = TRUE) }
     species <- names(annot_list)
     unique_comp <- combn(species, 2, simplify = FALSE)

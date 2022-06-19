@@ -12,8 +12,8 @@ protein sequences for a given species. This list must have names
 (not NULL), and names of each list element must match the names of
 list elements in \strong{annotation}.}
 
-\item{annotation}{A GRangesList or CompressedGRangesList object
-with the annotation for the sequences in \strong{seq}. This list must
+\item{annotation}{A GRangesList, CompressedGRangesList, or list of
+GRanges with the annotation for the sequences in \strong{seq}. This list must
 have names (not NULL), and names of each list element must match the names
 of list elements in \strong{seq}.}
 }

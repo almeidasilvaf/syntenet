@@ -30,6 +30,7 @@
 run_diamond <- function(seq = NULL, top_hits = 5, verbose = FALSE, 
                         outdir = tempdir(), threads = NULL, ...) {
     
+    valid <- valid_seq(seq)
     check_diamond <- diamond_is_installed()
     if(!check_diamond) {
         stop("Unable to find DIAMOND in PATH.")
@@ -127,8 +128,8 @@ parse_collinearity <- function(collinearity_paths = NULL) {
 #' names separated by underscore. For instance, if the first list element is
 #' a data frame containing the comparison of speciesA (query) 
 #' against speciesB (database), its name must be "speciesA_speciesB".
-#' @param annotation A processed GRangesList or CompressedGRangesList object 
-#' as returned by \code{process_input()}. 
+#' @param annotation A processed GRangesList, CompressedGRangesList, or
+#' list of GRanges as returned by \code{process_input()}. 
 #' @param outdir Path to the output directory. Default: tempdir().
 #' @param anchors Numeric indicating the minimum required number of genes
 #' to call a syntenic block. Default: 5.
@@ -159,6 +160,7 @@ infer_syntenet <- function(blast_list = NULL, annotation = NULL,
                            anchors = 5, max_gaps = 25,
                            is_pairwise = TRUE, verbose = FALSE, ...) {
 
+    valid <- valid_blast(blast_list) & valid_annot(annotation)
     annot_dfs <- lapply(annotation, function(x) {
         return(as.data.frame(x)[, c("seqnames", "gene", "start", "end")])
     })

@@ -47,13 +47,13 @@ profile_matrix <- phylogenomic_profile(clusters)$profile_matrix
 species_order <- c(
     "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",
     "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
-    "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
-) 
+    "Mnot", "Zjuj", "hlu", "jcu", "mes", "rco", "lus", "ptr"
+)
 species_annotation <- data.frame(
    Species = species_order,
    Family = c(rep("Fabaceae", 11), rep("Rosaceae", 6),
-              "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
-              "Linaceae", "Salicaceae")
+              "Moraceae", "Ramnaceae", "Cannabaceae",
+               rep("Euphorbiaceae", 3), "Linaceae", "Salicaceae")
 )
 gs_clusters <- find_GS_clusters(profile_matrix, species_annotation)
 }

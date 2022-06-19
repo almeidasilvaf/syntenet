@@ -3,8 +3,8 @@
 #' 
 #'
 #' @param seq A list of AAStringSet objects.
-#' @param annotation A GRangesList or CompressedGRangesList object with
-#' the annotation for the sequences in \strong{seq}.
+#' @param annotation A GRangesList, CompressedGRangesList, or list of
+#' GRanges with the annotation for the sequences in \strong{seq}.
 #' 
 #' @return TRUE if the objects pass the check.
 #' @noRd
@@ -107,7 +107,7 @@ check_gene_names <- function(seq = NULL, annotation = NULL) {
         }
         return(nam)
     })
-
+    
     # Check if names in `seq` match gene names in `annotation`
     check_names <- lapply(seq_along(seq_names), function(x) {
         c <- seq_names[[x]] %in% gene_names[[x]]
@@ -139,18 +139,11 @@ species_id_length <- function(input_list = NULL) {
     
     nam <- names(input_list)
     nam <- gsub(" ", "_", nam)
-    abbrev <- unlist(lapply(nam, substr, 1, 3)) # try with 3
-    count <- table(abbrev)
-    n <- 3
-    if(any(count > 1)) {
-        abbrev <- unlist(lapply(nam, substr, 1, 4)) # try with 4
-        count <- table(abbrev)
-        n <- 4
-        if(any(count > 1)) {
-            abbrev <- unlist(lapply(nam, substr, 1, 5)) # try with 5
-            count <- table(abbrev)
-            n <- 5
-        }
+    
+    for(n in seq(3, 5)) { 
+        abbrev <- lapply(nam, substr, 1, n)
+        count <- table(unlist(abbrev))
+        if (!any(count > 1)) break
     }
     return(n)
 }
@@ -279,3 +272,73 @@ species_colors <- function(species_annotation) {
     )
     return(results)
 }
+
+
+#' Wrapper to check if input sequences have the expected class
+#'
+#' @param seq A list of AAStringSet objects, each list element containing
+#' protein sequences for a given species. This list must have names 
+#' (not NULL), and names of each list element must match the names of
+#' list elements in \strong{annotation}.
+#' 
+#' @return TRUE if the input is valid.
+#' @noRd
+#' @importFrom methods is
+valid_seq <- function(seq) {
+    is_valid <- FALSE
+    
+    if(is(seq, "list") & is(seq[[1]], "AAStringSet")) {
+        is_valid <- TRUE
+    }
+    
+    if(!is_valid) { 
+        stop("Input sequences must be in a list of AAStringSet objects.") 
+    }
+    
+    return(is_valid)
+}
+
+
+#' Wrapper to check if input annotation has the expected class
+#'
+#' @param annotation A GRangesList, CompressedGRangesList, or list of
+#' GRanges with the annotation for the sequences in \strong{seq}. This list must
+#' have names (not NULL), and names of each list element must match the names
+#' of list elements in \strong{seq}.
+#' 
+#' @return TRUE if the input is valid.
+#' @noRd
+#' @importFrom methods is
+valid_annot <- function(annot) {
+
+    if(is(annot, "list") | is(annot, "GRangesList") | 
+       is(annot, "CompressedGRangesList")) {
+        is_valid <- TRUE
+    } else {
+        stop("Input annotation must be in a GRangesList, CompressedGRangesList,
+             or list of GRanges.") 
+    }
+    
+    return(is_valid)
+}
+
+
+#' Wrapper to check if input BLAST list has the expected class
+#'
+#' @param blast_list A list of data frames, each data frame having 
+#' the tabular output of BLASTp or similar programs, such as DIAMOND.
+#' 
+#' @return TRUE if the input is valid.
+#' @noRd
+#' @importFrom methods is
+valid_blast <- function(blast_list) {
+
+    if(is(blast_list, "list") & is(blast_list[[1]], "data.frame")) {
+        is_valid <- TRUE
+    } else {
+        stop("BLAST list must be a list of data frames.")
+    }
+    
+    return(is_valid)
+}
+

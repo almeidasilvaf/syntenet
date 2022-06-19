@@ -39,25 +39,28 @@
 
 #' List of data frames containing BLAST-like tabular output
 #'
-#' The object was created using the example code, exactly as described
-#' in the vignette. Hits with <50% identity were filtered out.
+#' The object was created by running \code{run_diamond} on the protein
+#' sequences for the Ostreococcus algae available in the \strong{proteomes}
+#' example data. Hits with <50% identity were filtered out. Code to recreate
+#' this data is available at the script/ subdirectory.
 #' 
 #' @name blast_list
 #' @format A list of data frames containing the pairwise comparisons between
-#' proteomes.
+#' proteomes of Ostreococcus species.
 #' @examples 
 #' data(blast_list)
 #' @usage data(blast_list)
 "blast_list"
 
 
-#' Data frame containing a network represented as an edge list
+#' Synteny network of Ostreococcus genomes represented as an edge list
 #'
-#' The object was created using the example code, exactly as described
-#' in the vignette.
+#' The object was created by running \code{infer_syntenet} on the 
+#' \strong{blast_list} example data. Code to recreate this data set is 
+#' available at the script/ subdirectory.
 #' 
 #' @name edges
-#' @format A data frame containing anchor between two
+#' @format A data frame containing anchor pairs between two Ostreococcus
 #' proteomes.
 #' @examples 
 #' data(edges)
@@ -66,6 +69,8 @@
 
 
 #' Synteny network of BUSCO genes for 25 eudicot species
+#'
+#' Data obtained from Zhao & Schranz, 2019.
 #'
 #' @name network
 #' @format An edgelist (i.e., a 2-column data frame with node 1 in 
@@ -82,6 +87,8 @@
 
 
 #' Synteny network clusters of BUSCO genes for 25 eudicot species
+#' 
+#' Data obtained from Zhao & Schranz, 2019.
 #'
 #' @name clusters
 #' @format A 2-column data frame containing the following variables:
@@ -102,8 +109,9 @@
 
 #' Microsynteny-based angiosperm phylogeny.
 #'
-#' The data are stored as a 'phylo' object, which can be created 
-#' with \code{treeio::read.tree()}.
+#' Original tree file obtained from Zhao et al., 2021.
+#' The tree is an object of class 'phylo', which can be created by reading
+#' the tree file with \code{treeio::read.tree()}.
 #'
 #' @name angiosperm_phylogeny
 #' @format An object of class 'phylo'.

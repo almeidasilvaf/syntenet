@@ -6,14 +6,16 @@
 \title{List of data frames containing BLAST-like tabular output}
 \format{
 A list of data frames containing the pairwise comparisons between
-proteomes.
+proteomes of Ostreococcus species.
 }
 \usage{
 data(blast_list)
 }
 \description{
-The object was created using the example code, exactly as described
-in the vignette. Hits with <50\% identity were filtered out.
+The object was created by running \code{run_diamond} on the protein
+sequences for the Ostreococcus algae available in the \strong{proteomes}
+example data. Hits with <50\% identity were filtered out. Code to recreate
+this data is available at the script/ subdirectory.
 }
 \examples{
 data(blast_list)

@@ -15,7 +15,7 @@ A 2-column data frame containing the following variables:
 data(clusters)
 }
 \description{
-Synteny network clusters of BUSCO genes for 25 eudicot species
+Data obtained from Zhao & Schranz, 2019.
 }
 \examples{
 data(clusters)

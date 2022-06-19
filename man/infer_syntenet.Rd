@@ -25,8 +25,8 @@ names separated by underscore. For instance, if the first list element is
 a data frame containing the comparison of speciesA (query)
 against speciesB (database), its name must be "speciesA_speciesB".}
 
-\item{annotation}{A processed GRangesList or CompressedGRangesList object
-as returned by \code{process_input()}.}
+\item{annotation}{A processed GRangesList, CompressedGRangesList, or
+list of GRanges as returned by \code{process_input()}.}
 
 \item{outdir}{Path to the output directory. Default: tempdir().}
 

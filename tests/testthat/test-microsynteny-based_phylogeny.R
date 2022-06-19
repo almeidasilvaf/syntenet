@@ -33,7 +33,7 @@ test_that("infer_microsynteny_phylogeny() infers a phylogeny", {
     if(iqtree_is_installed()) {
         phylo <- infer_microsynteny_phylogeny(tmat, outgroup = "pmu", 
                                               threads = 1)
-    }
+    } 
     expect_equal(class(phylo), "character")
     expect_equal(length(phylo), 10)
 })

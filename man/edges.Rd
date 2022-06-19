@@ -3,17 +3,18 @@
 \docType{data}
 \name{edges}
 \alias{edges}
-\title{Data frame containing a network represented as an edge list}
+\title{Synteny network of Ostreococcus genomes represented as an edge list}
 \format{
-A data frame containing anchor between two
+A data frame containing anchor pairs between two Ostreococcus
 proteomes.
 }
 \usage{
 data(edges)
 }
 \description{
-The object was created using the example code, exactly as described
-in the vignette.
+The object was created by running \code{infer_syntenet} on the
+\strong{blast_list} example data. Code to recreate this data set is
+available at the script/ subdirectory.
 }
 \examples{
 data(edges)

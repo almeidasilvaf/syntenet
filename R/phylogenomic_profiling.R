@@ -115,23 +115,30 @@ phylogenomic_profile <- function(clusters = NULL) {
 #' species_order <- c(
 #'     "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",
 #'     "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
-#'     "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
-#' ) 
+#'     "Mnot", "Zjuj", "hlu", "jcu", "mes", "rco", "lus", "ptr"
+#' )
 #' species_annotation <- data.frame(
 #'    Species = species_order,
 #'    Family = c(rep("Fabaceae", 11), rep("Rosaceae", 6),
-#'               "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
-#'               "Linaceae", "Salicaceae")
-#')
+#'               "Moraceae", "Ramnaceae", "Cannabaceae",
+#'                rep("Euphorbiaceae", 3), "Linaceae", "Salicaceae")
+#' )
 #' gs_clusters <- find_GS_clusters(profile_matrix, species_annotation)
 find_GS_clusters <- function(profile_matrix = NULL, 
                              species_annotation = NULL,
                              min_percentage = 50) {
-    
+    if(!is.data.frame(species_annotation)) {
+        stop("Species annotation must be a 2-column data frame.")
+    }
+    diff <- setdiff(colnames(profile_matrix), species_annotation$Species)
+    if(length(diff) != 0) {
+        diffname <- paste0(diff, collapse = "\n")
+        message("Could not find annotation for species: \n", diffname)
+    }
     names(species_annotation) <- c("Species", "Group")
     freq_by_group <- as.data.frame(table(species_annotation$Group))
     n <- length(unique(species_annotation$Group))
-
+    
     # Reshape to long format
     bmat <- as.data.frame(profile_matrix)
     bmat[bmat > 0] <- 1
@@ -166,7 +173,7 @@ find_GS_clusters <- function(profile_matrix = NULL,
         }
         return(gs)
     }))
-
+    
     if(is.data.frame(gs_df)) {
         names(gs_df) <- c("Group", "Percentage", "Cluster")
         gs_df$Percentage <- round(gs_df$Percentage, 2)

@@ -192,6 +192,23 @@ names(network) <- c("node1", "node2")
 usethis::use_data(network, compress = "xz", overwrite = TRUE)
 ```
 
+## edges.rda
+
+``` r
+# Load data
+data(proteomes)
+data(annotation)
+data(blast_list)
+
+# Process input data
+pdata <- process_input(proteomes, annotation)
+
+# Infer network
+edges <- infer_syntenet(blast_list, pdata$annotation)
+
+usethis::use_data(edges, compress = "xz")
+```
+
 ## clusters.rda
 
 The synteny network clusters for BUSCO genes were downloaded from [this

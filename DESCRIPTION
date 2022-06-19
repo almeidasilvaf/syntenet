@@ -1,6 +1,6 @@
 Package: syntenet
 Title: Inference And Analysis Of Synteny Networks
-Version: 0.99.0
+Version: 0.99.1
 Date: 2022-03-28
 Authors@R: 
     c(
@@ -51,6 +51,7 @@ Imports:
     GenomicRanges,
     Biostrings,
     utils,
+    methods,
     igraph,
     stats,
     vegan,

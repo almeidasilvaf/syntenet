@@ -11,7 +11,8 @@ plot_profiles(
   cluster_species = FALSE,
   cluster_columns = profiles$hclust,
   show_colnames = FALSE,
-  discretize = TRUE
+  discretize = TRUE,
+  ...
 )
 }
 \arguments{
@@ -43,6 +44,8 @@ impossible to read. Default: FALSE.}
 
 \item{discretize}{Logical indicating whether to discretize clusters in
 4 categories: 0, 1, 2, and 3+.}
+
+\item{...}{Additional parameters to \code{pheatmap::pheatmap()}.}
 }
 \value{
 A pheatmap object.

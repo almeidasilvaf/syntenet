@@ -20,7 +20,8 @@ intraspecies_synteny(
 
 \item{intra_dir}{Output directory.}
 
-\item{annot_list}{A list of annotation data frames.}
+\item{annot_list}{A processed GRangesList or CompressedGRangesList object
+as returned by \code{process_input()}.}
 
 \item{anchors}{Numeric indicating the minimum required number of genes
 to call a syntenic block. Default: 5.}

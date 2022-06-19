@@ -12,7 +12,7 @@ column 1 and node 2 in column 2).
 data(network)
 }
 \description{
-Synteny network of BUSCO genes for 25 eudicot species
+Data obtained from Zhao & Schranz, 2019.
 }
 \examples{
 data(network)

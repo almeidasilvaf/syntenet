@@ -11,8 +11,9 @@ An object of class 'phylo'.
 data(angiosperm_phylogeny)
 }
 \description{
-The data are stored as a 'phylo' object, which can be created
-with \code{treeio::read.tree()}.
+Original tree file obtained from Zhao et al., 2021.
+The tree is an object of class 'phylo', which can be created by reading
+the tree file with \code{treeio::read.tree()}.
 }
 \examples{
 data(angiosperm_phylogeny)

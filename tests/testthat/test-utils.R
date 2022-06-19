@@ -2,6 +2,7 @@
 #----Load data------------------------------------------------------------------
 data(proteomes)
 data(annotation)
+data(blast_list)
 
 #----Start tests----------------------------------------------------------------
 test_that("check_list_names() checks if names match", {
@@ -22,7 +23,7 @@ test_that("check_gene_names() checks if sequence names match gene names", {
 
 test_that("species_id_length() returns the best string length for IDs", {
     len <- species_id_length(proteomes)
-    expect_equal(class(len), "numeric")
+    expect_true(class(len) %in% c("numeric", "integer"))
 })
 
 test_that("is_valid() returns a logical scalar", {
@@ -57,3 +58,19 @@ test_that("species_colors() returns a list for plot_profiles()", {
     expect_equal(length(l), 2)
     
 })
+
+test_that("valid_seq() checks class of seq object", {
+    check <- valid_seq(proteomes)
+    expect_equal(check, TRUE)
+})
+
+test_that("valid_annot() checks class of annotation object", {
+    check <- valid_annot(annotation)
+    expect_equal(check, TRUE)
+})
+
+test_that("valid_blast() checks class of blast list object", {
+    check <- valid_blast(blast_list)
+    expect_equal(check, TRUE)
+})
+

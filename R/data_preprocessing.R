@@ -5,8 +5,8 @@
 #' protein sequences for a given species. This list must have names 
 #' (not NULL), and names of each list element must match the names of
 #' list elements in \strong{annotation}.
-#' @param annotation A GRangesList or CompressedGRangesList object 
-#' with the annotation for the sequences in \strong{seq}. This list must
+#' @param annotation A GRangesList, CompressedGRangesList, or list of
+#' GRanges with the annotation for the sequences in \strong{seq}. This list must
 #' have names (not NULL), and names of each list element must match the names
 #' of list elements in \strong{seq}.
 #'
@@ -35,6 +35,8 @@
 #' check_input(proteomes, annotation)
 check_input <- function(seq = NULL, annotation = NULL) {
     
+    valid <- valid_seq(seq) & valid_annot(annotation)
+
     check1 <- check_list_names(seq, annotation)
     check2 <- check_ngenes(seq, annotation)
     check3 <- check_gene_names(seq, annotation)
@@ -49,8 +51,8 @@ check_input <- function(seq = NULL, annotation = NULL) {
 #' protein sequences for a given species. This list must have names 
 #' (not NULL), and names of each list element must match the names of
 #' list elements in \strong{annotation}.
-#' @param annotation A GRangesList or CompressedGRangesList object 
-#' with the annotation for the sequences in \strong{seq}. This list must
+#' @param annotation A GRangesList, CompressedGRangesList, or list of
+#' GRanges with the annotation for the sequences in \strong{seq}. This list must
 #' have names (not NULL), and names of each list element must match the names
 #' of list elements in \strong{seq}.
 #'
@@ -94,6 +96,7 @@ check_input <- function(seq = NULL, annotation = NULL) {
 #' seq <- proteomes
 #' clean_data <- process_input(seq, annotation)
 process_input <- function(seq = NULL, annotation = NULL) {
+    
     check <- check_input(seq, annotation)
     ab_len <- species_id_length(seq)
     s_abbrev <- substr(names(seq), 1, ab_len)

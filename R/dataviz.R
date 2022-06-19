@@ -23,6 +23,7 @@
 #' impossible to read. Default: FALSE.
 #' @param discretize Logical indicating whether to discretize clusters in
 #' 4 categories: 0, 1, 2, and 3+. 
+#' @param ... Additional parameters to \code{pheatmap::pheatmap()}.
 #'
 #' @return A pheatmap object.
 #' 
@@ -60,7 +61,7 @@ plot_profiles <- function(
         cluster_species = FALSE,
         cluster_columns = profiles$hclust,
         show_colnames = FALSE,
-        discretize = TRUE
+        discretize = TRUE, ...
 ) {
     # Set defaults
     breaks <- NA
@@ -98,7 +99,8 @@ plot_profiles <- function(
         legend_breaks = breaks,
         legend_labels = legend_labels,
         annotation_row = annot_row,
-        annotation_colors = annot_colors
+        annotation_colors = annot_colors,
+        ...
     )
     return(p)
 }
@@ -177,14 +179,17 @@ plot_network <- function(network = NULL, clusters = NULL,
     deg <- as.data.frame(table(c(fedges$node1, fedges$node2)))
     names(deg) <- c("Gene", "Degree")
     genes <- merge(genes, deg) # Attr. 2: Degree
-    genes$Class <- as.factor(genes$Cluster) # Attr. 3: Class
+    genes$Group <- as.factor(genes$Cluster) # Attr. 3: Group
     if(is.data.frame(color_by)) {
-        genes$Class <- as.factor(color_by[, 2][color_by[, 1] %in% genes$Gene])
+        genes$Group <- NULL
+        names(color_by) <- c("Gene", "Group")
+        genes <- merge(genes, color_by, by = "Gene")
+        genes$Group <- as.factor(genes$Group)
     }
     graph <- graph_from_data_frame(fedges, directed = FALSE, vertices = genes)
-    palette <- custom_palette(1)[seq_len(nlevels(genes$Class))]
-    if(nlevels(genes$Class) > 20) {
-        palette <- colorRampPalette(custom_palette(1))(nlevels(genes$Class))
+    palette <- custom_palette(1)[seq_len(nlevels(genes$Group))]
+    if(nlevels(genes$Group) > 20) {
+        palette <- colorRampPalette(custom_palette(1))(nlevels(genes$Group))
     }
     if(interactive) {
         graph_d3 <- networkD3::igraph_to_networkD3(graph, group = genes)
@@ -192,16 +197,18 @@ plot_network <- function(network = NULL, clusters = NULL,
         p <- networkD3::forceNetwork(
             Links = graph_d3$links, Nodes = graph_d3$nodes,
             Source = 'source', Target = 'target',
-            NodeID = 'name', Group = 'Class',
+            NodeID = 'name', Group = 'Group', charge = -10,
             height = d[2], width = d[1], Nodesize = 'Degree',
             opacity=0.8, zoom = TRUE, fontSize = 12
         )
     } else {
         n <- ggnetwork::ggnetwork(graph, arrow.gap = 0)
         # Plot graph
-        p <- ggplot2::ggplot(n, ggplot2::aes_(x = ~x, y = ~y, xend = ~xend, yend = ~yend)) +
-            ggnetwork::geom_edges(color = "grey75", alpha = 0.5, show.legend=FALSE) +
-            ggnetwork::geom_nodes(ggplot2::aes_(size = ~Degree, color = ~Class)) +
+        p <- ggplot2::ggplot(n, ggplot2::aes_(x = ~x, y = ~y, 
+                                              xend = ~xend, yend = ~yend)) +
+            ggnetwork::geom_edges(color = "grey75", alpha = 0.5, 
+                                  show.legend = FALSE) +
+            ggnetwork::geom_nodes(aes_(size = ~Degree, color = ~Group)) +
             ggplot2::guides(size = "none") +
             ggplot2::scale_color_manual(values = palette) +
             ggnetwork::theme_blank()

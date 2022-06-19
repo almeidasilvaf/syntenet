@@ -53,7 +53,8 @@ connected by an edge. Synteny networks have been used to explore, among others,
 global synteny patterns in mammalian and angiosperm genomes [@zhao2019network], 
 the evolution of MADS-box transcription factors [@zhao2017phylogenomic], 
 and infer a microsynteny-based phylogeny for angiosperms [@zhao2021whole].
-`syntenet` is a package that can be used to infer synteny networks from
+`r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` is a package that 
+can be used to infer synteny networks from
 protein sequences and perform downstream network analyses that include:
 
 - **Network clustering**;
@@ -87,9 +88,10 @@ species *Ostreococcus lucimarinus* and *Ostreococcus sp RCC809*, which were
 obtained from Pico-PLAZA 3.0 [@vandepoele2013pico]. [^1]
 
 [^1]: **Friendly tip:** To read the proteomes in a FASTA file, use the 
-function `readAAStringSet()` from the Bioconductor package *Biostrings*. 
+function `readAAStringSet()` from the Bioconductor package
+`r BiocStyle::Biocpkg("Biostrings")`. 
 To read gene annotation from a GFF/GTF file, use the function `import()` 
-from the Bioconductor package *rtracklayer*.
+from the Bioconductor package `r BiocStyle::Biocpkg("rtracklayer")`.
 
 ```{r data}
 # Protein sequences
@@ -103,12 +105,13 @@ head(annotation)
 
 # Data preprocessing
 
-To detect synteny and infer synteny networks, `syntenet` requires two objects
+To detect synteny and infer synteny networks, 
+`r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` requires two objects
 as input:
 
-- **seq:** A list of AAStringSet objects containing the translated sequences
+- **seq:** A list of `AAStringSet` objects containing the translated sequences
 of primary transcripts for each species.
-- **annotation:** A GRangesList or CompressedGRangesList object containing
+- **annotation:** A `GRangesList` or `CompressedGRangesList` object containing
 the coordinates for the genes in **seq**.
 
 The first part of the pipeline consists in processing the data to make it
@@ -118,7 +121,7 @@ enter the pipeline. This function checks the input data for 3
 required conditions:
 
 1. Names of **seq** list (i.e., `names(seq)`) match 
-the names of **annotation** GRangesList/CompressedGRangesList
+the names of **annotation** `GRangesList`/`CompressedGRangesList`
 (i.e., `names(annotation)`)
 
 2. For each species (list elements), the number of sequences
@@ -139,7 +142,7 @@ check_input(proteomes, annotation)
 ```
 
 As you can see, the data passed the checks. Now, let's process them 
-with the function `process_input`.
+with the function `process_input()`.
 
 This function processes the input sequences and annotation to:
 
@@ -162,10 +165,11 @@ to the beginning of each gene name (e.g., Atha_AT1G01010).
 
 5. Add a unique species identifier (same as above) to 
 gene and chromosome names of each element of the **annotation**
-GRangesList/CompressedGRangesList.
+`GRangesList`/`CompressedGRangesList`.
 
-6. Filter each element of the **annotation** GRangesList/CompressedGRangesList 
-to keep only seqnames, ranges, and gene ID.
+6. Filter each element of the **annotation** 
+`GRangesList`/`CompressedGRangesList` to keep only seqnames, 
+ranges, and gene ID.
 
 
 Let's process our input data:
@@ -189,9 +193,9 @@ on the command line, saving the output in tabular format and reading
 the output table as a data frame 
 (e.g., with the base R function `read.table()`).
 
-2. Using a helper function in `syntenet` named `run_diamond()`, which 
-runs DIAMOND from the R session and automatically parses its output 
-to a data frame.
+2. Using a helper function in `r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` 
+named `run_diamond()`, which runs DIAMOND from the R session and 
+automatically parses its output to a data frame.
 
 Here, we will use `run_diamond()` to demonstrate how it works. 
 Needless to say, you need to have DIAMOND installed in your machine 
@@ -218,8 +222,9 @@ head(blast_list$Olucimarinus_Olucimarinus)
 
 Now we can use this list of BLAST-like data frames to detect synteny. Here,
 we reimplemented the popular MCScanX algorithm [@wang2012mcscanx], originally
-written in C++, using the Rcpp [@eddelbuettel2011rcpp] framework 
-for R and C++ integration. This means that `syntenet` comes with a native 
+written in C++, using the `r BiocStyle::CRANpkg("Rcpp")` [@eddelbuettel2011rcpp] 
+framework for R and C++ integration. This means that
+`r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` comes with a native 
 version of MCScanX, so you can run MCScanX in R without
 having to install it yourself. Amazing, huh?
 
@@ -237,8 +242,8 @@ head(net)
 ```
 
 In a synteny network, each row of the edge list represents an anchor pair. 
-In the edge list above, for example, the genes `net[1,1]` and `net[1,2]` are
-in the same syntenic block.
+In the edge list above, for example, 
+the genes `r net[1,1]` and `r net[1,2]` are in the same syntenic block.
 
 # Phylogenomic profiling
 
@@ -252,15 +257,15 @@ for instance. Here, we will use an example network of BUSCO genes for
 To obtain the phylogenomic profiles, you first need to cluster your network.
 This can be done with `cluster_network()`. [^2]
 
-[^2]: **Friendly tip:** `syntenet` uses the *Infomap* algorithm
+[^2]: **Friendly tip:** `r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` uses the *Infomap* algorithm
 to cluster networks, which has been shown to have the best performance 
 [@zhao2019network]. This algorithm assigns each gene to a single cluster. 
 However, for some cases (e.g., detection of tandem arrays), 
 you may want to use an algorithm that allows community overlap 
 (i.e., a gene can be part of more than one cluster). 
 If this is your case, we recommend the *clique percolation* algorithm, 
-which is implemented in the R package 
-CliquePercolation [@lange2021cliquepercolation].
+which is implemented in the R package
+`r BiocStyle::CRANpkg("CliquePercolation")` [@lange2021cliquepercolation].
 
 
 ```{r cluster_network}
@@ -280,7 +285,7 @@ a list of 2 elements:
 1. A matrix of phylogenomic profiles, with clusters in rows 
 and species in columns.
 
-2. An hclust object containing the results of Ward's clustering on a matrix
+2. An `hclust` object containing the results of Ward's clustering on a matrix
 of Jaccard distances obtained from the phylogenomic profiles matrix.
 
 
@@ -348,8 +353,8 @@ in the network. Let's plot a heatmap of group-specific clusters only.
 ```{r heatmap_filtered}
 # Filter profiles matrix to only include group-specific clusters
 pgs <- profiles
-pgs$profile_matrix <- pgs$profile_matrix[rownames(pgs$profile_matrix) %in%
-                                             gs_clusters$Cluster, ]
+idx <- rownames(pgs$profile_matrix) %in% gs_clusters$Cluster
+pgs$profile_matrix <- pgs$profile_matrix[idx, ]
 
 # Plot heatmap
 plot_profiles(
@@ -379,7 +384,7 @@ head(gene_df)
 
 plot_network(network, clusters, cluster_id = id, color_by = gene_df)
 
-# 3) Interactive visualization
+# 3) Interactive visualization (zoom out and in to explore it)
 plot_network(network, clusters, cluster_id = id, 
              interactive = TRUE, dim_interactive = c(500, 300))
 ```
@@ -400,7 +405,7 @@ bt_mat <- binarize_and_transpose(profiles$profile_matrix)
 bt_mat[1:5, 1:5]
 ```
 
-Now, you can use this transposed binary matrix as input to IQTREE [minh2020iq] 
+Now, you can use this transposed binary matrix as input to IQTREE [@minh2020iq] 
 to infer a phylogeny. Here, once again, we give you 2 options:
 
 1. Using `profiles2phylip()` to write the transposed binary matrix to a 
@@ -442,7 +447,8 @@ to the output files from IQTREE. Usually, you are interested in the file
 ending in *.treefile*. This is the species tree in Newick format, and it can
 be visualized with your favorite tree viewer. We strongly recommend using
 the `read.tree()` function from the Bioconductor package treeio [@wang2020treeio] to
-read the tree, and visualizing it with the ggtree Bioc package [@yu2017ggtree].
+read the tree, and visualizing it with the `r BiocStyle::Biocpkg("ggtree")` 
+Bioc package [@yu2017ggtree].
 For example, let's visualize a microsynteny-based phylogeny for 123 angiosperm
 species, whose phylogenomic profiles were obtained from @zhao2021whole.
 

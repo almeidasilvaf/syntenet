@@ -15,11 +15,22 @@
 #' tmat <- binarize_and_transpose(profile_matrix)
 binarize_and_transpose <- function(profile_matrix = NULL) {
     
-    bin_matrix <- profile_matrix
-    bin_matrix[bin_matrix > 1] <- 1
+    M <- profile_matrix
+
+    # Make sure M is a numeric matrix of non-negative integer values
+    if(!is.null(M)) {
+        check_nm <- is.matrix(M) & is.numeric(M)
+        check_nninteger <- as.vector(M >= 0 & M == round(M))
+        bad_input <- any(c(check_nm, check_nninteger) == FALSE)
+        if(bad_input) {
+            stop("Input must be a matrix of non-negative integer values.")
+        }
+    }
     
-    bint_matrix <- t(bin_matrix)
-    return(bint_matrix)
+    M[is.na(M)] <- 0
+    M[M > 1] <- 1
+    tM <- t(M)
+    return(tM)
 }
 
 
