@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">syntenet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
       </span>
     </div>
 
@@ -56,14 +56,14 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">plot_network</span><span class="op">(</span>
-  network <span class="op">=</span> <span class="cn">NULL</span>,
-  clusters <span class="op">=</span> <span class="cn">NULL</span>,
-  cluster_id <span class="op">=</span> <span class="cn">NULL</span>,
-  color_by <span class="op">=</span> <span class="st">"cluster"</span>,
-  interactive <span class="op">=</span> <span class="cn">FALSE</span>,
-  dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">600</span>, <span class="fl">600</span><span class="op">)</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">plot_network</span><span class="op">(</span></span>
+<span>  network <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  clusters <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cluster_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  color_by <span class="op">=</span> <span class="st">"cluster"</span>,</span>
+<span>  interactive <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">600</span>, <span class="fl">600</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -110,38 +110,38 @@ this parameter is ignored.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">network</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span>
-<span class="r-in"><span class="co"># Option 1: 1 cluster</span></span>
-<span class="r-in"><span class="va">cluster_id</span> <span class="op">&lt;-</span> <span class="fl">25</span></span>
-<span class="r-in"><span class="fu">plot_network</span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, <span class="va">cluster_id</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">network</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># Option 1: 1 cluster</span></span></span>
+<span class="r-in"><span><span class="va">cluster_id</span> <span class="op">&lt;-</span> <span class="fl">25</span></span></span>
+<span class="r-in"><span><span class="fu">plot_network</span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, <span class="va">cluster_id</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_network-1.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Option 2: 2 clusters</span></span>
-<span class="r-in"><span class="va">cluster_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">1089</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu">plot_network</span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, <span class="va">cluster_id</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Option 2: 2 clusters</span></span></span>
+<span class="r-in"><span><span class="va">cluster_id</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">25</span>, <span class="fl">1089</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">plot_network</span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, <span class="va">cluster_id</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_network-2.png" alt="" width="700" height="433"></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="co"># Option 3: custom annotation for coloring</span></span>
-<span class="r-in"><span class="va">species_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span class="r-in">    <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"pvu"</span>, <span class="st">"gma"</span>, <span class="st">"cca"</span>, <span class="st">"tpr"</span>, <span class="st">"mtr"</span>, <span class="st">"adu"</span>, <span class="st">"lja"</span>,</span>
-<span class="r-in">    <span class="st">"Lang"</span>, <span class="st">"car"</span>, <span class="st">"pmu"</span>, <span class="st">"ppe"</span>, <span class="st">"pbr"</span>, <span class="st">"mdo"</span>, <span class="st">"roc"</span>, <span class="st">"fve"</span>,</span>
-<span class="r-in">    <span class="st">"Mnot"</span>, <span class="st">"Zjuj"</span>, <span class="st">"jcu"</span>, <span class="st">"mes"</span>, <span class="st">"rco"</span>, <span class="st">"lus"</span>, <span class="st">"ptr"</span></span>
-<span class="r-in"><span class="op">)</span> </span>
-<span class="r-in"><span class="va">species_annotation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">   Species <span class="op">=</span> <span class="va">species_order</span>,</span>
-<span class="r-in">   Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Fabaceae"</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Rosaceae"</span>, <span class="fl">6</span><span class="op">)</span>,</span>
-<span class="r-in">              <span class="st">"Moraceae"</span>, <span class="st">"Ramnaceae"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Euphorbiaceae"</span>, <span class="fl">3</span><span class="op">)</span>, </span>
-<span class="r-in">              <span class="st">"Linaceae"</span>, <span class="st">"Salicaceae"</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">network</span><span class="op">$</span><span class="va">node1</span>, <span class="va">network</span><span class="op">$</span><span class="va">node2</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span class="r-in">    Gene <span class="op">=</span> <span class="va">genes</span>,</span>
-<span class="r-in">    Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">genes</span>, <span class="st">"_"</span><span class="op">)</span>, <span class="va">head</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
-<span class="r-in"><span class="op">)</span></span>
-<span class="r-in"><span class="va">gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">gene_df</span>, <span class="va">species_annotation</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gene"</span>, <span class="st">"Family"</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"></span>
-<span class="r-in"><span class="fu">plot_network</span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="fl">25</span>, color_by <span class="op">=</span> <span class="va">gene_df</span><span class="op">)</span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="co"># Option 3: custom annotation for coloring</span></span></span>
+<span class="r-in"><span><span class="va">species_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"pvu"</span>, <span class="st">"gma"</span>, <span class="st">"cca"</span>, <span class="st">"tpr"</span>, <span class="st">"mtr"</span>, <span class="st">"adu"</span>, <span class="st">"lja"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Lang"</span>, <span class="st">"car"</span>, <span class="st">"pmu"</span>, <span class="st">"ppe"</span>, <span class="st">"pbr"</span>, <span class="st">"mdo"</span>, <span class="st">"roc"</span>, <span class="st">"fve"</span>,</span></span>
+<span class="r-in"><span>    <span class="st">"Mnot"</span>, <span class="st">"Zjuj"</span>, <span class="st">"jcu"</span>, <span class="st">"mes"</span>, <span class="st">"rco"</span>, <span class="st">"lus"</span>, <span class="st">"ptr"</span></span></span>
+<span class="r-in"><span><span class="op">)</span> </span></span>
+<span class="r-in"><span><span class="va">species_annotation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>   Species <span class="op">=</span> <span class="va">species_order</span>,</span></span>
+<span class="r-in"><span>   Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Fabaceae"</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Rosaceae"</span>, <span class="fl">6</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>              <span class="st">"Moraceae"</span>, <span class="st">"Ramnaceae"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Euphorbiaceae"</span>, <span class="fl">3</span><span class="op">)</span>, </span></span>
+<span class="r-in"><span>              <span class="st">"Linaceae"</span>, <span class="st">"Salicaceae"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">network</span><span class="op">$</span><span class="va">node1</span>, <span class="va">network</span><span class="op">$</span><span class="va">node2</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>    Gene <span class="op">=</span> <span class="va">genes</span>,</span></span>
+<span class="r-in"><span>    Species <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/unlist.html" class="external-link">unlist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/strsplit.html" class="external-link">strsplit</a></span><span class="op">(</span><span class="va">genes</span>, <span class="st">"_"</span><span class="op">)</span>, <span class="va">head</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">gene_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html" class="external-link">merge</a></span><span class="op">(</span><span class="va">gene_df</span>, <span class="va">species_annotation</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Gene"</span>, <span class="st">"Family"</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="fu">plot_network</span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="fl">25</span>, color_by <span class="op">=</span> <span class="va">gene_df</span><span class="op">)</span></span></span>
 <span class="r-plt img"><img src="plot_network-3.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
@@ -157,7 +157,7 @@ this parameter is ignored.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>

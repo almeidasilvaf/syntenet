@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">syntenet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
       </span>
     </div>
 
@@ -56,16 +56,16 @@
     </div>
 
     <div id="ref-usage">
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="fu">intraspecies_synteny</span><span class="op">(</span>
-  blast_intra <span class="op">=</span> <span class="cn">NULL</span>,
-  intra_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"intra"</span><span class="op">)</span>,
-  annot_list <span class="op">=</span> <span class="cn">NULL</span>,
-  anchors <span class="op">=</span> <span class="fl">5</span>,
-  max_gaps <span class="op">=</span> <span class="fl">25</span>,
-  is_pairwise <span class="op">=</span> <span class="cn">TRUE</span>,
-  verbose <span class="op">=</span> <span class="cn">FALSE</span>,
-  <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">intraspecies_synteny</span><span class="op">(</span></span>
+<span>  blast_intra <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  intra_dir <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"intra"</span><span class="op">)</span>,</span>
+<span>  annot_list <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  anchors <span class="op">=</span> <span class="fl">5</span>,</span>
+<span>  max_gaps <span class="op">=</span> <span class="fl">25</span>,</span>
+<span>  is_pairwise <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  <span class="va">...</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div id="arguments">
@@ -117,13 +117,13 @@ screen. Default: FALSE.</p></dd>
 
     <div id="ref-examples">
     <h2>Examples</h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">blast_list</span><span class="op">)</span></span>
-<span class="r-in"><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">annotation</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">blast_intra</span> <span class="op">&lt;-</span> <span class="va">blast_list</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">annot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">annotation</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">annot</span> <span class="op">&lt;-</span> <span class="va">annot</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seqnames"</span>, <span class="st">"gene_id"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span></span>
-<span class="r-in"><span class="va">annot_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Olucimarinus <span class="op">=</span> <span class="va">annot</span><span class="op">)</span></span>
-<span class="r-in"><span class="va">intrasyn</span> <span class="op">&lt;-</span> <span class="fu">intraspecies_synteny</span><span class="op">(</span><span class="va">blast_intra</span>, annot_list <span class="op">=</span> <span class="va">annot_list</span><span class="op">)</span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">blast_list</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">annotation</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">blast_intra</span> <span class="op">&lt;-</span> <span class="va">blast_list</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">annot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">annotation</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">annot</span> <span class="op">&lt;-</span> <span class="va">annot</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"seqnames"</span>, <span class="st">"gene_id"</span>, <span class="st">"start"</span>, <span class="st">"end"</span><span class="op">)</span><span class="op">]</span></span></span>
+<span class="r-in"><span><span class="va">annot_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>Olucimarinus <span class="op">=</span> <span class="va">annot</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">intrasyn</span> <span class="op">&lt;-</span> <span class="fu">intraspecies_synteny</span><span class="op">(</span><span class="va">blast_intra</span>, annot_list <span class="op">=</span> <span class="va">annot_list</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </div>
@@ -138,7 +138,7 @@ screen. Default: FALSE.</p></dd>
 </div>
 
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
       </footer></div>
