@@ -47,6 +47,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
+#ifdef WIN32
+#include <direct.h>
+#endif
+
 #ifndef M_LN2
 #define M_LN2 0.69314718055994530942
 #endif

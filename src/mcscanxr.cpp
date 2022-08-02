@@ -850,7 +850,11 @@ void msa_main(const char *prefix_fn){
     sprintf(html_fn,"%s.html",prefix_fn);
     auto html_fn_res = chdir(html_fn);
     if (html_fn_res<0){
+#ifdef WIN32
+        _mkdir(html_fn);
+#else
         mkdir(html_fn,S_IRWXU|S_IRGRP|S_IXGRP);
+#endif
         auto html_fn_res = chdir(html_fn);
         if(html_fn_res){}
     }
@@ -969,7 +973,11 @@ int rcpp_mcscanx_file(
         const char *outdir_fn = outdir.c_str();
         auto outdir_fn_res = chdir(outdir_fn);
         if (outdir_fn_res<0){
+#ifdef WIN32
+            _mkdir(outdir_fn);
+#else
             mkdir(outdir_fn,S_IRWXU|S_IRGRP|S_IXGRP);
+#endif
             auto outdir_fn_res = chdir(outdir_fn);
             if(outdir_fn_res){}
         }
