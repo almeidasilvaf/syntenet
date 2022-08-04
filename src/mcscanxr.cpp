@@ -688,7 +688,8 @@ void add_block(Gene_feat* s, Gene_feat* t, int level){
 }
 
 void add_matchpoints(int seg_index,int level){
-    int i, j;
+    int i;
+    std::size_t j;
     Seg_feat *s;
     map<string, Gene_feat>::iterator it08;
     i = (int)(seg_index/2);
@@ -711,7 +712,9 @@ void add_matchpoints(int seg_index,int level){
 }
 
 void traverse(){
-    int i, j, k, lev;
+    int j, k;
+    std::size_t i;
+    int lev = 0;
     Gene_feat gf4;
     map<string, Gene_feat>::iterator it09;
     for (i=0; i<endpoints.size(); i++){
@@ -745,7 +748,8 @@ void traverse(){
 }
 
 void mark_tandem(const char *prefix_fn){
-    int i = 0, j;
+    std::size_t i = 0;
+    std::size_t j;
     geneSet::const_iterator itc06;
     more_feat mf;
     for (itc06=allg.begin(); itc06!=allg.end(); itc06++){
@@ -788,7 +792,8 @@ void mark_tandem(const char *prefix_fn){
 }
 
 void print_html(){
-    int i = 0, j;
+    int i = 0;
+    std::size_t j;
     string color;
     ofstream result;
     string prev_mol = "";
