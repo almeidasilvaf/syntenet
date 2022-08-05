@@ -690,6 +690,8 @@ void add_block(Gene_feat* s, Gene_feat* t, int level){
 void add_matchpoints(int seg_index,int level){
     int i;
     std::size_t j;
+    std::size_t level_;
+    level_ = level;
     Seg_feat *s;
     map<string, Gene_feat>::iterator it08;
     i = (int)(seg_index/2);
@@ -697,14 +699,14 @@ void add_matchpoints(int seg_index,int level){
     if (seg_index%2==0){
         for (j=0; j<s->pids.size(); j++){
             it08 = gene_map.find(match_list[s->pids[j]].gene1);
-            if (it08->second.cursor.size()>=level){
+            if (it08->second.cursor.size()>=level_){
                 it08->second.cursor[level-1] = s->pids[j]+2;
             }
         }
     }else{
         for (j=0; j<s->pids.size(); j++){
             it08=gene_map.find(match_list[s->pids[j]].gene2);
-            if (it08->second.cursor.size()>=level){
+            if (it08->second.cursor.size()>=level_){
                 it08->second.cursor[level-1] = -(s->pids[j]+2);
             }
         }
@@ -794,6 +796,7 @@ void mark_tandem(const char *prefix_fn){
 void print_html(){
     int i = 0;
     std::size_t j;
+    std::size_t max_level_;
     string color;
     ofstream result;
     string prev_mol = "";
@@ -834,7 +837,7 @@ void print_html(){
                 result<<"<td bgcolor='#ffff99'>"<<match_list[-n->cursor[j]-2].gene1<<"</td>";
             }
         }
-        for (j=n->cursor.size(); j<max_level; j++){
+        for (j=n->cursor.size(); max_level_=max_level; j<max_level_; j++){
             result<<"<td>&nbsp;</td>";
         }
         result<<"</tr>"<<endl;
