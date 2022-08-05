@@ -797,6 +797,7 @@ void print_html(){
     int i = 0;
     std::size_t j;
     std::size_t max_level_;
+    max_level_ = max_level; 
     string color;
     ofstream result;
     string prev_mol = "";
@@ -837,7 +838,7 @@ void print_html(){
                 result<<"<td bgcolor='#ffff99'>"<<match_list[-n->cursor[j]-2].gene1<<"</td>";
             }
         }
-        for (j=n->cursor.size(); max_level_=max_level; j<max_level_; j++){
+        for (j=n->cursor.size(); j<max_level_; j++){
             result<<"<td>&nbsp;</td>";
         }
         result<<"</tr>"<<endl;
