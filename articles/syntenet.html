@@ -40,7 +40,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">syntenet</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.3</span>
       </span>
     </div>
 
@@ -531,15 +531,15 @@ phylogenomic profiles matrix.</p></li>
 <span><span class="co"># Exploring the output</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">)</span></span>
 <span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ profile_matrix: int [1:2410, 1:25] 0 0 0 0 0 0 0 1 1 1 ...</span></span>
+<span><span class="co">#&gt;  $ profile_matrix: int [1:2411, 1:25] 1 1 1 1 1 1 1 1 1 1 ...</span></span>
 <span><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></span>
-<span><span class="co">#&gt;   .. ..$ : chr [1:2410] "1099" "914" "1691" "250" ...</span></span>
+<span><span class="co">#&gt;   .. ..$ : chr [1:2411] "335" "262" "1142" "1202" ...</span></span>
 <span><span class="co">#&gt;   .. ..$ : chr [1:25] "adu" "car" "cca" "fve" ...</span></span>
 <span><span class="co">#&gt;  $ hclust        :List of 7</span></span>
-<span><span class="co">#&gt;   ..$ merge      : int [1:2409, 1:2] -18 -1125 -21 -1010 -36 -83 -1174 -115 -125 -127 ...</span></span>
-<span><span class="co">#&gt;   ..$ height     : num [1:2409] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
-<span><span class="co">#&gt;   ..$ order      : int [1:2410] 1099 914 1691 250 1163 268 1234 533 397 557 ...</span></span>
-<span><span class="co">#&gt;   ..$ labels     : chr [1:2410] "1" "2" "3" "4" ...</span></span>
+<span><span class="co">#&gt;   ..$ merge      : int [1:2410, 1:2] -18 -1125 -21 -1010 -36 -83 -1174 -115 -125 -127 ...</span></span>
+<span><span class="co">#&gt;   ..$ height     : num [1:2410] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
+<span><span class="co">#&gt;   ..$ order      : int [1:2411] 335 262 1142 1202 1258 395 1393 663 599 595 ...</span></span>
+<span><span class="co">#&gt;   ..$ labels     : chr [1:2411] "1" "2" "3" "4" ...</span></span>
 <span><span class="co">#&gt;   ..$ method     : chr "ward.D"</span></span>
 <span><span class="co">#&gt;   ..$ call       : language stats::hclust(d = dist_mat, method = "ward.D")</span></span>
 <span><span class="co">#&gt;   ..$ dist.method: chr "jaccard"</span></span>
@@ -548,20 +548,20 @@ phylogenomic profiles matrix.</p></li>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       </span></span>
 <span><span class="co">#&gt;        adu car cca fve gma hlu jcu Lang lja lus mdo mes Mnot mtr pbr pmu ppe</span></span>
-<span><span class="co">#&gt;   1099   0   1   0   1   1   0   1    0   0   2   0   1    1   1   0   1   1</span></span>
-<span><span class="co">#&gt;   914    0   0   0   1   1   0   1    0   0   1   0   1    1   1   0   1   1</span></span>
-<span><span class="co">#&gt;   1691   0   0   0   1   0   0   0    0   0   1   0   1    1   1   0   1   1</span></span>
-<span><span class="co">#&gt;   250    0   0   0   1   2   0   1    0   0   1   1   1    1   0   0   1   1</span></span>
-<span><span class="co">#&gt;   1163   0   0   0   1   2   0   1    0   0   2   2   1    1   1   0   1   1</span></span>
-<span><span class="co">#&gt;   268    0   1   1   1   1   0   1    0   0   1   1   1    1   0   0   1   1</span></span>
+<span><span class="co">#&gt;   335    1   0   1   0   1   0   0    1   0   0   1   0    1   1   0   1   1</span></span>
+<span><span class="co">#&gt;   262    1   0   1   0   1   0   0    1   1   0   1   0    1   1   1   1   1</span></span>
+<span><span class="co">#&gt;   1142   1   0   1   0   1   0   0    0   1   0   2   1    1   1   0   1   1</span></span>
+<span><span class="co">#&gt;   1202   1   1   1   1   2   0   1    1   0   2   1   0    1   0   0   0   1</span></span>
+<span><span class="co">#&gt;   1258   1   1   1   0   2   0   0    0   1   2   1   0    1   0   0   1   1</span></span>
+<span><span class="co">#&gt;   395    1   0   1   1   1   0   0    0   0   1   1   1    1   1   1   1   1</span></span>
 <span><span class="co">#&gt;       </span></span>
 <span><span class="co">#&gt;        ptr pvu rco roc tpr van vra Zjuj</span></span>
-<span><span class="co">#&gt;   1099   1   1   1   0   1   0   0    1</span></span>
-<span><span class="co">#&gt;   914    0   0   1   1   1   0   0    1</span></span>
-<span><span class="co">#&gt;   1691   1   1   1   1   1   0   0    1</span></span>
-<span><span class="co">#&gt;   250    2   1   1   1   0   0   0    1</span></span>
-<span><span class="co">#&gt;   1163   1   1   1   1   0   0   0    1</span></span>
-<span><span class="co">#&gt;   268    1   1   1   1   0   1   0    1</span></span></code></pre></div>
+<span><span class="co">#&gt;   335    1   0   0   1   1   0   0    0</span></span>
+<span><span class="co">#&gt;   262    0   1   0   1   1   1   0    0</span></span>
+<span><span class="co">#&gt;   1142   0   1   0   1   1   1   0    0</span></span>
+<span><span class="co">#&gt;   1202   1   1   1   0   1   0   0    1</span></span>
+<span><span class="co">#&gt;   1258   1   1   0   0   1   0   0    1</span></span>
+<span><span class="co">#&gt;   395    1   0   0   1   1   0   0    1</span></span></code></pre></div>
 <p>As a plot is worth a thousand words (or numbers), you can visualize
 the phylogenomic profiles as a heatmap with
 <code><a href="../reference/plot_profiles.html">plot_profiles()</a></code>. Let’s also add some species
@@ -670,8 +670,8 @@ visualize the group-specific clusters.</p>
 <span><span class="co"># 3) Interactive visualization (zoom out and in to explore it)</span></span>
 <span><span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, </span>
 <span>             interactive <span class="op">=</span> <span class="cn">TRUE</span>, dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">300</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="htmlwidget-eaeef37a1db40b6790a6" style="width:500px;height:300px;" class="forceNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-eaeef37a1db40b6790a6">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-10,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-46bacc6c3ef750c2788a" style="width:500px;height:300px;" class="forceNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-46bacc6c3ef750c2788a">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-10,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="microsynteny-based-phylogeny-reconstruction">Microsynteny-based phylogeny reconstruction<a class="anchor" aria-label="anchor" href="#microsynteny-based-phylogeny-reconstruction"></a>
@@ -687,12 +687,12 @@ can be done with <code>binarize_and_tranpose()</code>.</p>
 <span><span class="co"># Looking at the first 5 rows and 5 columns of the matrix</span></span>
 <span><span class="va">bt_mat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">#&gt;      </span></span>
-<span><span class="co">#&gt;       1099 914 1691 250 1163</span></span>
-<span><span class="co">#&gt;   adu    0   0    0   0    0</span></span>
-<span><span class="co">#&gt;   car    1   0    0   0    0</span></span>
-<span><span class="co">#&gt;   cca    0   0    0   0    0</span></span>
-<span><span class="co">#&gt;   fve    1   1    1   1    1</span></span>
-<span><span class="co">#&gt;   gma    1   1    0   1    1</span></span></code></pre></div>
+<span><span class="co">#&gt;       335 262 1142 1202 1258</span></span>
+<span><span class="co">#&gt;   adu   1   1    1    1    1</span></span>
+<span><span class="co">#&gt;   car   0   0    0    1    1</span></span>
+<span><span class="co">#&gt;   cca   1   1    1    1    1</span></span>
+<span><span class="co">#&gt;   fve   0   0    0    1    0</span></span>
+<span><span class="co">#&gt;   gma   1   1    1    1    1</span></span></code></pre></div>
 <p>Now, you can use this transposed binary matrix as input to IQTREE
 <span class="citation">(Minh et al. 2020)</span> to infer a phylogeny.
 Here, once again, we give you 2 options:</p>
@@ -775,7 +775,7 @@ angiosperm species, whose phylogenomic profiles were obtained from <span class="
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] ggtree_3.4.1     syntenet_0.99.2  BiocStyle_2.24.0</span></span>
+<span><span class="co">#&gt; [1] ggtree_3.4.1     syntenet_0.99.3  BiocStyle_2.24.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;  [1] nlme_3.1-158           bitops_1.0-7           fs_1.5.2              </span></span>
