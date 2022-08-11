@@ -1,4 +1,58 @@
 
+#' Create a data frame of pairwise comparisons to make in \code{run_diamond}
+#' 
+#' @param species Character vector of species names.
+#' @param compare Character scalar indicating which comparisons
+#' should be made when running DIAMOND. 
+#' Possible modes are "all" (all-vs-all comparisons), 
+#' "intraspecies" (intraspecies comparisons only), or
+#' "interspecies" (interspecies comparisons only). Alternatively, users can
+#' pass a 2-column data frame as input with the names of species to be 
+#' compared.
+#'
+#' @return A 2-column data frame with columns \strong{sp1} and \strong{sp2}
+#' representing the pairwise species comparisons to be made.
+#' @importFrom methods is
+#' @noRd
+#' @examples 
+#' species <- c("Olucimarinus", "OspRCC809")
+#' get_comp(species)
+get_comp <- function(species, compare = "all") {
+
+    # Create a data frame of all possible pairwise comparisons
+    comb_df <- expand.grid(species, species, stringsAsFactors = FALSE)
+    names(comb_df) <- c("sp1", "sp2")
+    
+    if(is(compare, "data.frame")) {
+        if(ncol(compare) != 2) {
+            stop("The data frame of species comparisons must have 2 columns.")
+        }
+        comb_df <- compare
+        names(comb_df) <- c("sp1", "sp2")
+        
+        # Check if any species in input data frame is not in 'seq'
+        sp <- unique(c(comb_df$sp1, comb_df$sp2))
+        name_is_missing <- any(!sp %in% species)
+        if(name_is_missing) {
+            stop("All species names in 'compare' must be in 'seq'.")
+        }
+        
+    } else if(compare == "intraspecies") {
+        comb_df <- comb_df[comb_df$sp1 == comb_df$sp2, ]
+        
+    } else if(compare == "interspecies") {
+        comb_df <- comb_df[comb_df$sp1 != comb_df$sp2, ]
+        
+        
+    } else if(compare == "all") {
+        comb_df <- comb_df
+        
+    } else {
+        stop("Invalid argument passed to parameter 'compare'.")
+    }
+    return(comb_df)
+}
+
 #' Wrapper to run DIAMOND from an R session
 #'
 #' @param seq A processed list of AAStringSet objects 
@@ -10,8 +64,14 @@
 #' are saved to a temporary directory.
 #' @param threads Number of threads to use. Default: let DIAMOND auto-detect
 #' and use all available virtual cores on the machine.
-#' @param ... Any additional arguments to
-#' `diamond blastp`.
+#' @param compare Character scalar indicating which comparisons
+#' should be made when running DIAMOND. 
+#' Possible modes are "all" (all-vs-all comparisons), 
+#' "intraspecies" (intraspecies comparisons only), or
+#' "interspecies" (interspecies comparisons only). Alternatively, users can
+#' pass a 2-column data frame as input with the names of species to be 
+#' compared.
+#' @param ... Any additional arguments to `diamond blastp`.
 #'
 #' @return A list of data frames containing DIAMOND's tabular output
 #' for each pairwise combination of species. For n species, the list length
@@ -28,7 +88,8 @@
 #'     diamond_results <- run_diamond(seq)
 #' }
 run_diamond <- function(seq = NULL, top_hits = 5, verbose = FALSE, 
-                        outdir = tempdir(), threads = NULL, ...) {
+                        outdir = tempdir(), threads = NULL, 
+                        compare = "all", ...) {
     
     valid <- valid_seq(seq)
     check_diamond <- diamond_is_installed()
@@ -56,7 +117,7 @@ run_diamond <- function(seq = NULL, top_hits = 5, verbose = FALSE,
     if(!is.null(threads)) { threads <- paste0("-p ", threads) }
     # 2. Pairwise BLASTp-like search with DIAMOND
     if(verbose) { message("2. Running pairwise DIAMOND searches...\n")}
-    comb_df <- expand.grid(names(seq), names(seq), stringsAsFactors = FALSE)
+    comb_df <- get_comp(names(seq), compare = compare)
     diamond_blastp <- lapply(seq_len(nrow(comb_df)), function(x) {
         query <- paste0(file.path(seqdir, comb_df[x, 1]), ".fasta")
         db <- file.path(dbdir, comb_df[x, 2])

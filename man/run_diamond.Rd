@@ -10,6 +10,7 @@ run_diamond(
   verbose = FALSE,
   outdir = tempdir(),
   threads = NULL,
+  compare = "all",
   ...
 )
 }
@@ -28,8 +29,15 @@ are saved to a temporary directory.}
 \item{threads}{Number of threads to use. Default: let DIAMOND auto-detect
 and use all available virtual cores on the machine.}
 
-\item{...}{Any additional arguments to
-\verb{diamond blastp}.}
+\item{compare}{Character scalar indicating which comparisons
+should be made when running DIAMOND.
+Possible modes are "all" (all-vs-all comparisons),
+"intraspecies" (intraspecies comparisons only), or
+"interspecies" (interspecies comparisons only). Alternatively, users can
+pass a 2-column data frame as input with the names of species to be
+compared.}
+
+\item{...}{Any additional arguments to \verb{diamond blastp}.}
 }
 \value{
 A list of data frames containing DIAMOND's tabular output

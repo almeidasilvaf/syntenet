@@ -25,8 +25,11 @@ Authors@R:
            email = "yves.vandepeer@psb.vib-ugent.be",
            comment = c(ORCID = "0000-0003-4327-3730"))
     )
-Description: syntenet can be used to infer synteny networks from BLASTp-like
-    tabular output and analyze them. Anchor pairs from synteny analyses are
+Description: syntenet can be used to infer synteny networks from 
+    whole-genome protein sequences and analyze them. Anchor pairs
+    are detected with the MCScanX algorithm, which was ported to this package
+    with the Rcpp framework for R and C++ integration. 
+    Anchor pairs from synteny analyses are
     treated as an undirected unweighted graph (i.e., a synteny network),
     and users can perform: i. network clustering; ii. phylogenomic profiling 
     (by identifying which species contain which clusters) and; 
