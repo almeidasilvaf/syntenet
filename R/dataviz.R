@@ -14,9 +14,10 @@
 #' If users have a species tree, they can read it 
 #' with \code{treeio::read.tree()} and get the species order 
 #' with \code{ggtree::get_taxa_name()}.
-#' @param cluster_columns Either a logical scalar (TRUE or FALSE) or an hclust
-#' object. Default: hclust object in the \strong{profiles} list as returned
-#' by \code{phylogenomic_profile()}.
+#' @param cluster_columns Either TRUE or an hclust object. Default: 
+#' hclust object in the \strong{profiles} list as returned
+#' by \code{phylogenomic_profile()} if \strong{discretize = FALSE},
+#' and TRUE if \strong{discretize = TRUE}.
 #' @param show_colnames Logical indicating whether to show column names (i.e.,
 #' cluster IDs) or not. Showing cluster IDs can be useful when visualizing
 #' a small subset of them. When visualizing all clusters, cluster IDs are
@@ -46,20 +47,18 @@
 #'               "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
 #'               "Linaceae", "Salicaceae")
 #')
-#' # Option 1: cluster cols using ward.D clustering based on Jaccard distances
 #' p <- plot_profiles(profiles, species_annotation, 
 #'                    cluster_species = species_order)
 #'                    
-#' # Option 2: hierarchical clustering
 #' p <- plot_profiles(profiles, species_annotation, 
 #'                    cluster_species = species_order, 
-#'                    cluster_columns = TRUE)
+#'                    discretize = FALSE)
 plot_profiles <- function(
         profiles = NULL, 
         species_annotation = NULL,
         palette = "Greens",
         cluster_species = FALSE,
-        cluster_columns = profiles$hclust,
+        cluster_columns = TRUE,
         show_colnames = FALSE,
         discretize = TRUE, ...
 ) {
@@ -82,7 +81,13 @@ plot_profiles <- function(
         legend_labels <- c("0", "1", "2", "3+", "")
     } else {
         profile_matrix <- log2(profile_matrix + 1)
+        cluster_columns <- profiles$hclust
     }
+    
+    if(is(cluster_columns, "hclust")) {
+        cluster_columns <- cluster_columns
+    }
+    
     if(is.character(cluster_species)) {
         if(!all(cluster_species %in% rownames(profile_matrix))) {
             stop("'cluster_species' must match column names of profile matrix.")

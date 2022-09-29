@@ -57,7 +57,7 @@ Imports:
     methods,
     igraph,
     stats,
-    vegan,
+    labdsv,
     grDevices,
     RColorBrewer,
     pheatmap,

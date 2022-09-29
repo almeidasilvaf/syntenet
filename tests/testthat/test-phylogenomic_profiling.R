@@ -27,6 +27,7 @@ test_that("phylogenomic_profile() returns cluster profiles", {
 })
 
 test_that("find_GS_clusters() finds group-specific clusters", {
+    
     profile_matrix <- phylogenomic_profile(clusters)$profile_matrix
     
     species_order <- c(
@@ -40,7 +41,12 @@ test_that("find_GS_clusters() finds group-specific clusters", {
                    "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
                    "Linaceae", "Salicaceae")
     )
+    
     gs_clusters <- find_GS_clusters(profile_matrix, species_annotation)
+    
+    expect_error(
+        find_GS_clusters(profile_matrix, matrix(NA, 2, 2))
+    )
     
     expect_equal(class(gs_clusters), "data.frame")
     expect_equal(names(gs_clusters), c("Group", "Percentage", "Cluster"))

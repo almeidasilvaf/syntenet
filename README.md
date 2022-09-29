@@ -8,7 +8,7 @@
 [![GitHub
 issues](https://img.shields.io/github/issues/almeidasilvaf/syntenet)](https://github.com/almeidasilvaf/syntenet/issues)
 [![Lifecycle:
-experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check-bioc](https://github.com/almeidasilvaf/syntenet/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/almeidasilvaf/syntenet/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/almeidasilvaf/syntenet/branch/master/graph/badge.svg)](https://codecov.io/gh/almeidasilvaf/syntenet?branch=master)
@@ -69,7 +69,7 @@ print(citation('syntenet'), bibtex = TRUE)
 #> 
 #>   Almeida-Silva F, Zhao T, Ullrich K, Van de Peer Y (2022). _syntenet:
 #>   Inference And Analysis Of Synteny Networks_. R package version
-#>   0.99.0, <https://github.com/almeidasilvaf/syntenet>.
+#>   0.99.4, <https://github.com/almeidasilvaf/syntenet>.
 #> 
 #> A BibTeX entry for LaTeX users is
 #> 
@@ -77,14 +77,14 @@ print(citation('syntenet'), bibtex = TRUE)
 #>     title = {syntenet: Inference And Analysis Of Synteny Networks},
 #>     author = {Fabrício Almeida-Silva and Tao Zhao and Kristian K Ullrich and Yves {Van de Peer}},
 #>     year = {2022},
-#>     note = {R package version 0.99.0},
+#>     note = {R package version 0.99.4},
 #>     url = {https://github.com/almeidasilvaf/syntenet},
 #>   }
 ```
 
-Please note that the `syntenet` was only made possible thanks to many
-other R and bioinformatics software authors, which are cited either in
-the vignettes and/or the paper(s) describing this package.
+Please note that `syntenet` was only made possible thanks to many other
+R and bioinformatics software authors, which are cited either in the
+vignettes and/or the paper(s) describing this package.
 
 ## Code of Conduct
 

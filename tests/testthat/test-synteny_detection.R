@@ -7,12 +7,26 @@ data(edges)
 
 #----Start tests----------------------------------------------------------------
 test_that("get_comp() returns a data frame of comparisons", {
+    
     species <- c("sp1", "sp2")
     comp_df <- data.frame(sp1 = "sp1", sp2 = "sp2")
     t1 <- get_comp(species, compare = "all")
     t2 <- get_comp(species, compare = "intraspecies")
     t3 <- get_comp(species, compare = "interspecies")
     t4 <- get_comp(species, compare = comp_df)
+    
+    expect_error(
+        get_comp(species, compare = cbind(comp_df, comp_df))
+    )
+    
+    expect_error(
+        get_comp(species, compare = data.frame(sp1 = "sp1", sp2 = "sp3"))
+    )
+    
+    expect_error(
+        get_comp(species, compare = "error")
+    )
+    
     expect_equal(nrow(t1), 4)
     expect_equal(nrow(t2), 2)
     expect_equal(nrow(t3), 2)
@@ -21,9 +35,10 @@ test_that("get_comp() returns a data frame of comparisons", {
 })
 
 test_that("run_diamond() runs DIAMOND on the background", {
+    
     seq <- process_input(proteomes, annotation)$seq[1:2]
     if(diamond_is_installed()) {
-        diamond <- run_diamond(seq)
+        diamond <- run_diamond(seq, verbose = TRUE, threads = 1)
     } else {
         diamond <- list(
             A = data.frame(),

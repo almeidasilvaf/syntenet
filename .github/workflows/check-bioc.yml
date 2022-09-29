@@ -75,6 +75,14 @@ jobs:
           echo ".libPaths('/__w/_temp/Library')" > ~/.Rprofile
           
           git config --global --add safe.directory /__w/syntenet/syntenet
+          
+          # Install IQTREE
+          sudo apt-get update && apt-get install -y iqtree
+          
+          # Install DIAMOND
+          wget http://github.com/bbuchfink/diamond/releases/download/v2.0.14/diamond-linux64.tar.gz -O /tmp/diamond-linux64.tar.gz && \
+            tar -xzf /tmp/diamond-linux64.tar.gz -C /usr/local/bin && \
+            rm /tmp/diamond-linux64.tar.gz
 
 
       ## Most of these steps are the same as the ones in

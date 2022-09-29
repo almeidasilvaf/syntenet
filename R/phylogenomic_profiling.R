@@ -50,7 +50,7 @@ cluster_network <- function(network = NULL) {
 #'   grouped by ward.D based on Jaccard distances.}
 #' } 
 #'
-#' @importFrom vegan vegdist 
+#' @importFrom labdsv dsvdis
 #' @importFrom stats hclust
 #' @export
 #' @rdname phylogenomic_profile
@@ -63,12 +63,14 @@ phylogenomic_profile <- function(clusters = NULL) {
     clusters$Species <- vapply(strsplit(clusters$Gene, "_"), `[`, 1, 
                                FUN.VALUE = character(1))
     profile_matrix <- table(clusters$Cluster,clusters$Species)
-    profile_matrix <- matrix(profile_matrix, ncol = ncol(profile_matrix), 
-                             dimnames = dimnames(profile_matrix))
+    profile_matrix <- matrix(
+        profile_matrix, ncol = ncol(profile_matrix), 
+        dimnames = dimnames(profile_matrix)
+    )
     
-    # Calculate matrix of Jaccard distances
-    dist_mat <- vegan::vegdist(log2(profile_matrix + 1), method = "jaccard")
-    
+    # Calculate matrix of Ruzicka distances
+    dist_mat <- labdsv::dsvdis(log2(profile_matrix + 1), index = "ruzicka")
+
     # Cluster with ward.D based on Jaccard distances
     clust_mat <- stats::hclust(dist_mat, method = "ward.D")
     

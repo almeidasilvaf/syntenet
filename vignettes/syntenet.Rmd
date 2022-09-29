@@ -286,7 +286,7 @@ a list of 2 elements:
 and species in columns.
 
 2. An `hclust` object containing the results of Ward's clustering on a matrix
-of Jaccard distances obtained from the phylogenomic profiles matrix.
+of Ruzicka distances obtained from the phylogenomic profiles matrix.
 
 
 ```{r phylogenomic_profile}

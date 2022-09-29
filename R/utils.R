@@ -21,7 +21,7 @@ check_list_names <- function(seq = NULL, annotation = NULL) {
     
     if(is.null(annot_names) | is.null(seq_names)) {
         stop("List-like arguments 'seq' and 'annotation' must have names.")
-    } else if(any(isFALSE(n_match))) {
+    } else if(any(n_match == FALSE)) {
         stop("Names of list elements in 'seq' and 'annotation' must match.")
     } else {
         check <- TRUE
