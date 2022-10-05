@@ -85,13 +85,7 @@ library(syntenet)
 
 For this vignette, we will use the proteomes and gene annotation of the algae 
 species *Ostreococcus lucimarinus* and *Ostreococcus sp RCC809*, which were 
-obtained from Pico-PLAZA 3.0 [@vandepoele2013pico]. [^1]
-
-[^1]: **Friendly tip:** To read the proteomes in a FASTA file, use the 
-function `readAAStringSet()` from the Bioconductor package
-`r BiocStyle::Biocpkg("Biostrings")`. 
-To read gene annotation from a GFF/GTF file, use the function `import()` 
-from the Bioconductor package `r BiocStyle::Biocpkg("rtracklayer")`.
+obtained from Pico-PLAZA 3.0 [@vandepoele2013pico]. 
 
 ```{r data}
 # Protein sequences
@@ -103,7 +97,7 @@ data(annotation)
 head(annotation)
 ```
 
-# Data preprocessing
+# Importing data to the R session
 
 To detect synteny and infer synteny networks, 
 `r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` requires two objects
@@ -113,6 +107,99 @@ as input:
 of primary transcripts for each species.
 - **annotation:** A `GRangesList` or `CompressedGRangesList` object containing
 the coordinates for the genes in **seq**.
+
+If you have whole-genome protein sequences in FASTA files and gene annotation
+in GFF/GTF files, you can import them to R with the functions 
+`readAAStringSet()` from the Bioconductor package
+`r BiocStyle::Biocpkg("Biostrings")` and `import()` 
+from the Bioconductor package `r BiocStyle::Biocpkg("rtracklayer")`.
+
+To demonstrate it, we will export the example data set `proteomes` as 
+FASTA files in a directory named **sequences/**, and the example data set
+`annotation` as GFF files in a directory named **annotation/**.
+
+```{r export_example}
+# Create directories sequences/ and annotation/ in tempdir()
+seq_dir <- file.path(tempdir(), "sequences")
+annot_dir <- file.path(tempdir(), "annotation")
+
+if(!dir.exists(seq_dir)) { dir.create(seq_dir, recursive = TRUE) }
+if(!dir.exists(annot_dir)) { dir.create(annot_dir, recursive = TRUE) }
+
+# Take a look at the paths
+seq_dir
+annot_dir
+
+# Export sequences as FASTA files
+Biostrings::writeXStringSet(
+    proteomes$Olucimarinus, filepath = file.path(seq_dir, "Olucimarinus.fa")
+)
+Biostrings::writeXStringSet(
+    proteomes$OspRCC809, filepath = file.path(seq_dir, "OspRCC809.fa")
+)
+
+# Export gene annotation as GFF files
+rtracklayer::export(
+    annotation$Olucimarinus, con = file.path(annot_dir, "Olucimarinus.gff")
+)
+rtracklayer::export(
+    annotation$OspRCC809, con = file.path(annot_dir, "OspRCC809.gff")
+)
+
+# See the contents of sequences/ and annotation/ directories
+dir(seq_dir)
+dir(annot_dir)
+```
+
+This is what you typically have: a directory containing FASTA files 
+(here, **sequences/**), and a directory containing GFF files 
+(here, **annotation/**). Now, let's see how you can import these files to your
+R session.
+
+## From FASTA files to a list of `AAStringSet` objects
+
+To import FASTA files as a list of `AAStringSet` objects, we will loop
+through each file in the **sequences/** directory and read them with
+`Biostrings::readAAStringSet()`.
+
+```{r read_fasta}
+# Get full path to FASTA files
+fasta_files <- list.files(seq_dir, full.names = TRUE)
+fasta_files
+
+# Read FASTA files as a list of `AAStringSet` objects
+seqs <- lapply(fasta_files, Biostrings::readAAStringSet)
+
+# Name list elements
+names(seqs) <- gsub("\\.fa", "", basename(fasta_files))
+
+seqs
+```
+
+And that's it! Now you have a list of `AAStringSet` objects.
+
+## From GFF/GTF files to a `GRangesList` object
+
+To import GFF files as a GRangesList object, we will loop through each file
+in the **annotation/** directory and read them with `rtracklayer::import()`.
+
+```{r read_gff}
+# Get full path to GFF files
+gff_files <- list.files(annot_dir, full.names = TRUE)
+gff_files
+
+# Read GFF files as a `GRangesList` object
+ranges <- lapply(gff_files, rtracklayer::import)
+ranges <- GenomicRanges::GRangesList(ranges)
+
+# Name list elements
+names(ranges) <- gsub("\\.gff", "", basename(gff_files))
+ranges
+```
+
+And now you have a `GRangesList` object.
+
+# Data preprocessing
 
 The first part of the pipeline consists in processing the data to make it
 match a standard structure. However, before processing the data for synteny 
@@ -255,9 +342,9 @@ for instance. Here, we will use an example network of BUSCO genes for
 25 eudicot species, which was obtained from @zhao2019network. 
 
 To obtain the phylogenomic profiles, you first need to cluster your network.
-This can be done with `cluster_network()`. [^2]
+This can be done with `cluster_network()`. [^1]
 
-[^2]: **Friendly tip:** `r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` uses the *Infomap* algorithm
+[^1]: **Friendly tip:** `r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` uses the *Infomap* algorithm
 to cluster networks, which has been shown to have the best performance 
 [@zhao2019network]. This algorithm assigns each gene to a single cluster. 
 However, for some cases (e.g., detection of tandem arrays), 
@@ -461,7 +548,6 @@ ggtree(angiosperm_phylogeny) +
     geom_tiplab(size = 3) +
     xlim(0, 0.3)
 ```
-
 
 # Session information {.unnumbered}
 

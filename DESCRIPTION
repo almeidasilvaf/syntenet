@@ -67,6 +67,7 @@ Imports:
     networkD3
 Suggests:
     BiocStyle,
+    rtracklayer,
     ggtree,
     covr,
     knitr,
