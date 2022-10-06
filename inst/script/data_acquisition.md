@@ -423,3 +423,55 @@ out <- here::here("inst", "extdata")
 
 fs::file_move(path = olu_col, new_path = out)
 ```
+
+## sequences/
+
+This directory contains FASTA files that correspond to a subset of the
+sequences in the example data set `proteomes`.
+
+``` r
+data(proteomes)
+
+# Create a list of vector with IDs of genes to subset - here, first 100 genes
+genes_subset <- lapply(proteomes, function(x) names(x)[1:100]) 
+
+# Path to sequences/ directory
+seq_dir <- here::here("inst", "extdata", "sequences")
+
+# Export sequences as FASTA files
+Biostrings::writeXStringSet(
+    proteomes$Olucimarinus[genes_subset$Olucimarinus], 
+    filepath = file.path(seq_dir, "Olucimarinus.fa.gz"),
+    compress = TRUE
+)
+
+Biostrings::writeXStringSet(
+    proteomes$OspRCC809[genes_subset$OspRCC809], 
+    filepath = file.path(seq_dir, "OspRCC809.fa.gz"), 
+    compress = TRUE
+)
+```
+
+## annotation/
+
+This directory contains GFF3 files that correspond to a subset of the
+ranges in the example data set `annotation`.
+
+``` r
+data(annotation)
+
+# Path to annotation/ directory
+annot_dir <- here::here("inst", "extdata", "annotation")
+
+# Export ranges as GFF3 files
+rtracklayer::export(
+    annotation$Olucimarinus[annotation$Olucimarinus$gene_id %in% 
+                                genes_subset$Olucimarinus, ], 
+    con = file.path(annot_dir, "Olucimarinus.gff3.gz")
+)
+rtracklayer::export(
+    annotation$OspRCC809[annotation$OspRCC809$gene_id %in%
+                             genes_subset$OspRCC809, ], 
+    con = file.path(annot_dir, "OspRCC809.gff3.gz")
+)
+```

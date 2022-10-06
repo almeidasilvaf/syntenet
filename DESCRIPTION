@@ -53,6 +53,7 @@ Imports:
     Rcpp (>= 1.0.8),
     GenomicRanges,
     Biostrings,
+    rtracklayer,
     utils,
     methods,
     igraph,
@@ -67,7 +68,6 @@ Imports:
     networkD3
 Suggests:
     BiocStyle,
-    rtracklayer,
     ggtree,
     covr,
     knitr,

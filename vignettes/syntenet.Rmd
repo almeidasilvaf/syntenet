@@ -108,93 +108,53 @@ of primary transcripts for each species.
 - **annotation:** A `GRangesList` or `CompressedGRangesList` object containing
 the coordinates for the genes in **seq**.
 
-If you have whole-genome protein sequences in FASTA files and gene annotation
-in GFF/GTF files, you can import them to R with the functions 
-`readAAStringSet()` from the Bioconductor package
-`r BiocStyle::Biocpkg("Biostrings")` and `import()` 
-from the Bioconductor package `r BiocStyle::Biocpkg("rtracklayer")`.
 
-To demonstrate it, we will export the example data set `proteomes` as 
-FASTA files in a directory named **sequences/**, and the example data set
-`annotation` as GFF files in a directory named **annotation/**.
+If you have whole-genome protein sequences in FASTA files, store all FASTA
+files in the same directory and use the function `fasta2AAStringSetlist()` to
+read all FASTA files into a list of `AAStringSet` objects.
 
-```{r export_example}
-# Create directories sequences/ and annotation/ in tempdir()
-seq_dir <- file.path(tempdir(), "sequences")
-annot_dir <- file.path(tempdir(), "annotation")
+Likewise, if you have gene annotation in GFF/GFF3/GTF files, 
+store all files in the same directory and use the function `gff2GRangesList()`
+to read all GFF/GFF3/GTF files into a `GRangesList object`.
 
-if(!dir.exists(seq_dir)) { dir.create(seq_dir, recursive = TRUE) }
-if(!dir.exists(annot_dir)) { dir.create(annot_dir, recursive = TRUE) }
-
-# Take a look at the paths
-seq_dir
-annot_dir
-
-# Export sequences as FASTA files
-Biostrings::writeXStringSet(
-    proteomes$Olucimarinus, filepath = file.path(seq_dir, "Olucimarinus.fa")
-)
-Biostrings::writeXStringSet(
-    proteomes$OspRCC809, filepath = file.path(seq_dir, "OspRCC809.fa")
-)
-
-# Export gene annotation as GFF files
-rtracklayer::export(
-    annotation$Olucimarinus, con = file.path(annot_dir, "Olucimarinus.gff")
-)
-rtracklayer::export(
-    annotation$OspRCC809, con = file.path(annot_dir, "OspRCC809.gff")
-)
-
-# See the contents of sequences/ and annotation/ directories
-dir(seq_dir)
-dir(annot_dir)
-```
-
-This is what you typically have: a directory containing FASTA files 
-(here, **sequences/**), and a directory containing GFF files 
-(here, **annotation/**). Now, let's see how you can import these files to your
-R session.
+For a demonstration, we will read example FASTA and GFF3 files stored in 
+subdirectories named **sequences/** and **annotation/**, which are located 
+in the `extdata/` directory of this package.
 
 ## From FASTA files to a list of `AAStringSet` objects
 
-To import FASTA files as a list of `AAStringSet` objects, we will loop
-through each file in the **sequences/** directory and read them with
-`Biostrings::readAAStringSet()`.
+Here is how you can use `fasta2AAStringSetlist()` to read FASTA files 
+in a directory as a list of `AAStringSet` objects.
 
-```{r read_fasta}
-# Get full path to FASTA files
-fasta_files <- list.files(seq_dir, full.names = TRUE)
-fasta_files
+```{r fasta2AAStringSetlist}
+# Path to directory containing FASTA files
+fasta_dir <- system.file("extdata", "sequences", package = "syntenet")
+fasta_dir
 
-# Read FASTA files as a list of `AAStringSet` objects
-seqs <- lapply(fasta_files, Biostrings::readAAStringSet)
+dir(fasta_dir) # see the contents of the directory
 
-# Name list elements
-names(seqs) <- gsub("\\.fa", "", basename(fasta_files))
-
-seqs
+# Read all FASTA files in `fasta_dir`
+aastringsetlist <- fasta2AAStringSetlist(fasta_dir)
+aastringsetlist
 ```
 
 And that's it! Now you have a list of `AAStringSet` objects.
 
 ## From GFF/GTF files to a `GRangesList` object
 
-To import GFF files as a GRangesList object, we will loop through each file
-in the **annotation/** directory and read them with `rtracklayer::import()`.
+Here is how you can use `gff2GRangesList()` to read GFF/GFF3/GTF files 
+in a directory as a `GRangesList` object.
 
-```{r read_gff}
-# Get full path to GFF files
-gff_files <- list.files(annot_dir, full.names = TRUE)
-gff_files
+```{r gff2GRangesList}
+# Path to directory containing FASTA files
+gff_dir <- system.file("extdata", "annotation", package = "syntenet")
+gff_dir
 
-# Read GFF files as a `GRangesList` object
-ranges <- lapply(gff_files, rtracklayer::import)
-ranges <- GenomicRanges::GRangesList(ranges)
+dir(gff_dir) # see the contents of the directory
 
-# Name list elements
-names(ranges) <- gsub("\\.gff", "", basename(gff_files))
-ranges
+# Read all FASTA files in `fasta_dir`
+grangeslist <- gff2GRangesList(gff_dir)
+grangeslist
 ```
 
 And now you have a `GRangesList` object.
