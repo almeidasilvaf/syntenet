@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">syntenet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -278,189 +278,148 @@ species.</li>
 <code>CompressedGRangesList</code> object containing the coordinates for
 the genes in <strong>seq</strong>.</li>
 </ul>
-<p>If you have whole-genome protein sequences in FASTA files and gene
-annotation in GFF/GTF files, you can import them to R with the functions
-<code>readAAStringSet()</code> from the Bioconductor package <em><a href="https://bioconductor.org/packages/3.15/Biostrings" class="external-link">Biostrings</a></em>
-and <code>import()</code> from the Bioconductor package <em><a href="https://bioconductor.org/packages/3.15/rtracklayer" class="external-link">rtracklayer</a></em>.</p>
-<p>To demonstrate it, we will export the example data set
-<code>proteomes</code> as FASTA files in a directory named
-<strong>sequences/</strong>, and the example data set
-<code>annotation</code> as GFF files in a directory named
-<strong>annotation/</strong>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Create directories sequences/ and annotation/ in tempdir()</span></span>
-<span><span class="va">seq_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"sequences"</span><span class="op">)</span></span>
-<span><span class="va">annot_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"annotation"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">seq_dir</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">seq_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">}</span></span>
-<span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.exists</a></span><span class="op">(</span><span class="va">annot_dir</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/files2.html" class="external-link">dir.create</a></span><span class="op">(</span><span class="va">annot_dir</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">}</span></span>
-<span></span>
-<span><span class="co"># Take a look at the paths</span></span>
-<span><span class="va">seq_dir</span></span>
-<span><span class="co">#&gt; [1] "/tmp/Rtmpz3GB9O/sequences"</span></span>
-<span><span class="va">annot_dir</span></span>
-<span><span class="co">#&gt; [1] "/tmp/Rtmpz3GB9O/annotation"</span></span>
-<span></span>
-<span><span class="co"># Export sequences as FASTA files</span></span>
-<span><span class="fu">Biostrings</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Biostrings/man/XStringSet-io.html" class="external-link">writeXStringSet</a></span><span class="op">(</span></span>
-<span>    <span class="va">proteomes</span><span class="op">$</span><span class="va">Olucimarinus</span>, filepath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">seq_dir</span>, <span class="st">"Olucimarinus.fa"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu">Biostrings</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Biostrings/man/XStringSet-io.html" class="external-link">writeXStringSet</a></span><span class="op">(</span></span>
-<span>    <span class="va">proteomes</span><span class="op">$</span><span class="va">OspRCC809</span>, filepath <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">seq_dir</span>, <span class="st">"OspRCC809.fa"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Export gene annotation as GFF files</span></span>
-<span><span class="fu">rtracklayer</span><span class="fu">::</span><span class="fu">export</span><span class="op">(</span></span>
-<span>    <span class="va">annotation</span><span class="op">$</span><span class="va">Olucimarinus</span>, con <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">annot_dir</span>, <span class="st">"Olucimarinus.gff"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu">rtracklayer</span><span class="fu">::</span><span class="fu">export</span><span class="op">(</span></span>
-<span>    <span class="va">annotation</span><span class="op">$</span><span class="va">OspRCC809</span>, con <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="va">annot_dir</span>, <span class="st">"OspRCC809.gff"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># See the contents of sequences/ and annotation/ directories</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="va">seq_dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Olucimarinus.fa" "OspRCC809.fa"</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="va">annot_dir</span><span class="op">)</span></span>
-<span><span class="co">#&gt; [1] "Olucimarinus.gff" "OspRCC809.gff"</span></span></code></pre></div>
-<p>This is what you typically have: a directory containing FASTA files
-(here, <strong>sequences/</strong>), and a directory containing GFF
-files (here, <strong>annotation/</strong>). Now, let’s see how you can
-import these files to your R session.</p>
+<p>If you have whole-genome protein sequences in FASTA files, store all
+FASTA files in the same directory and use the function
+<code><a href="../reference/fasta2AAStringSetlist.html">fasta2AAStringSetlist()</a></code> to read all FASTA files into a list
+of <code>AAStringSet</code> objects.</p>
+<p>Likewise, if you have gene annotation in GFF/GFF3/GTF files, store
+all files in the same directory and use the function
+<code><a href="../reference/gff2GRangesList.html">gff2GRangesList()</a></code> to read all GFF/GFF3/GTF files into a
+<code>GRangesList object</code>.</p>
+<p>For a demonstration, we will read example FASTA and GFF3 files stored
+in subdirectories named <strong>sequences/</strong> and
+<strong>annotation/</strong>, which are located in the
+<code>extdata/</code> directory of this package.</p>
 <div class="section level3">
 <h3 id="from-fasta-files-to-a-list-of-aastringset-objects">From FASTA files to a list of <code>AAStringSet</code> objects<a class="anchor" aria-label="anchor" href="#from-fasta-files-to-a-list-of-aastringset-objects"></a>
 </h3>
-<p>To import FASTA files as a list of <code>AAStringSet</code> objects,
-we will loop through each file in the <strong>sequences/</strong>
-directory and read them with
-<code><a href="https://rdrr.io/pkg/Biostrings/man/XStringSet-io.html" class="external-link">Biostrings::readAAStringSet()</a></code>.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get full path to FASTA files</span></span>
-<span><span class="va">fasta_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">seq_dir</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">fasta_files</span></span>
-<span><span class="co">#&gt; [1] "/tmp/Rtmpz3GB9O/sequences/Olucimarinus.fa"</span></span>
-<span><span class="co">#&gt; [2] "/tmp/Rtmpz3GB9O/sequences/OspRCC809.fa"</span></span>
+<p>Here is how you can use <code><a href="../reference/fasta2AAStringSetlist.html">fasta2AAStringSetlist()</a></code> to read
+FASTA files in a directory as a list of <code>AAStringSet</code>
+objects.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Path to directory containing FASTA files</span></span>
+<span><span class="va">fasta_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"sequences"</span>, package <span class="op">=</span> <span class="st">"syntenet"</span><span class="op">)</span></span>
+<span><span class="va">fasta_dir</span></span>
+<span><span class="co">#&gt; [1] "/__w/_temp/Library/syntenet/extdata/sequences"</span></span>
 <span></span>
-<span><span class="co"># Read FASTA files as a list of `AAStringSet` objects</span></span>
-<span><span class="va">seqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">fasta_files</span>, <span class="fu">Biostrings</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/Biostrings/man/XStringSet-io.html" class="external-link">readAAStringSet</a></span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="va">fasta_dir</span><span class="op">)</span> <span class="co"># see the contents of the directory</span></span>
+<span><span class="co">#&gt; [1] "Olucimarinus.fa.gz" "OspRCC809.fa.gz"</span></span>
 <span></span>
-<span><span class="co"># Name list elements</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">seqs</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\.fa"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">fasta_files</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">seqs</span></span>
+<span><span class="co"># Read all FASTA files in `fasta_dir`</span></span>
+<span><span class="va">aastringsetlist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fasta2AAStringSetlist.html">fasta2AAStringSetlist</a></span><span class="op">(</span><span class="va">fasta_dir</span><span class="op">)</span></span>
+<span><span class="va">aastringsetlist</span></span>
 <span><span class="co">#&gt; $Olucimarinus</span></span>
-<span><span class="co">#&gt; AAStringSet object of length 1901:</span></span>
-<span><span class="co">#&gt;        width seq                                            names               </span></span>
-<span><span class="co">#&gt;    [1]   911 MTTMADERASIARVSVVKYGAI...VQLYTYPGSTNDPNFLLKLA* OL01G00010</span></span>
-<span><span class="co">#&gt;    [2]   789 MGGRRCFCSRSSPVGVGAPAPA...PPQCGADIEAGSEPPPDKCG* OL01G00020</span></span>
-<span><span class="co">#&gt;    [3]   618 MTRAKDAIVVDDGNDDDDDDDD...RDASASLALALAFSSEESVV* OL01G00030</span></span>
-<span><span class="co">#&gt;    [4]   547 MPTKAQCWVVSYARVRDGASRS...TGSVSARASIFGEQASFRKA* OL01G00040</span></span>
-<span><span class="co">#&gt;    [5]   319 MFTASHTTSKVTLRARVATQPR...HNGMALWRETTPKDSLIPAL* OL01G00050</span></span>
-<span><span class="co">#&gt;    ...   ... ...</span></span>
-<span><span class="co">#&gt; [1897]   106 MAANDGETKLPEDGWIQPCFAC...RAIVDQVGGEHLKGSLMPIE* OL03G05910</span></span>
-<span><span class="co">#&gt; [1898]    70 RMGIVKLATDGSVWVHSPIELD...QQWKDAYPGATLYACPGLKSK OL03G05920</span></span>
-<span><span class="co">#&gt; [1899]   680 MDDAHDARWATTSARDGERARA...RSVGPSASDKILEALFPVAD* OL03G05930</span></span>
-<span><span class="co">#&gt; [1900]   179 MRAVRERSKANLAARVKEEATR...ELERTRELFARARVRAYECI* OL03G05940</span></span>
-<span><span class="co">#&gt; [1901]    83 MFVREARRAIPRFIKDPPQAFH...ESGDVRSVEGEVCGAVLVDE* OL03G05950</span></span>
+<span><span class="co">#&gt; AAStringSet object of length 100:</span></span>
+<span><span class="co">#&gt;       width seq                                             names               </span></span>
+<span><span class="co">#&gt;   [1]   911 MTTMADERASIARVSVVKYGAI...DVQLYTYPGSTNDPNFLLKLA* OL01G00010</span></span>
+<span><span class="co">#&gt;   [2]   789 MGGRRCFCSRSSPVGVGAPAPA...FPPQCGADIEAGSEPPPDKCG* OL01G00020</span></span>
+<span><span class="co">#&gt;   [3]   618 MTRAKDAIVVDDGNDDDDDDDD...DRDASASLALALAFSSEESVV* OL01G00030</span></span>
+<span><span class="co">#&gt;   [4]   547 MPTKAQCWVVSYARVRDGASRS...VTGSVSARASIFGEQASFRKA* OL01G00040</span></span>
+<span><span class="co">#&gt;   [5]   319 MFTASHTTSKVTLRARVATQPR...LHNGMALWRETTPKDSLIPAL* OL01G00050</span></span>
+<span><span class="co">#&gt;   ...   ... ...</span></span>
+<span><span class="co">#&gt;  [96]   476 MVPARNFLDGANAREVELDRVV...VMRKLREPDSVARLAGQTGVR* OL01G00960</span></span>
+<span><span class="co">#&gt;  [97]   771 MARHRGTRGGWNATTTEGGDGR...SIPDDGFDESSSVSASTIDGF* OL01G00970</span></span>
+<span><span class="co">#&gt;  [98]   494 MDSEFWGCVIPAGRAVRVEVAT...FIKSRKDLFTIDGAYVRLVKK* OL01G00980</span></span>
+<span><span class="co">#&gt;  [99]   264 VRAIVGATTRIQTRAPPRANHR...DWSFISDEFQDDASDSEVIDR* OL01G00990</span></span>
+<span><span class="co">#&gt; [100]   565 MQLDAFRKATVKGVATRVGGAD...QLADLLRKNMGVPAKFIDAQN* OL01G01000</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $OspRCC809</span></span>
-<span><span class="co">#&gt; AAStringSet object of length 1433:</span></span>
-<span><span class="co">#&gt;        width seq                                            names               </span></span>
-<span><span class="co">#&gt;    [1]   274 MASTTGSAARRVFVDVEKTVNG...DVLSLGQGSLSGESSSSDEE* ORCC809_01G00010</span></span>
-<span><span class="co">#&gt;    [2]   175 MDQMRAANAQRSYLLFFVLFFL...SRRLLGRLDSEHTDLHPSWR* ORCC809_01G00020</span></span>
-<span><span class="co">#&gt;    [3]   403 MTAPRVRASRRATATAAATVTA...LTERDLRYMEPKATIEEWMG* ORCC809_01G00030</span></span>
-<span><span class="co">#&gt;    [4]   217 MTIDADGDDTLAPHAPAHGEVS...LIRLRGVEKTPTVDPPPPPP* ORCC809_01G00040</span></span>
-<span><span class="co">#&gt;    [5]  1691 RIEADEKSLLVFGKESPVRTAC...VRMGNNVVTSRYASSESEEDV ORCC809_01G00050</span></span>
-<span><span class="co">#&gt;    ...   ... ...</span></span>
-<span><span class="co">#&gt; [1429]   428 MVDANATTQTFVLEAEQELRVE...DLPSNVLLVGNLKWLGEDGK* ORCC809_03G02980</span></span>
-<span><span class="co">#&gt; [1430]   378 MSVPRTTLRRIPLGNARDVLVT...ETLKAIDAVHAQCRDPCIAT* ORCC809_03G02990</span></span>
-<span><span class="co">#&gt; [1431]  1156 MRATSAPSIVSFVARVACLFVA...CAFGTSLASFVVERARRLEN* ORCC809_03G03000</span></span>
-<span><span class="co">#&gt; [1432]   541 MAITVFLTDHGRRASALTFLVV...GFGVGAVKFMLAPEMVKSLA* ORCC809_03G03010</span></span>
-<span><span class="co">#&gt; [1433]   289 MSLSSLRSFSRSISSAPGGRSC...EPEEPEPEEPEPEEPEEPEP* ORCC809_03G03020</span></span></code></pre></div>
+<span><span class="co">#&gt; AAStringSet object of length 100:</span></span>
+<span><span class="co">#&gt;       width seq                                             names               </span></span>
+<span><span class="co">#&gt;   [1]   274 MASTTGSAARRVFVDVEKTVNG...WDVLSLGQGSLSGESSSSDEE* ORCC809_01G00010</span></span>
+<span><span class="co">#&gt;   [2]   175 MDQMRAANAQRSYLLFFVLFFL...SSRRLLGRLDSEHTDLHPSWR* ORCC809_01G00020</span></span>
+<span><span class="co">#&gt;   [3]   403 MTAPRVRASRRATATAAATVTA...ALTERDLRYMEPKATIEEWMG* ORCC809_01G00030</span></span>
+<span><span class="co">#&gt;   [4]   217 MTIDADGDDTLAPHAPAHGEVS...SLIRLRGVEKTPTVDPPPPPP* ORCC809_01G00040</span></span>
+<span><span class="co">#&gt;   [5]  1691 RIEADEKSLLVFGKESPVRTAC...SVRMGNNVVTSRYASSESEEDV ORCC809_01G00050</span></span>
+<span><span class="co">#&gt;   ...   ... ...</span></span>
+<span><span class="co">#&gt;  [96]   357 MSRGLADNWDDAEGYYCARIGE...TVNEALQHPFIVERIRTTAPN* ORCC809_01G00960</span></span>
+<span><span class="co">#&gt;  [97]   164 MAMDSFRSAPRSRRRVEATSRE...SKPVKPVREPVRMVEASTGAH* ORCC809_01G00970</span></span>
+<span><span class="co">#&gt;  [98]    85 MPEGTVFIGNIPYDATESSLTE...NLNAREYNGRQLRVDHAETMKG ORCC809_01G00980</span></span>
+<span><span class="co">#&gt;  [99]   229 MKGGGGASGAAASANGNGAVGG...PDQRAQVEYLRQLAAQQGMVR* ORCC809_01G00990</span></span>
+<span><span class="co">#&gt; [100]   103 RKAGGERWEDSSLAEWPENDFR...EMAGKFIGNRPVKLRKSAWNER ORCC809_01G01000</span></span></code></pre></div>
 <p>And that’s it! Now you have a list of <code>AAStringSet</code>
 objects.</p>
 </div>
 <div class="section level3">
 <h3 id="from-gffgtf-files-to-a-grangeslist-object">From GFF/GTF files to a <code>GRangesList</code> object<a class="anchor" aria-label="anchor" href="#from-gffgtf-files-to-a-grangeslist-object"></a>
 </h3>
-<p>To import GFF files as a GRangesList object, we will loop through
-each file in the <strong>annotation/</strong> directory and read them
-with <code>rtracklayer::import()</code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Get full path to GFF files</span></span>
-<span><span class="va">gff_files</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">list.files</a></span><span class="op">(</span><span class="va">annot_dir</span>, full.names <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">gff_files</span></span>
-<span><span class="co">#&gt; [1] "/tmp/Rtmpz3GB9O/annotation/Olucimarinus.gff"</span></span>
-<span><span class="co">#&gt; [2] "/tmp/Rtmpz3GB9O/annotation/OspRCC809.gff"</span></span>
+<p>Here is how you can use <code><a href="../reference/gff2GRangesList.html">gff2GRangesList()</a></code> to read
+GFF/GFF3/GTF files in a directory as a <code>GRangesList</code>
+object.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Path to directory containing FASTA files</span></span>
+<span><span class="va">gff_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"extdata"</span>, <span class="st">"annotation"</span>, package <span class="op">=</span> <span class="st">"syntenet"</span><span class="op">)</span></span>
+<span><span class="va">gff_dir</span></span>
+<span><span class="co">#&gt; [1] "/__w/_temp/Library/syntenet/extdata/annotation"</span></span>
 <span></span>
-<span><span class="co"># Read GFF files as a `GRangesList` object</span></span>
-<span><span class="va">ranges</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">gff_files</span>, <span class="fu">rtracklayer</span><span class="fu">::</span><span class="va">import</span><span class="op">)</span></span>
-<span><span class="va">ranges</span> <span class="op">&lt;-</span> <span class="fu">GenomicRanges</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/GenomicRanges/man/GRangesList-class.html" class="external-link">GRangesList</a></span><span class="op">(</span><span class="va">ranges</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="va">gff_dir</span><span class="op">)</span> <span class="co"># see the contents of the directory</span></span>
+<span><span class="co">#&gt; [1] "Olucimarinus.gff3.gz" "OspRCC809.gff3.gz"</span></span>
 <span></span>
-<span><span class="co"># Name list elements</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ranges</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">"\\.gff"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/basename.html" class="external-link">basename</a></span><span class="op">(</span><span class="va">gff_files</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="va">ranges</span></span>
+<span><span class="co"># Read all FASTA files in `fasta_dir`</span></span>
+<span><span class="va">grangeslist</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gff2GRangesList.html">gff2GRangesList</a></span><span class="op">(</span><span class="va">gff_dir</span><span class="op">)</span></span>
+<span><span class="va">grangeslist</span></span>
 <span><span class="co">#&gt; GRangesList object of length 2:</span></span>
 <span><span class="co">#&gt; $Olucimarinus</span></span>
-<span><span class="co">#&gt; GRanges object with 1903 ranges and 5 metadata columns:</span></span>
-<span><span class="co">#&gt;          seqnames        ranges strand |      source     type     score</span></span>
-<span><span class="co">#&gt;             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |    &lt;factor&gt; &lt;factor&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">#&gt;      [1]    Chr_1      939-3671      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      [2]    Chr_1     3907-6927      + | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      [3]    Chr_1     7085-9160      + | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      [4]    Chr_1    9830-11480      + | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      [5]    Chr_1   11467-12599      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      ...      ...           ...    ... .         ...      ...       ...</span></span>
-<span><span class="co">#&gt;   [1899]    Chr_3 977435-977752      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;   [1900]    Chr_3 978702-978911      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;   [1901]    Chr_3 979281-981320      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;   [1902]    Chr_3 981778-982314      + | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;   [1903]    Chr_3 982498-982746      + | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;              phase    group</span></span>
-<span><span class="co">#&gt;          &lt;integer&gt; &lt;factor&gt;</span></span>
-<span><span class="co">#&gt;      [1]      &lt;NA&gt;    Chr_1</span></span>
-<span><span class="co">#&gt;      [2]      &lt;NA&gt;    Chr_1</span></span>
-<span><span class="co">#&gt;      [3]      &lt;NA&gt;    Chr_1</span></span>
-<span><span class="co">#&gt;      [4]      &lt;NA&gt;    Chr_1</span></span>
-<span><span class="co">#&gt;      [5]      &lt;NA&gt;    Chr_1</span></span>
-<span><span class="co">#&gt;      ...       ...      ...</span></span>
-<span><span class="co">#&gt;   [1899]      &lt;NA&gt;    Chr_3</span></span>
-<span><span class="co">#&gt;   [1900]      &lt;NA&gt;    Chr_3</span></span>
-<span><span class="co">#&gt;   [1901]      &lt;NA&gt;    Chr_3</span></span>
-<span><span class="co">#&gt;   [1902]      &lt;NA&gt;    Chr_3</span></span>
-<span><span class="co">#&gt;   [1903]      &lt;NA&gt;    Chr_3</span></span>
+<span><span class="co">#&gt; GRanges object with 100 ranges and 7 metadata columns:</span></span>
+<span><span class="co">#&gt;         seqnames        ranges strand |      source     type     score</span></span>
+<span><span class="co">#&gt;            &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |    &lt;factor&gt; &lt;factor&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">#&gt;     [1]    Chr_1      939-3671      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     [2]    Chr_1     3907-6927      + | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     [3]    Chr_1     7085-9160      + | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     [4]    Chr_1    9830-11480      + | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     [5]    Chr_1   11467-12599      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     ...      ...           ...    ... .         ...      ...       ...</span></span>
+<span><span class="co">#&gt;    [96]    Chr_1 170975-172402      + | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;    [97]    Chr_1 172445-174757      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;    [98]    Chr_1 175358-176839      + | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;    [99]    Chr_1 176901-177692      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;   [100]    Chr_1 177742-179436      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;             phase          ID        Name     gene_id</span></span>
+<span><span class="co">#&gt;         &lt;integer&gt; &lt;character&gt; &lt;character&gt; &lt;character&gt;</span></span>
+<span><span class="co">#&gt;     [1]      &lt;NA&gt;  OL01G00010  OL01G00010  OL01G00010</span></span>
+<span><span class="co">#&gt;     [2]      &lt;NA&gt;  OL01G00020  OL01G00020  OL01G00020</span></span>
+<span><span class="co">#&gt;     [3]      &lt;NA&gt;  OL01G00030  OL01G00030  OL01G00030</span></span>
+<span><span class="co">#&gt;     [4]      &lt;NA&gt;  OL01G00040  OL01G00040  OL01G00040</span></span>
+<span><span class="co">#&gt;     [5]      &lt;NA&gt;  OL01G00050  OL01G00050  OL01G00050</span></span>
+<span><span class="co">#&gt;     ...       ...         ...         ...         ...</span></span>
+<span><span class="co">#&gt;    [96]      &lt;NA&gt;  OL01G00960  OL01G00960  OL01G00960</span></span>
+<span><span class="co">#&gt;    [97]      &lt;NA&gt;  OL01G00970  OL01G00970  OL01G00970</span></span>
+<span><span class="co">#&gt;    [98]      &lt;NA&gt;  OL01G00980  OL01G00980  OL01G00980</span></span>
+<span><span class="co">#&gt;    [99]      &lt;NA&gt;  OL01G00990  OL01G00990  OL01G00990</span></span>
+<span><span class="co">#&gt;   [100]      &lt;NA&gt;  OL01G01000  OL01G01000  OL01G01000</span></span>
 <span><span class="co">#&gt;   -------</span></span>
-<span><span class="co">#&gt;   seqinfo: 6 sequences from an unspecified genome; no seqlengths</span></span>
+<span><span class="co">#&gt;   seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; $OspRCC809</span></span>
-<span><span class="co">#&gt; GRanges object with 1433 ranges and 5 metadata columns:</span></span>
-<span><span class="co">#&gt;          seqnames        ranges strand |      source     type     score</span></span>
-<span><span class="co">#&gt;             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |    &lt;factor&gt; &lt;factor&gt; &lt;numeric&gt;</span></span>
-<span><span class="co">#&gt;      [1]    chr_1      321-1142      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      [2]    chr_1     1463-2089      + | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      [3]    chr_1     2162-3370      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      [4]    chr_1     3774-4424      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      [5]    chr_1     4693-9924      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;      ...      ...           ...    ... .         ...      ...       ...</span></span>
-<span><span class="co">#&gt;   [1429]    chr_3 504915-506198      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;   [1430]    chr_3 506377-507510      + | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;   [1431]    chr_3 507856-511323      + | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;   [1432]    chr_3 511533-513155      - | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;   [1433]    chr_3 513841-514707      + | rtracklayer     gene        NA</span></span>
-<span><span class="co">#&gt;              phase    group</span></span>
-<span><span class="co">#&gt;          &lt;integer&gt; &lt;factor&gt;</span></span>
-<span><span class="co">#&gt;      [1]      &lt;NA&gt;    chr_1</span></span>
-<span><span class="co">#&gt;      [2]      &lt;NA&gt;    chr_1</span></span>
-<span><span class="co">#&gt;      [3]      &lt;NA&gt;    chr_1</span></span>
-<span><span class="co">#&gt;      [4]      &lt;NA&gt;    chr_1</span></span>
-<span><span class="co">#&gt;      [5]      &lt;NA&gt;    chr_1</span></span>
-<span><span class="co">#&gt;      ...       ...      ...</span></span>
-<span><span class="co">#&gt;   [1429]      &lt;NA&gt;    chr_3</span></span>
-<span><span class="co">#&gt;   [1430]      &lt;NA&gt;    chr_3</span></span>
-<span><span class="co">#&gt;   [1431]      &lt;NA&gt;    chr_3</span></span>
-<span><span class="co">#&gt;   [1432]      &lt;NA&gt;    chr_3</span></span>
-<span><span class="co">#&gt;   [1433]      &lt;NA&gt;    chr_3</span></span>
+<span><span class="co">#&gt; GRanges object with 100 ranges and 7 metadata columns:</span></span>
+<span><span class="co">#&gt;         seqnames        ranges strand |      source     type     score</span></span>
+<span><span class="co">#&gt;            &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; |    &lt;factor&gt; &lt;factor&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">#&gt;     [1]    chr_1      321-1142      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     [2]    chr_1     1463-2089      + | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     [3]    chr_1     2162-3370      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     [4]    chr_1     3774-4424      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     [5]    chr_1     4693-9924      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;     ...      ...           ...    ... .         ...      ...       ...</span></span>
+<span><span class="co">#&gt;    [96]    chr_1 165459-166529      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;    [97]    chr_1 166654-167213      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;    [98]    chr_1 167296-167550      + | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;    [99]    chr_1 167542-168228      + | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;   [100]    chr_1 168639-168947      - | rtracklayer     gene        NA</span></span>
+<span><span class="co">#&gt;             phase               ID             Name          gene_id</span></span>
+<span><span class="co">#&gt;         &lt;integer&gt;      &lt;character&gt;      &lt;character&gt;      &lt;character&gt;</span></span>
+<span><span class="co">#&gt;     [1]      &lt;NA&gt; ORCC809_01G00010 ORCC809_01G00010 ORCC809_01G00010</span></span>
+<span><span class="co">#&gt;     [2]      &lt;NA&gt; ORCC809_01G00020 ORCC809_01G00020 ORCC809_01G00020</span></span>
+<span><span class="co">#&gt;     [3]      &lt;NA&gt; ORCC809_01G00030 ORCC809_01G00030 ORCC809_01G00030</span></span>
+<span><span class="co">#&gt;     [4]      &lt;NA&gt; ORCC809_01G00040 ORCC809_01G00040 ORCC809_01G00040</span></span>
+<span><span class="co">#&gt;     [5]      &lt;NA&gt; ORCC809_01G00050 ORCC809_01G00050 ORCC809_01G00050</span></span>
+<span><span class="co">#&gt;     ...       ...              ...              ...              ...</span></span>
+<span><span class="co">#&gt;    [96]      &lt;NA&gt; ORCC809_01G00960 ORCC809_01G00960 ORCC809_01G00960</span></span>
+<span><span class="co">#&gt;    [97]      &lt;NA&gt; ORCC809_01G00970 ORCC809_01G00970 ORCC809_01G00970</span></span>
+<span><span class="co">#&gt;    [98]      &lt;NA&gt; ORCC809_01G00980 ORCC809_01G00980 ORCC809_01G00980</span></span>
+<span><span class="co">#&gt;    [99]      &lt;NA&gt; ORCC809_01G00990 ORCC809_01G00990 ORCC809_01G00990</span></span>
+<span><span class="co">#&gt;   [100]      &lt;NA&gt; ORCC809_01G01000 ORCC809_01G01000 ORCC809_01G01000</span></span>
 <span><span class="co">#&gt;   -------</span></span>
-<span><span class="co">#&gt;   seqinfo: 6 sequences from an unspecified genome; no seqlengths</span></span></code></pre></div>
+<span><span class="co">#&gt;   seqinfo: 2 sequences from an unspecified genome; no seqlengths</span></span></code></pre></div>
 <p>And now you have a <code>GRangesList</code> object.</p>
 </div>
 </div>
@@ -490,7 +449,7 @@ of non-protein-coding genes.</p></li>
 names in <code>annotation</code>.</p></li>
 </ol>
 <p>Let’s check if the example data sets satisfy these 3 criteria:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/check_input.html">check_input</a></span><span class="op">(</span><span class="va">proteomes</span>, <span class="va">annotation</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
 <p>As you can see, the data passed the checks. Now, let’s process them
@@ -519,7 +478,7 @@ chromosome names of each element of the <strong>annotation</strong>
 seqnames, ranges, and gene ID.</p></li>
 </ol>
 <p>Let’s process our input data:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/process_input.html">process_input</a></span><span class="op">(</span><span class="va">proteomes</span>, <span class="va">annotation</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Looking at the processed data</span></span>
@@ -611,7 +570,7 @@ works. Needless to say, you need to have DIAMOND installed in your
 machine and in your PATH to run this function. To check if you have
 DIAMOND installed, use the function
 <code><a href="../reference/diamond_is_installed.html">diamond_is_installed()</a></code>.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">blast_list</span><span class="op">)</span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="../reference/diamond_is_installed.html">diamond_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">blast_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_diamond.html">run_diamond</a></span><span class="op">(</span>seq <span class="op">=</span> <span class="va">pdata</span><span class="op">$</span><span class="va">seq</span><span class="op">)</span></span>
@@ -619,7 +578,7 @@ DIAMOND installed, use the function
 <p>The output of <code><a href="../reference/run_diamond.html">run_diamond()</a></code> is a list of data frames
 containing the tabular output of pairwise BLAST-like searches. Let’s
 take a look at it.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List names</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">blast_list</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "Olucimarinus_Olucimarinus" "Olucimarinus_OspRCC809"   </span></span>
@@ -651,7 +610,7 @@ having to install it yourself. Amazing, huh?</p>
 <code><a href="../reference/infer_syntenet.html">infer_syntenet()</a></code>. The output is a network represented as a
 so-called <strong>edge list</strong> (i.e., a 2-column data frame with
 node 1 and node 2 in columns 1 and 2, respectively).</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Infer synteny network</span></span>
 <span><span class="va">net</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/infer_syntenet.html">infer_syntenet</a></span><span class="op">(</span><span class="va">blast_list</span>, <span class="va">pdata</span><span class="op">$</span><span class="va">annotation</span><span class="op">)</span></span>
 <span></span>
@@ -689,7 +648,7 @@ part of more than one cluster). If this is your case, we recommend the
 &lt;em&gt;clique percolation&lt;/em&gt; algorithm, which is implemented in the R
 package &lt;em&gt;&lt;a href="https://CRAN.R-project.org/package=CliquePercolation" class="external-link"&gt;CliquePercolation&lt;/a&gt;&lt;/em&gt;
 &lt;span class="citation"&gt;(Lange 2021)&lt;/span&gt;.&lt;/p&gt;'><sup>1</sup></a></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load example data and take a look at it</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">network</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">network</span><span class="op">)</span></span>
@@ -721,7 +680,7 @@ species in columns.</p></li>
 clustering on a matrix of Ruzicka distances obtained from the
 phylogenomic profiles matrix.</p></li>
 </ol>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Phylogenomic profiling</span></span>
 <span><span class="va">profiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phylogenomic_profile.html">phylogenomic_profile</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span>
 <span></span>
@@ -763,7 +722,7 @@ phylogenomic profiles matrix.</p></li>
 the phylogenomic profiles as a heatmap with
 <code><a href="../reference/plot_profiles.html">plot_profiles()</a></code>. Let’s also add some species
 annotation.</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create a vector of custom species order to plot</span></span>
 <span><span class="va">species_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
 <span>    <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"pvu"</span>, <span class="st">"gma"</span>, <span class="st">"cca"</span>, <span class="st">"tpr"</span>, <span class="st">"mtr"</span>, <span class="st">"adu"</span>, <span class="st">"lja"</span>,</span>
@@ -801,7 +760,7 @@ highly conserved ones as well.</p>
 you can use the function <code><a href="../reference/find_GS_clusters.html">find_GS_clusters()</a></code>. For that, you
 only need to input the profiles matrix and a data frame of species
 annotation (i.e., species groups).</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Find group-specific clusters</span></span>
 <span><span class="va">gs_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_GS_clusters.html">find_GS_clusters</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span>, <span class="va">species_annotation</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Could not find annotation for species: </span></span>
@@ -821,7 +780,7 @@ annotation (i.e., species groups).</p>
 <span><span class="co">#&gt; [1] 394</span></span></code></pre></div>
 <p>As you can see, there are 394 family-specific clusters in the
 network. Let’s plot a heatmap of group-specific clusters only.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter profiles matrix to only include group-specific clusters</span></span>
 <span><span class="va">pgs</span> <span class="op">&lt;-</span> <span class="va">profiles</span></span>
 <span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span></span>
@@ -837,12 +796,12 @@ network. Let’s plot a heatmap of group-specific clusters only.</p>
 <p>Pretty cool, huh? You can also visualize clusters as a network plot
 with the function <code><a href="../reference/plot_network.html">plot_network()</a></code>. For example, let’s
 visualize the group-specific clusters.</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1) Visualize a network of first 5 GS-clusters</span></span>
 <span><span class="va">id</span> <span class="op">&lt;-</span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span><span class="op">)</span></span></code></pre></div>
 <p><img src="syntenet_files/figure-html/plot_network-1.png" width="700"></p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># 2) Coloring nodes by family</span></span>
 <span><span class="va">genes</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/unique.html" class="external-link">unique</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="va">network</span><span class="op">$</span><span class="va">node1</span>, <span class="va">network</span><span class="op">$</span><span class="va">node2</span><span class="op">)</span><span class="op">)</span></span>
@@ -862,13 +821,13 @@ visualize the group-specific clusters.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, color_by <span class="op">=</span> <span class="va">gene_df</span><span class="op">)</span></span></code></pre></div>
 <p><img src="syntenet_files/figure-html/plot_network-2.png" width="700"></p>
-<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># 3) Interactive visualization (zoom out and in to explore it)</span></span>
 <span><span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, </span>
 <span>             interactive <span class="op">=</span> <span class="cn">TRUE</span>, dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">300</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="htmlwidget-15e9a858924a3e0b5f16" style="width:500px;height:300px;" class="forceNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-15e9a858924a3e0b5f16">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-10,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-d11d1120a249ac26d3a9" style="width:500px;height:300px;" class="forceNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-d11d1120a249ac26d3a9">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-10,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="microsynteny-based-phylogeny-reconstruction">Microsynteny-based phylogeny reconstruction<a class="anchor" aria-label="anchor" href="#microsynteny-based-phylogeny-reconstruction"></a>
@@ -878,7 +837,7 @@ in each species to reconstruct a microsynteny-based phylogeny.</p>
 <p>To do that, you first need to binarize the profiles matrix (0s and 1s
 representing absence and presence, respectively) and transpose it. This
 can be done with <code>binarize_and_tranpose()</code>.</p>
-<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bt_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binarize_and_transpose.html">binarize_and_transpose</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Looking at the first 5 rows and 5 columns of the matrix</span></span>
@@ -913,7 +872,7 @@ species). However, we’re only using this filtered data set for speed
 issues. For real-life applications, the best thing to do is to
 <strong>include phylogenomic profiles for all genes</strong> (not only
 BUSCO genes).</p>
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Leave only 6 legume species and P. mume as an outgroup for testing purposes</span></span>
 <span><span class="va">included</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gma"</span>, <span class="st">"pvu"</span>, <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"cca"</span>, <span class="st">"pmu"</span><span class="op">)</span></span>
 <span><span class="va">bt_mat</span> <span class="op">&lt;-</span> <span class="va">bt_mat</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">bt_mat</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">included</span>, <span class="op">]</span></span>
@@ -936,7 +895,7 @@ and visualizing it with the <em><a href="https://bioconductor.org/packages/3.15/
 Bioc package <span class="citation">(Yu et al. 2017)</span>. For
 example, let’s visualize a microsynteny-based phylogeny for 123
 angiosperm species, whose phylogenomic profiles were obtained from <span class="citation">Zhao et al. (2021)</span>.</p>
-<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">angiosperm_phylogeny</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Plotting the tree</span></span>
@@ -950,7 +909,7 @@ angiosperm species, whose phylogenomic profiles were obtained from <span class="
 <h2 class="unnumbered" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
 <p>This document was created under the following conditions:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.2.1 (2022-06-23)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
@@ -972,7 +931,7 @@ angiosperm species, whose phylogenomic profiles were obtained from <span class="
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] ggtree_3.4.4     syntenet_0.99.6  BiocStyle_2.24.0</span></span>
+<span><span class="co">#&gt; [1] ggtree_3.4.4     syntenet_0.99.7  BiocStyle_2.24.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;   [1] nlme_3.1-159                matrixStats_0.62.0         </span></span>

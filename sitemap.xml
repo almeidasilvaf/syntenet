@@ -52,7 +52,13 @@
     <loc>/reference/edges.html</loc>
   </url>
   <url>
+    <loc>/reference/fasta2AAStringSetlist.html</loc>
+  </url>
+  <url>
     <loc>/reference/find_GS_clusters.html</loc>
+  </url>
+  <url>
+    <loc>/reference/gff2GRangesList.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
