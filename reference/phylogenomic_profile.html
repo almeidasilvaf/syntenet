@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">syntenet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -68,24 +68,17 @@
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>A list with the following elements:</p><dl><dt>profile_matrix</dt>
-<dd><p>A matrix of i rows and j columns containing
+<p>A matrix of i rows and j columns containing
 the number of genes in cluster i for each species j. The number of rows
 is equal to the number of clusters in <strong>clusters</strong>, and
 the number of columns is equal to the number of species
-in <strong>clusters</strong>.</p></dd>
-
-<dt>hclust</dt>
-<dd><p>An hclust object containing the network clusters
-grouped by ward.D based on Jaccard distances.</p></dd>
-
-
-</dl></div>
+in <strong>clusters</strong>.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">profiles</span> <span class="op">&lt;-</span> <span class="fu">phylogenomic_profile</span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span><span class="op">$</span><span class="va">profile_matrix</span></span></span>
+<span class="r-in"><span><span class="va">profiles</span> <span class="op">&lt;-</span> <span class="fu">phylogenomic_profile</span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

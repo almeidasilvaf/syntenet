@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">syntenet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,8 +70,7 @@
     <h2 id="arguments">Arguments<a class="anchor" aria-label="anchor" href="#arguments"></a></h2>
     <dl><dt>transposed_profiles</dt>
 <dd><p>A binary and transposed profile matrix.
-The profile matrix is the second element of the list returned
-by <code><a href="phylogenomic_profile.html">phylogenomic_profile()</a></code></p></dd>
+The profile matrix can be obtained with <code><a href="phylogenomic_profile.html">phylogenomic_profile()</a></code>.</p></dd>
 
 
 <dt>bootr</dt>
@@ -121,7 +120,7 @@ Default: FALSE.</p></dd>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">profile_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="phylogenomic_profile.html">phylogenomic_profile</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span><span class="op">$</span><span class="va">profile_matrix</span></span></span>
+<span class="r-in"><span><span class="va">profile_matrix</span> <span class="op">&lt;-</span> <span class="fu"><a href="phylogenomic_profile.html">phylogenomic_profile</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">tmat</span> <span class="op">&lt;-</span> <span class="fu"><a href="binarize_and_transpose.html">binarize_and_transpose</a></span><span class="op">(</span><span class="va">profile_matrix</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Leave only some legumes and P. mume as an outgroup for testing purposes</span></span></span>

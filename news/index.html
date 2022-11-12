@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">syntenet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,6 +62,13 @@
 <p>NEW FEATURES</p>
 <ul><li><p>Added functions fasta2AAStringSetlist and gff2GRangesList to help users read multiple FASTA and GFF/GTF files as list of AAStringSet and GRangesList, respectively.</p></li>
 <li><p>Updated vignette to instruct users on how to load FASTA and GFF/GTF files to the R session.</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.0.1" id="syntenet-101">syntenet 1.0.1<a class="anchor" aria-label="anchor" href="#syntenet-101"></a></h2>
+<p>NEW FEATURES</p>
+<ul><li><p>Ward’s clustering of synteny clusters is now performed prior to plotting in <code><a href="../reference/plot_profiles.html">plot_profiles()</a></code>, not in <code><a href="../reference/phylogenomic_profile.html">phylogenomic_profile()</a></code>. As a consequence, <code><a href="../reference/phylogenomic_profile.html">phylogenomic_profile()</a></code> now returns only a matrix of profiles, not a list containing the matrix and an hclust object.</p></li>
+<li><p>Added an option to handle names in vector <em>cluster_species</em> as new names for display in the heatmap. This way, species abbreviations can be easily replaced with species’ full names to make plots look better.</p></li>
+<li><p>Added parameters <em>dist_function</em> and <em>dist_params</em> to allow users to specify function and parameters to calculate the distance matrix that will be passed to Ward’s clustering.</p></li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

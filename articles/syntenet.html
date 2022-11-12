@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">syntenet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.99.7</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -132,26 +132,30 @@ Synteny networks have been used to explore, among others, global synteny
 patterns in mammalian and angiosperm genomes <span class="citation">(Zhao and Schranz 2019)</span>, the evolution of
 MADS-box transcription factors <span class="citation">(Zhao et al.
 2017)</span>, and infer a microsynteny-based phylogeny for angiosperms
-<span class="citation">(Zhao et al. 2021)</span>. <em><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></em> is a
-package that can be used to infer synteny networks from protein
+<span class="citation">(Zhao et al. 2021)</span>. <em><a href="https://bioconductor.org/packages/3.15/syntenet" class="external-link">syntenet</a></em>
+is a package that can be used to infer synteny networks from protein
 sequences and perform downstream network analyses that include:</p>
 <ul>
-<li><p><strong>Network clustering</strong>;</p></li>
+<li><p><strong>Network clustering</strong> using the Infomap
+algorithm;</p></li>
 <li><p><strong>Phylogenomic profiling</strong>, which consists in
 identifying which species contain which clusters. This analysis can
 reveal highly conserved synteny clusters and taxon-specific ones (e.g.,
 family- and order-specific clusters);</p></li>
 <li><p><strong>Microsynteny-based phylogeny reconstruction</strong> with
 maximum likelihood, which can be achieved by inferring a phylogeny from
-a binary matrix of phylogenomic profiles with IQTREE.</p></li>
+a binary matrix of phylogenomic profiles with IQTREE2.</p></li>
 </ul>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p><em><a href="https://bioconductor.org/packages/3.15/syntenet" class="external-link">syntenet</a></em>
+can be installed from Bioconductor with the following code:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">if</span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html" class="external-link">requireNamespace</a></span><span class="op">(</span><span class="st">'BiocManager'</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'BiocManager'</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu">BiocManager</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/BiocManager/man/install.html" class="external-link">install</a></span><span class="op">(</span><span class="st">"syntenet"</span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load package after installation</span></span>
@@ -266,7 +270,7 @@ sp RCC809</em>, which were obtained from Pico-PLAZA 3.0 <span class="citation">(
 <div class="section level2">
 <h2 id="importing-data-to-the-r-session">Importing data to the R session<a class="anchor" aria-label="anchor" href="#importing-data-to-the-r-session"></a>
 </h2>
-<p>To detect synteny and infer synteny networks, <em><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></em>
+<p>To detect synteny and infer synteny networks, <em><a href="https://bioconductor.org/packages/3.15/syntenet" class="external-link">syntenet</a></em>
 requires two objects as input:</p>
 <ul>
 <li>
@@ -553,31 +557,30 @@ seqnames, ranges, and gene ID.</p></li>
 <h2 id="synteny-network-inference">Synteny network inference<a class="anchor" aria-label="anchor" href="#synteny-network-inference"></a>
 </h2>
 <p>Now that we have our processed data, we can infer the synteny
-network. To detect synteny, we need the tabular output from BLASTp <span class="citation">(Altschul et al. 1997)</span> or similar programs.
-Here, we give you two options:</p>
-<ol style="list-style-type: decimal">
-<li><p>Running BLASTp, DIAMOND <span class="citation">(Buchfink, Reuter,
-and Drost 2021)</span> or similar programs on the command line, saving
-the output in tabular format and reading the output table as a data
-frame (e.g., with the base R function
-<code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">read.table()</a></code>).</p></li>
-<li><p>Using a helper function in <em><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></em> named
-<code><a href="../reference/run_diamond.html">run_diamond()</a></code>, which runs DIAMOND from the R session and
-automatically parses its output to a data frame.</p></li>
-</ol>
-<p>Here, we will use <code><a href="../reference/run_diamond.html">run_diamond()</a></code> to demonstrate how it
-works. Needless to say, you need to have DIAMOND installed in your
-machine and in your PATH to run this function. To check if you have
-DIAMOND installed, use the function
-<code><a href="../reference/diamond_is_installed.html">diamond_is_installed()</a></code>.</p>
+network. To detect synteny, we need the tabular output from BLASTp <span class="citation">(Altschul et al. 1997)</span> or similar programs. To
+get that, you can use the function <code><a href="../reference/run_diamond.html">run_diamond()</a></code>, which
+runs DIAMOND <span class="citation">(Buchfink, Reuter, and Drost
+2021)</span> from the R session and automatically parses its output to a
+list of data frames <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;&lt;strong&gt;Alternative:&lt;/strong&gt; if you want to use a
+different program for similarity searches, you can run it on the command
+line, save the output in tabular format, and read the tabular output as
+a data frame (e.g., with the base R function &lt;code&gt;read.table&lt;/code&gt;).&lt;/p&gt;"><sup>1</sup></a>.</p>
+<p>Let’s demonstrate how <code><a href="../reference/run_diamond.html">run_diamond()</a></code> works. Needless to
+say, you need to have DIAMOND installed in your machine and in your PATH
+to run this function. To check if you have DIAMOND installed, use the
+function <code><a href="../reference/diamond_is_installed.html">diamond_is_installed()</a></code> <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; in the code chunk below, the if
+statement is not required. We just added it to make sure that the
+function &lt;code&gt;&lt;a href="../reference/run_diamond.html"&gt;run_diamond()&lt;/a&gt;&lt;/code&gt; is only executed if DIAMOND is
+installed, to avoid problems when building this vignette in machines
+that do not have DIAMOND installed.&lt;/p&gt;'><sup>2</sup></a>.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">blast_list</span><span class="op">)</span></span>
 <span><span class="kw">if</span><span class="op">(</span><span class="fu"><a href="../reference/diamond_is_installed.html">diamond_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>    <span class="va">blast_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/run_diamond.html">run_diamond</a></span><span class="op">(</span>seq <span class="op">=</span> <span class="va">pdata</span><span class="op">$</span><span class="va">seq</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>The output of <code><a href="../reference/run_diamond.html">run_diamond()</a></code> is a list of data frames
-containing the tabular output of pairwise BLAST-like searches. Let’s
-take a look at it.</p>
+containing the tabular output of all-vs-all DIAMOND searches. Let’s take
+a look at it.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># List names</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">blast_list</span><span class="op">)</span></span>
@@ -600,12 +603,12 @@ take a look at it.</p>
 <span><span class="co">#&gt; 4  753    334  894 3.98e-56      204</span></span>
 <span><span class="co">#&gt; 5  617      1  617 0.00e+00     1046</span></span>
 <span><span class="co">#&gt; 6  546      1  546 0.00e+00     1035</span></span></code></pre></div>
-<p>Now we can use this list of BLAST-like data frames to detect synteny.
+<p>Now, we can use this list of DIAMOND data frames to detect synteny.
 Here, we reimplemented the popular MCScanX algorithm <span class="citation">(Y. Wang et al. 2012)</span>, originally written in
 C++, using the <em><a href="https://CRAN.R-project.org/package=Rcpp" class="external-link">Rcpp</a></em> <span class="citation">(Eddelbuettel and François 2011)</span> framework for R
-and C++ integration. This means that <em><a href="https://github.com/almeidasilvaf/syntenet" class="external-link">syntenet</a></em> comes
-with a native version of MCScanX, so you can run MCScanX in R without
-having to install it yourself. Amazing, huh?</p>
+and C++ integration. This means that <em><a href="https://bioconductor.org/packages/3.15/syntenet" class="external-link">syntenet</a></em>
+comes with a native version of the MCScanX algorithm, so you can run
+MCScanX in R without having to install it yourself. Amazing, huh?</p>
 <p>To detect synteny and infer the synteny network, use the function
 <code><a href="../reference/infer_syntenet.html">infer_syntenet()</a></code>. The output is a network represented as a
 so-called <strong>edge list</strong> (i.e., a 2-column data frame with
@@ -638,16 +641,16 @@ and highly conserved clusters, for instance. Here, we will use an
 example network of BUSCO genes for 25 eudicot species, which was
 obtained from <span class="citation">Zhao and Schranz (2019)</span>.</p>
 <p>To obtain the phylogenomic profiles, you first need to cluster your
-network. This can be done with <code><a href="../reference/cluster_network.html">cluster_network()</a></code>. <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;strong&gt;Friendly tip:&lt;/strong&gt; &lt;em&gt;&lt;a href="https://github.com/almeidasilvaf/syntenet" class="external-link"&gt;syntenet&lt;/a&gt;&lt;/em&gt; uses
-the &lt;em&gt;Infomap&lt;/em&gt; algorithm to cluster networks, which has been shown
-to have the best performance &lt;span class="citation"&gt;(Zhao and Schranz
-2019)&lt;/span&gt;. This algorithm assigns each gene to a single cluster.
-However, for some cases (e.g., detection of tandem arrays), you may want
-to use an algorithm that allows community overlap (i.e., a gene can be
-part of more than one cluster). If this is your case, we recommend the
-&lt;em&gt;clique percolation&lt;/em&gt; algorithm, which is implemented in the R
-package &lt;em&gt;&lt;a href="https://CRAN.R-project.org/package=CliquePercolation" class="external-link"&gt;CliquePercolation&lt;/a&gt;&lt;/em&gt;
-&lt;span class="citation"&gt;(Lange 2021)&lt;/span&gt;.&lt;/p&gt;'><sup>1</sup></a></p>
+network. This can be done with <code><a href="../reference/cluster_network.html">cluster_network()</a></code>. <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;strong&gt;Friendly tip:&lt;/strong&gt; &lt;em&gt;&lt;a href="https://bioconductor.org/packages/3.15/syntenet" class="external-link"&gt;syntenet&lt;/a&gt;&lt;/em&gt;
+uses the &lt;em&gt;Infomap&lt;/em&gt; algorithm to cluster networks, which has been
+shown to have the best performance &lt;span class="citation"&gt;(Zhao and
+Schranz 2019)&lt;/span&gt;. This algorithm assigns each gene to a single
+cluster. However, for some cases (e.g., detection of tandem arrays), you
+may want to use an algorithm that allows community overlap (i.e., a gene
+can be part of more than one cluster). If this is your case, we
+recommend the &lt;em&gt;clique percolation&lt;/em&gt; algorithm, which is
+implemented in the R package &lt;em&gt;&lt;a href="https://CRAN.R-project.org/package=CliquePercolation" class="external-link"&gt;CliquePercolation&lt;/a&gt;&lt;/em&gt;
+&lt;span class="citation"&gt;(Lange 2021)&lt;/span&gt;.&lt;/p&gt;'><sup>3</sup></a></p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Load example data and take a look at it</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">network</span><span class="op">)</span></span>
@@ -671,86 +674,124 @@ package &lt;em&gt;&lt;a href="https://CRAN.R-project.org/package=CliquePercolati
 <span><span class="co">#&gt; 5 cca_24381       5</span></span>
 <span><span class="co">#&gt; 6 cca_24396       6</span></span></code></pre></div>
 <p>Now that each gene has been assigned to a cluster, we can identify
-the phylogenomic profiles of each cluster. This function returns a list
-of 2 elements:</p>
-<ol style="list-style-type: decimal">
-<li><p>A matrix of phylogenomic profiles, with clusters in rows and
-species in columns.</p></li>
-<li><p>An <code>hclust</code> object containing the results of Ward’s
-clustering on a matrix of Ruzicka distances obtained from the
-phylogenomic profiles matrix.</p></li>
-</ol>
+the phylogenomic profiles of each cluster. This function returns a
+matrix of phylogenomic profiles, with clusters in rows and species in
+columns.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Phylogenomic profiling</span></span>
 <span><span class="va">profiles</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/phylogenomic_profile.html">phylogenomic_profile</a></span><span class="op">(</span><span class="va">clusters</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Exploring the output</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">)</span></span>
-<span><span class="co">#&gt; List of 2</span></span>
-<span><span class="co">#&gt;  $ profile_matrix: int [1:2411, 1:25] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "dimnames")=List of 2</span></span>
-<span><span class="co">#&gt;   .. ..$ : chr [1:2411] "870" "916" "1111" "1629" ...</span></span>
-<span><span class="co">#&gt;   .. ..$ : chr [1:25] "adu" "car" "cca" "fve" ...</span></span>
-<span><span class="co">#&gt;  $ hclust        :List of 7</span></span>
-<span><span class="co">#&gt;   ..$ merge      : int [1:2410, 1:2] -18 -1125 -21 -1010 -36 -83 -1174 -115 -125 -127 ...</span></span>
-<span><span class="co">#&gt;   ..$ height     : num [1:2410] 0 0 0 0 0 0 0 0 0 0 ...</span></span>
-<span><span class="co">#&gt;   ..$ order      : int [1:2411] 870 916 1111 1629 151 815 1653 902 822 1295 ...</span></span>
-<span><span class="co">#&gt;   ..$ labels     : chr [1:2411] "1" "2" "3" "4" ...</span></span>
-<span><span class="co">#&gt;   ..$ method     : chr "ward.D"</span></span>
-<span><span class="co">#&gt;   ..$ call       : language stats::hclust(d = dist_mat, method = "ward.D")</span></span>
-<span><span class="co">#&gt;   ..$ dist.method: chr "ruzicka"</span></span>
-<span><span class="co">#&gt;   ..- attr(*, "class")= chr "hclust"</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span></span>
-<span><span class="co">#&gt;       </span></span>
-<span><span class="co">#&gt;        adu car cca fve gma hlu jcu Lang lja lus mdo mes Mnot mtr pbr pmu ppe</span></span>
-<span><span class="co">#&gt;   870    0   0   0   1   1   0   0    2   1   1   1   1    0   0   1   1   1</span></span>
-<span><span class="co">#&gt;   916    0   0   0   1   1   0   0    1   1   2   1   1    1   0   2   1   1</span></span>
-<span><span class="co">#&gt;   1111   0   0   0   1   1   0   1    0   1   2   2   1    0   0   2   1   1</span></span>
-<span><span class="co">#&gt;   1629   0   0   1   1   1   0   1    1   1   2   1   1    0   0   1   1   1</span></span>
-<span><span class="co">#&gt;   151    0   0   0   0   1   0   1    1   1   2   2   1    1   1   2   1   1</span></span>
-<span><span class="co">#&gt;   815    0   0   0   1   1   0   1    1   1   2   1   1    1   0   1   1   1</span></span>
-<span><span class="co">#&gt;       </span></span>
-<span><span class="co">#&gt;        ptr pvu rco roc tpr van vra Zjuj</span></span>
-<span><span class="co">#&gt;   870    1   1   1   1   0   1   1    1</span></span>
-<span><span class="co">#&gt;   916    1   1   1   1   0   1   1    1</span></span>
-<span><span class="co">#&gt;   1111   1   1   1   1   0   1   1    1</span></span>
-<span><span class="co">#&gt;   1629   1   1   1   1   0   1   1    1</span></span>
-<span><span class="co">#&gt;   151    1   1   1   1   1   1   1    0</span></span>
-<span><span class="co">#&gt;   815    1   1   1   1   1   1   1    1</span></span></code></pre></div>
-<p>As a plot is worth a thousand words (or numbers), you can visualize
-the phylogenomic profiles as a heatmap with
-<code><a href="../reference/plot_profiles.html">plot_profiles()</a></code>. Let’s also add some species
-annotation.</p>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    </span></span>
+<span><span class="co">#&gt;     adu car cca fve gma hlu jcu Lang lja lus mdo mes Mnot mtr pbr pmu ppe ptr</span></span>
+<span><span class="co">#&gt;   1   1   1   1   1   2   0   0    2   1   2   2   1    1   1   3   1   1   1</span></span>
+<span><span class="co">#&gt;   2   1   1   1   1   1   0   0    1   0   1   1   1    1   1   1   1   1   1</span></span>
+<span><span class="co">#&gt;   3   0   1   1   1   1   0   0    1   1   2   1   1    1   1   1   1   1   1</span></span>
+<span><span class="co">#&gt;   4   0   1   1   1   2   0   1    2   1   2   0   2    1   1   1   1   1   0</span></span>
+<span><span class="co">#&gt;   5   1   1   1   1   2   0   1    0   0   0   1   1    1   1   1   1   1   1</span></span>
+<span><span class="co">#&gt;   6   2   1   2   1   3   0   1    2   0   2   2   1    1   2   2   1   1   2</span></span>
+<span><span class="co">#&gt;    </span></span>
+<span><span class="co">#&gt;     pvu rco roc tpr van vra Zjuj</span></span>
+<span><span class="co">#&gt;   1   1   1   1   1   1   1    1</span></span>
+<span><span class="co">#&gt;   2   1   0   0   1   1   1    1</span></span>
+<span><span class="co">#&gt;   3   1   1   1   1   0   0    1</span></span>
+<span><span class="co">#&gt;   4   1   1   0   1   1   0    1</span></span>
+<span><span class="co">#&gt;   5   1   1   1   1   1   2    1</span></span>
+<span><span class="co">#&gt;   6   1   1   1   1   0   1    1</span></span></code></pre></div>
+<p>As a plot is worth a thousand words (or numbers), you can use the
+function <code><a href="../reference/plot_profiles.html">plot_profiles()</a></code> to visualize the phylogenomic
+profiles as a heatmap with species in rows and synteny network clusters
+in columns. The heatmap generated by this function is highly
+customizable by users. Some important remarks are:</p>
+<ol style="list-style-type: decimal">
+<li><p>You can add a legend for species metadata (e.g., taxonomic
+information) by passing a 2-column data frame to the parameter
+<em>species_annotation</em>.</p></li>
+<li><p>Columns (network clusters) are grouped with Ward’s clustering on
+a matrix of distances. The method to compute the distance matrix can be
+defined by users in parameters <em>dist_function</em> and
+<em>dist_params</em>. By default, it uses the function
+<code><a href="https://rdrr.io/r/stats/dist.html" class="external-link">stats::dist()</a></code> with parameter
+<code>method = "euclidean"</code>.</p></li>
+<li><p>The order in which species are displayed can be defined by users
+in parameter <em>cluster_species</em>. We strongly recommend passing a
+vector of species order that matches the species tree, so that patterns
+can be explored in a phylogenetic context. Importantly, if the character
+vector is named, vector names will be used as species names in the plot.
+This a nice way to replace species abbreviations with their full
+names.</p></li>
+</ol>
+<p>Here, to briefly demonstrate how to play with the parameters we just
+mentioned in the 3 remarks above, we will:</p>
+<ul>
+<li><p>Create a vector with the order in which we want species to be
+displayed, with longer species names in vector names.</p></li>
+<li><p>Create a metadata data frame containing the family of each
+species.</p></li>
+<li><p>Use the function <code>dsvdis()</code> from the <em><a href="https://CRAN.R-project.org/package=labdsv" class="external-link">labdsv</a></em> package
+to calculate Ruzicka distances when clustering columns.</p></li>
+</ul>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Create a vector of custom species order to plot</span></span>
-<span><span class="va">species_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
-<span>    <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"pvu"</span>, <span class="st">"gma"</span>, <span class="st">"cca"</span>, <span class="st">"tpr"</span>, <span class="st">"mtr"</span>, <span class="st">"adu"</span>, <span class="st">"lja"</span>,</span>
-<span>    <span class="st">"Lang"</span>, <span class="st">"car"</span>, <span class="st">"pmu"</span>, <span class="st">"ppe"</span>, <span class="st">"pbr"</span>, <span class="st">"mdo"</span>, <span class="st">"roc"</span>, <span class="st">"fve"</span>,</span>
-<span>    <span class="st">"Mnot"</span>, <span class="st">"Zjuj"</span>, <span class="st">"jcu"</span>, <span class="st">"mes"</span>, <span class="st">"rco"</span>, <span class="st">"lus"</span>, <span class="st">"ptr"</span></span>
-<span><span class="op">)</span> </span>
+<code class="sourceCode R"><span><span class="co"># 1) Create a named vector of custom species order to plot</span></span>
+<span><span class="va">species_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/setNames.html" class="external-link">setNames</a></span><span class="op">(</span></span>
+<span>    <span class="co"># vector elements</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>        <span class="st">"vra"</span>, <span class="st">"van"</span>, <span class="st">"pvu"</span>, <span class="st">"gma"</span>, <span class="st">"cca"</span>, <span class="st">"tpr"</span>, <span class="st">"mtr"</span>, <span class="st">"adu"</span>, <span class="st">"lja"</span>,</span>
+<span>        <span class="st">"Lang"</span>, <span class="st">"car"</span>, <span class="st">"pmu"</span>, <span class="st">"ppe"</span>, <span class="st">"pbr"</span>, <span class="st">"mdo"</span>, <span class="st">"roc"</span>, <span class="st">"fve"</span>,</span>
+<span>        <span class="st">"Mnot"</span>, <span class="st">"Zjuj"</span>, <span class="st">"jcu"</span>, <span class="st">"mes"</span>, <span class="st">"rco"</span>, <span class="st">"lus"</span>, <span class="st">"ptr"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    <span class="co"># vector names</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>        <span class="st">"V. radiata"</span>, <span class="st">"V. angularis"</span>, <span class="st">"P. vulgaris"</span>, <span class="st">"G. max"</span>, <span class="st">"C. cajan"</span>,</span>
+<span>        <span class="st">"T. pratense"</span>, <span class="st">"M. truncatula"</span>, <span class="st">"A. duranensis"</span>, <span class="st">"L. japonicus"</span>,</span>
+<span>        <span class="st">"L. angustifolius"</span>, <span class="st">"C. arietinum"</span>, <span class="st">"P. mume"</span>, <span class="st">"P. persica"</span>,</span>
+<span>        <span class="st">"P. bretschneideri"</span>, <span class="st">"M. domestica"</span>, <span class="st">"R. occidentalis"</span>, </span>
+<span>        <span class="st">"F. vesca"</span>, <span class="st">"M. notabilis"</span>, <span class="st">"Z. jujuba"</span>,</span>
+<span>        <span class="st">"J. curcas"</span>, <span class="st">"M. esculenta"</span>, <span class="st">"R. communis"</span>, </span>
+<span>        <span class="st">"L. usitatissimum"</span>, <span class="st">"P. trichocarpa"</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">species_order</span></span>
+<span><span class="co">#&gt;        V. radiata      V. angularis       P. vulgaris            G. max </span></span>
+<span><span class="co">#&gt;             "vra"             "van"             "pvu"             "gma" </span></span>
+<span><span class="co">#&gt;          C. cajan       T. pratense     M. truncatula     A. duranensis </span></span>
+<span><span class="co">#&gt;             "cca"             "tpr"             "mtr"             "adu" </span></span>
+<span><span class="co">#&gt;      L. japonicus  L. angustifolius      C. arietinum           P. mume </span></span>
+<span><span class="co">#&gt;             "lja"            "Lang"             "car"             "pmu" </span></span>
+<span><span class="co">#&gt;        P. persica P. bretschneideri      M. domestica   R. occidentalis </span></span>
+<span><span class="co">#&gt;             "ppe"             "pbr"             "mdo"             "roc" </span></span>
+<span><span class="co">#&gt;          F. vesca      M. notabilis         Z. jujuba         J. curcas </span></span>
+<span><span class="co">#&gt;             "fve"            "Mnot"            "Zjuj"             "jcu" </span></span>
+<span><span class="co">#&gt;      M. esculenta       R. communis  L. usitatissimum    P. trichocarpa </span></span>
+<span><span class="co">#&gt;             "mes"             "rco"             "lus"             "ptr"</span></span>
 <span></span>
-<span><span class="co"># Create a data frame of families for each species</span></span>
+<span><span class="co"># 2) Create a metadata data frame containing the family of each species</span></span>
 <span><span class="va">species_annotation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>   Species <span class="op">=</span> <span class="va">species_order</span>,</span>
-<span>   Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Fabaceae"</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Rosaceae"</span>, <span class="fl">6</span><span class="op">)</span>,</span>
-<span>              <span class="st">"Moraceae"</span>, <span class="st">"Ramnaceae"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Euphorbiaceae"</span>, <span class="fl">3</span><span class="op">)</span>, </span>
-<span>              <span class="st">"Linaceae"</span>, <span class="st">"Salicaceae"</span><span class="op">)</span></span>
+<span>    Species <span class="op">=</span> <span class="va">species_order</span>,</span>
+<span>    Family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Fabaceae"</span>, <span class="fl">11</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Rosaceae"</span>, <span class="fl">6</span><span class="op">)</span>,</span>
+<span>        <span class="st">"Moraceae"</span>, <span class="st">"Ramnaceae"</span>, <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="st">"Euphorbiaceae"</span>, <span class="fl">3</span><span class="op">)</span>, </span>
+<span>        <span class="st">"Linaceae"</span>, <span class="st">"Salicaceae"</span></span>
+<span>    <span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">species_annotation</span><span class="op">)</span></span>
-<span><span class="co">#&gt;   Species   Family</span></span>
-<span><span class="co">#&gt; 1     vra Fabaceae</span></span>
-<span><span class="co">#&gt; 2     van Fabaceae</span></span>
-<span><span class="co">#&gt; 3     pvu Fabaceae</span></span>
-<span><span class="co">#&gt; 4     gma Fabaceae</span></span>
-<span><span class="co">#&gt; 5     cca Fabaceae</span></span>
-<span><span class="co">#&gt; 6     tpr Fabaceae</span></span>
+<span><span class="co">#&gt;              Species   Family</span></span>
+<span><span class="co">#&gt; V. radiata       vra Fabaceae</span></span>
+<span><span class="co">#&gt; V. angularis     van Fabaceae</span></span>
+<span><span class="co">#&gt; P. vulgaris      pvu Fabaceae</span></span>
+<span><span class="co">#&gt; G. max           gma Fabaceae</span></span>
+<span><span class="co">#&gt; C. cajan         cca Fabaceae</span></span>
+<span><span class="co">#&gt; T. pratense      tpr Fabaceae</span></span>
 <span></span>
-<span><span class="co"># Plot phylogenomic profiles</span></span>
+<span></span>
+<span><span class="co"># 3) Plot phylogenomic profiles, but using Ruzicka distances</span></span>
 <span><span class="fu"><a href="../reference/plot_profiles.html">plot_profiles</a></span><span class="op">(</span></span>
-<span>    <span class="va">profiles</span>, <span class="va">species_annotation</span>, </span>
+<span>    <span class="va">profiles</span>, </span>
+<span>    <span class="va">species_annotation</span>, </span>
 <span>    cluster_species <span class="op">=</span> <span class="va">species_order</span>, </span>
-<span>    cluster_columns <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span>    dist_function <span class="op">=</span> <span class="fu">labdsv</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/labdsv/man/dsvdis.html" class="external-link">dsvdis</a></span>,</span>
+<span>    dist_params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>index <span class="op">=</span> <span class="st">"ruzicka"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 <p><img src="syntenet_files/figure-html/plot_profiles-1.png" width="700"></p>
 <p>The heatmap is a nice way to observe patterns. For instance, you can
@@ -762,7 +803,7 @@ only need to input the profiles matrix and a data frame of species
 annotation (i.e., species groups).</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Find group-specific clusters</span></span>
-<span><span class="va">gs_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_GS_clusters.html">find_GS_clusters</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span>, <span class="va">species_annotation</span><span class="op">)</span></span>
+<span><span class="va">gs_clusters</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/find_GS_clusters.html">find_GS_clusters</a></span><span class="op">(</span><span class="va">profiles</span>, <span class="va">species_annotation</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Could not find annotation for species: </span></span>
 <span><span class="co">#&gt; hlu</span></span>
 <span></span>
@@ -782,13 +823,12 @@ annotation (i.e., species groups).</p>
 network. Let’s plot a heatmap of group-specific clusters only.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Filter profiles matrix to only include group-specific clusters</span></span>
-<span><span class="va">pgs</span> <span class="op">&lt;-</span> <span class="va">profiles</span></span>
-<span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span></span>
-<span><span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span> <span class="op">&lt;-</span> <span class="va">pgs</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">[</span><span class="va">idx</span>, <span class="op">]</span></span>
+<span><span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">)</span> <span class="op"><a href="https://rdrr.io/r/base/match.html" class="external-link">%in%</a></span> <span class="va">gs_clusters</span><span class="op">$</span><span class="va">Cluster</span></span>
+<span><span class="va">p_gs</span> <span class="op">&lt;-</span> <span class="va">profiles</span><span class="op">[</span><span class="va">idx</span>, <span class="op">]</span></span>
 <span></span>
 <span><span class="co"># Plot heatmap</span></span>
 <span><span class="fu"><a href="../reference/plot_profiles.html">plot_profiles</a></span><span class="op">(</span></span>
-<span>    <span class="va">pgs</span>, <span class="va">species_annotation</span>, </span>
+<span>    <span class="va">p_gs</span>, <span class="va">species_annotation</span>, </span>
 <span>    cluster_species <span class="op">=</span> <span class="va">species_order</span>, </span>
 <span>    cluster_columns <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -824,10 +864,12 @@ visualize the group-specific clusters.</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># 3) Interactive visualization (zoom out and in to explore it)</span></span>
-<span><span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span><span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, </span>
-<span>             interactive <span class="op">=</span> <span class="cn">TRUE</span>, dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">300</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div id="htmlwidget-d11d1120a249ac26d3a9" style="width:500px;height:300px;" class="forceNetwork html-widget"></div>
-<script type="application/json" data-for="htmlwidget-d11d1120a249ac26d3a9">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-10,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
+<span><span class="fu"><a href="../reference/plot_network.html">plot_network</a></span><span class="op">(</span></span>
+<span>    <span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, </span>
+<span>    interactive <span class="op">=</span> <span class="cn">TRUE</span>, dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">300</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div id="htmlwidget-6b26b5a399c023a3fec1" style="width:500px;height:300px;" class="forceNetwork html-widget"></div>
+<script type="application/json" data-for="htmlwidget-6b26b5a399c023a3fec1">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-10,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="microsynteny-based-phylogeny-reconstruction">Microsynteny-based phylogeny reconstruction<a class="anchor" aria-label="anchor" href="#microsynteny-based-phylogeny-reconstruction"></a>
@@ -838,32 +880,31 @@ in each species to reconstruct a microsynteny-based phylogeny.</p>
 representing absence and presence, respectively) and transpose it. This
 can be done with <code>binarize_and_tranpose()</code>.</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">bt_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binarize_and_transpose.html">binarize_and_transpose</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">$</span><span class="va">profile_matrix</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="va">bt_mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/binarize_and_transpose.html">binarize_and_transpose</a></span><span class="op">(</span><span class="va">profiles</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Looking at the first 5 rows and 5 columns of the matrix</span></span>
 <span><span class="va">bt_mat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">5</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">5</span><span class="op">]</span></span>
 <span><span class="co">#&gt;      </span></span>
-<span><span class="co">#&gt;       870 916 1111 1629 151</span></span>
-<span><span class="co">#&gt;   adu   0   0    0    0   0</span></span>
-<span><span class="co">#&gt;   car   0   0    0    0   0</span></span>
-<span><span class="co">#&gt;   cca   0   0    0    1   0</span></span>
-<span><span class="co">#&gt;   fve   1   1    1    1   0</span></span>
-<span><span class="co">#&gt;   gma   1   1    1    1   1</span></span></code></pre></div>
-<p>Now, you can use this transposed binary matrix as input to IQTREE
+<span><span class="co">#&gt;       1 2 3 4 5</span></span>
+<span><span class="co">#&gt;   adu 1 1 0 0 1</span></span>
+<span><span class="co">#&gt;   car 1 1 1 1 1</span></span>
+<span><span class="co">#&gt;   cca 1 1 1 1 1</span></span>
+<span><span class="co">#&gt;   fve 1 1 1 1 1</span></span>
+<span><span class="co">#&gt;   gma 1 1 1 1 1</span></span></code></pre></div>
+<p>Now, you can use this transposed binary matrix as input to IQTREE2
 <span class="citation">(Minh et al. 2020)</span> to infer a phylogeny.
-Here, once again, we give you 2 options:</p>
-<ol style="list-style-type: decimal">
-<li><p>Using <code><a href="../reference/profiles2phylip.html">profiles2phylip()</a></code> to write the transposed
-binary matrix to a PHYLIP file and running IQTREE from the command line.
-As you are inferring a phylogeny from the profiles matrix, you need to
-specify <code>-st MORPH</code> to indicate you have a binary
-alignment.</p></li>
-<li><p>Using the helper function
+To do so, you can use the function
 <code><a href="../reference/infer_microsynteny_phylogeny.html">infer_microsynteny_phylogeny()</a></code>, which allows you to run
-IQTREE from an R session. You need to have IQTREE installed in your
+IQTREE2 from an R session <a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content='&lt;p&gt;&lt;strong&gt;Alternative:&lt;/strong&gt; if you want to use a
+different program rather than IQTREE2, you can use the function
+&lt;code&gt;&lt;a href="../reference/profiles2phylip.html"&gt;profiles2phylip()&lt;/a&gt;&lt;/code&gt; to write the transposed binary matrix to
+a PHYLIP file and run your favorite program on the command line.
+However, when inferring a phylogeny from phylogenomic profiles, you need
+to make sure that the program you are using supports substitution models
+for binary data. In IQTREE2, for instance, using binary, morphological
+models requires passing parameters &lt;code&gt;-st MORPH&lt;/code&gt;.&lt;/p&gt;'><sup>4</sup></a>. You need to have IQTREE2 installed in your
 machine and in your PATH to run this function. You can check if you have
-IQTREE installed with <code><a href="../reference/iqtree_is_installed.html">iqtree_is_installed()</a></code>.</p></li>
-</ol>
+IQTREE2 installed with <code><a href="../reference/iqtree_is_installed.html">iqtree_is_installed()</a></code>.</p>
 <p>For the sake of demonstration, we will infer a phylogeny with
 <code><a href="../reference/infer_microsynteny_phylogeny.html">infer_microsynteny_phylogeny()</a></code> using the profiles for BUSCO
 genes for six legume species only. We will also remove non-variable
@@ -885,11 +926,11 @@ BUSCO genes).</p>
 <span>                                          threads <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
 <p>The output of <code><a href="../reference/infer_microsynteny_phylogeny.html">infer_microsynteny_phylogeny()</a></code> is a
-character vector with paths to the output files from IQTREE. Usually,
+character vector with paths to the output files from IQTREE2. Usually,
 you are interested in the file ending in <em>.treefile</em>. This is the
 species tree in Newick format, and it can be visualized with your
 favorite tree viewer. We strongly recommend using the
-<code><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree()</a></code> function from the Bioconductor package treeio
+<code><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree()</a></code> function from the Bioconductor package <em><a href="https://bioconductor.org/packages/3.15/treeio" class="external-link">treeio</a></em>
 <span class="citation">(L.-G. Wang et al. 2020)</span> to read the tree,
 and visualizing it with the <em><a href="https://bioconductor.org/packages/3.15/ggtree" class="external-link">ggtree</a></em>
 Bioc package <span class="citation">(Yu et al. 2017)</span>. For
@@ -931,65 +972,65 @@ angiosperm species, whose phylogenomic profiles were obtained from <span class="
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] ggtree_3.4.4     syntenet_0.99.7  BiocStyle_2.24.0</span></span>
+<span><span class="co">#&gt; [1] ggtree_3.4.4     syntenet_1.1.1   BiocStyle_2.24.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
-<span><span class="co">#&gt;   [1] nlme_3.1-159                matrixStats_0.62.0         </span></span>
-<span><span class="co">#&gt;   [3] bitops_1.0-7                labdsv_2.0-1               </span></span>
+<span><span class="co">#&gt;   [1] nlme_3.1-160                labdsv_2.0-1               </span></span>
+<span><span class="co">#&gt;   [3] bitops_1.0-7                matrixStats_0.62.0         </span></span>
 <span><span class="co">#&gt;   [5] fs_1.5.2                    RColorBrewer_1.1-3         </span></span>
 <span><span class="co">#&gt;   [7] rprojroot_2.0.3             GenomeInfoDb_1.32.4        </span></span>
-<span><span class="co">#&gt;   [9] tools_4.2.1                 bslib_0.4.0                </span></span>
+<span><span class="co">#&gt;   [9] tools_4.2.1                 bslib_0.4.1                </span></span>
 <span><span class="co">#&gt;  [11] utf8_1.2.2                  R6_2.5.1                   </span></span>
-<span><span class="co">#&gt;  [13] lazyeval_0.2.2              BiocGenerics_0.42.0        </span></span>
-<span><span class="co">#&gt;  [15] mgcv_1.8-40                 colorspace_2.0-3           </span></span>
-<span><span class="co">#&gt;  [17] tidyselect_1.1.2            compiler_4.2.1             </span></span>
-<span><span class="co">#&gt;  [19] Biobase_2.56.0              textshaping_0.3.6          </span></span>
-<span><span class="co">#&gt;  [21] cli_3.4.1                   intergraph_2.0-2           </span></span>
-<span><span class="co">#&gt;  [23] network_1.17.2              DelayedArray_0.22.0        </span></span>
-<span><span class="co">#&gt;  [25] desc_1.4.2                  labeling_0.4.2             </span></span>
-<span><span class="co">#&gt;  [27] rtracklayer_1.56.1          bookdown_0.29              </span></span>
-<span><span class="co">#&gt;  [29] sass_0.4.2                  scales_1.2.1               </span></span>
-<span><span class="co">#&gt;  [31] pkgdown_2.0.6               yulab.utils_0.0.5          </span></span>
-<span><span class="co">#&gt;  [33] systemfonts_1.0.4           stringr_1.4.1              </span></span>
-<span><span class="co">#&gt;  [35] digest_0.6.29               Rsamtools_2.12.0           </span></span>
-<span><span class="co">#&gt;  [37] rmarkdown_2.16              XVector_0.36.0             </span></span>
-<span><span class="co">#&gt;  [39] pkgconfig_2.0.3             htmltools_0.5.3            </span></span>
-<span><span class="co">#&gt;  [41] MatrixGenerics_1.8.1        highr_0.9                  </span></span>
-<span><span class="co">#&gt;  [43] fastmap_1.1.0               htmlwidgets_1.5.4          </span></span>
-<span><span class="co">#&gt;  [45] rlang_1.0.6                 gridGraphics_0.5-1         </span></span>
-<span><span class="co">#&gt;  [47] farver_2.1.1                jquerylib_0.1.4            </span></span>
-<span><span class="co">#&gt;  [49] BiocIO_1.6.0                generics_0.1.3             </span></span>
-<span><span class="co">#&gt;  [51] jsonlite_1.8.2              statnet.common_4.7.0       </span></span>
-<span><span class="co">#&gt;  [53] BiocParallel_1.30.3         dplyr_1.0.10               </span></span>
-<span><span class="co">#&gt;  [55] RCurl_1.98-1.9              magrittr_2.0.3             </span></span>
-<span><span class="co">#&gt;  [57] ggplotify_0.1.0             ggnetwork_0.5.10           </span></span>
-<span><span class="co">#&gt;  [59] GenomeInfoDbData_1.2.8      patchwork_1.1.2            </span></span>
-<span><span class="co">#&gt;  [61] Matrix_1.5-1                Rcpp_1.0.9                 </span></span>
-<span><span class="co">#&gt;  [63] munsell_0.5.0               S4Vectors_0.34.0           </span></span>
-<span><span class="co">#&gt;  [65] fansi_1.0.3                 ape_5.6-2                  </span></span>
-<span><span class="co">#&gt;  [67] lifecycle_1.0.2             stringi_1.7.8              </span></span>
-<span><span class="co">#&gt;  [69] yaml_2.3.5                  SummarizedExperiment_1.26.1</span></span>
-<span><span class="co">#&gt;  [71] MASS_7.3-58.1               zlibbioc_1.42.0            </span></span>
-<span><span class="co">#&gt;  [73] Rtsne_0.16                  grid_4.2.1                 </span></span>
-<span><span class="co">#&gt;  [75] parallel_4.2.1              crayon_1.5.2               </span></span>
-<span><span class="co">#&gt;  [77] lattice_0.20-45             Biostrings_2.64.1          </span></span>
-<span><span class="co">#&gt;  [79] splines_4.2.1               knitr_1.40                 </span></span>
-<span><span class="co">#&gt;  [81] pillar_1.8.1                igraph_1.3.5               </span></span>
-<span><span class="co">#&gt;  [83] GenomicRanges_1.48.0        rjson_0.2.21               </span></span>
-<span><span class="co">#&gt;  [85] codetools_0.2-18            stats4_4.2.1               </span></span>
-<span><span class="co">#&gt;  [87] XML_3.99-0.11               glue_1.6.2                 </span></span>
-<span><span class="co">#&gt;  [89] evaluate_0.16               ggfun_0.0.7                </span></span>
-<span><span class="co">#&gt;  [91] BiocManager_1.30.18         treeio_1.20.2              </span></span>
-<span><span class="co">#&gt;  [93] vctrs_0.4.2                 networkD3_0.4              </span></span>
-<span><span class="co">#&gt;  [95] tidyr_1.2.1                 gtable_0.3.1               </span></span>
-<span><span class="co">#&gt;  [97] purrr_0.3.4                 cachem_1.0.6               </span></span>
-<span><span class="co">#&gt;  [99] ggplot2_3.3.6               xfun_0.33                  </span></span>
-<span><span class="co">#&gt; [101] restfulr_0.0.15             tidytree_0.4.1             </span></span>
-<span><span class="co">#&gt; [103] coda_0.19-4                 ragg_1.2.3                 </span></span>
-<span><span class="co">#&gt; [105] tibble_3.1.8                pheatmap_1.0.12            </span></span>
-<span><span class="co">#&gt; [107] aplot_0.1.7                 GenomicAlignments_1.32.1   </span></span>
-<span><span class="co">#&gt; [109] memoise_2.0.1               IRanges_2.30.1             </span></span>
-<span><span class="co">#&gt; [111] cluster_2.1.4</span></span></code></pre></div>
+<span><span class="co">#&gt;  [13] lazyeval_0.2.2              mgcv_1.8-41                </span></span>
+<span><span class="co">#&gt;  [15] BiocGenerics_0.42.0         colorspace_2.0-3           </span></span>
+<span><span class="co">#&gt;  [17] withr_2.5.0                 tidyselect_1.2.0           </span></span>
+<span><span class="co">#&gt;  [19] compiler_4.2.1              textshaping_0.3.6          </span></span>
+<span><span class="co">#&gt;  [21] cli_3.4.1                   Biobase_2.56.0             </span></span>
+<span><span class="co">#&gt;  [23] intergraph_2.0-2            network_1.18.0             </span></span>
+<span><span class="co">#&gt;  [25] desc_1.4.2                  DelayedArray_0.22.0        </span></span>
+<span><span class="co">#&gt;  [27] labeling_0.4.2              rtracklayer_1.56.1         </span></span>
+<span><span class="co">#&gt;  [29] bookdown_0.30               sass_0.4.2                 </span></span>
+<span><span class="co">#&gt;  [31] scales_1.2.1                pkgdown_2.0.6              </span></span>
+<span><span class="co">#&gt;  [33] yulab.utils_0.0.5           systemfonts_1.0.4          </span></span>
+<span><span class="co">#&gt;  [35] stringr_1.4.1               digest_0.6.30              </span></span>
+<span><span class="co">#&gt;  [37] Rsamtools_2.12.0            rmarkdown_2.18             </span></span>
+<span><span class="co">#&gt;  [39] XVector_0.36.0              pkgconfig_2.0.3            </span></span>
+<span><span class="co">#&gt;  [41] htmltools_0.5.3             MatrixGenerics_1.8.1       </span></span>
+<span><span class="co">#&gt;  [43] highr_0.9                   fastmap_1.1.0              </span></span>
+<span><span class="co">#&gt;  [45] htmlwidgets_1.5.4           rlang_1.0.6                </span></span>
+<span><span class="co">#&gt;  [47] gridGraphics_0.5-1          farver_2.1.1               </span></span>
+<span><span class="co">#&gt;  [49] jquerylib_0.1.4             BiocIO_1.6.0               </span></span>
+<span><span class="co">#&gt;  [51] generics_0.1.3              jsonlite_1.8.3             </span></span>
+<span><span class="co">#&gt;  [53] statnet.common_4.7.0        BiocParallel_1.30.4        </span></span>
+<span><span class="co">#&gt;  [55] dplyr_1.0.10                RCurl_1.98-1.9             </span></span>
+<span><span class="co">#&gt;  [57] magrittr_2.0.3              ggplotify_0.1.0            </span></span>
+<span><span class="co">#&gt;  [59] ggnetwork_0.5.10            GenomeInfoDbData_1.2.8     </span></span>
+<span><span class="co">#&gt;  [61] patchwork_1.1.2             Matrix_1.5-1               </span></span>
+<span><span class="co">#&gt;  [63] Rcpp_1.0.9                  munsell_0.5.0              </span></span>
+<span><span class="co">#&gt;  [65] S4Vectors_0.34.0            fansi_1.0.3                </span></span>
+<span><span class="co">#&gt;  [67] ape_5.6-2                   lifecycle_1.0.3            </span></span>
+<span><span class="co">#&gt;  [69] stringi_1.7.8               yaml_2.3.6                 </span></span>
+<span><span class="co">#&gt;  [71] MASS_7.3-58.1               SummarizedExperiment_1.26.1</span></span>
+<span><span class="co">#&gt;  [73] zlibbioc_1.42.0             Rtsne_0.16                 </span></span>
+<span><span class="co">#&gt;  [75] grid_4.2.1                  parallel_4.2.1             </span></span>
+<span><span class="co">#&gt;  [77] crayon_1.5.2                lattice_0.20-45            </span></span>
+<span><span class="co">#&gt;  [79] splines_4.2.1               Biostrings_2.64.1          </span></span>
+<span><span class="co">#&gt;  [81] knitr_1.40                  pillar_1.8.1               </span></span>
+<span><span class="co">#&gt;  [83] igraph_1.3.5                GenomicRanges_1.48.0       </span></span>
+<span><span class="co">#&gt;  [85] rjson_0.2.21                codetools_0.2-18           </span></span>
+<span><span class="co">#&gt;  [87] stats4_4.2.1                XML_3.99-0.12              </span></span>
+<span><span class="co">#&gt;  [89] glue_1.6.2                  evaluate_0.18              </span></span>
+<span><span class="co">#&gt;  [91] ggfun_0.0.8                 BiocManager_1.30.19        </span></span>
+<span><span class="co">#&gt;  [93] treeio_1.20.2               vctrs_0.5.0                </span></span>
+<span><span class="co">#&gt;  [95] networkD3_0.4               tidyr_1.2.1                </span></span>
+<span><span class="co">#&gt;  [97] gtable_0.3.1                purrr_0.3.5                </span></span>
+<span><span class="co">#&gt;  [99] cachem_1.0.6                ggplot2_3.4.0              </span></span>
+<span><span class="co">#&gt; [101] xfun_0.34                   restfulr_0.0.15            </span></span>
+<span><span class="co">#&gt; [103] tidytree_0.4.1              coda_0.19-4                </span></span>
+<span><span class="co">#&gt; [105] ragg_1.2.4                  tibble_3.1.8               </span></span>
+<span><span class="co">#&gt; [107] pheatmap_1.0.12             aplot_0.1.8                </span></span>
+<span><span class="co">#&gt; [109] GenomicAlignments_1.32.1    memoise_2.0.1              </span></span>
+<span><span class="co">#&gt; [111] IRanges_2.30.1              cluster_2.1.4</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
