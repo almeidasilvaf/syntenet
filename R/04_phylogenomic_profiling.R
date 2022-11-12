@@ -39,55 +39,38 @@ cluster_network <- function(network = NULL) {
 #' @param clusters A 2-column data frame with variables \strong{Gene} and
 #' \strong{Cluster} as returned by \code{cluster_network}.
 #' 
-#' @return A list with the following elements:
-#' \describe{
-#'   \item{profile_matrix}{A matrix of i rows and j columns containing 
-#'   the number of genes in cluster i for each species j. The number of rows 
-#'   is equal to the number of clusters in \strong{clusters}, and 
-#'   the number of columns is equal to the number of species 
-#'   in \strong{clusters}.}
-#'   \item{hclust}{An hclust object containing the network clusters
-#'   grouped by ward.D based on Jaccard distances.}
-#' } 
+#' @return A matrix of i rows and j columns containing 
+#' the number of genes in cluster i for each species j. The number of rows 
+#' is equal to the number of clusters in \strong{clusters}, and 
+#' the number of columns is equal to the number of species 
+#' in \strong{clusters}.
 #'
-#' @importFrom labdsv dsvdis
-#' @importFrom stats hclust
 #' @export
 #' @rdname phylogenomic_profile
 #' @examples 
 #' data(clusters)
-#' profiles <- phylogenomic_profile(clusters)$profile_matrix
+#' profiles <- phylogenomic_profile(clusters)
 phylogenomic_profile <- function(clusters = NULL) {
     
-    # Add species info and create profile matrix
-    clusters$Species <- vapply(strsplit(clusters$Gene, "_"), `[`, 1, 
-                               FUN.VALUE = character(1))
+    # Add species info
+    clusters$Species <- vapply(
+        strsplit(clusters$Gene, "_"), `[`, 1, FUN.VALUE = character(1)
+    )
+    # Create a profile matrix
     profile_matrix <- table(clusters$Cluster,clusters$Species)
     profile_matrix <- matrix(
         profile_matrix, ncol = ncol(profile_matrix), 
         dimnames = dimnames(profile_matrix)
     )
     
-    # Calculate matrix of Ruzicka distances
-    dist_mat <- labdsv::dsvdis(log2(profile_matrix + 1), index = "ruzicka")
-
-    # Cluster with ward.D based on Jaccard distances
-    clust_mat <- stats::hclust(dist_mat, method = "ward.D")
-    
-    # Reorder rows based on clustering
-    fprofile_matrix <- profile_matrix[clust_mat$order, ]
-    
-    final_list <- list(profile_matrix = fprofile_matrix, 
-                       hclust = clust_mat)
-    return(final_list)
+    return(profile_matrix)
 }
 
 
 #' Find group-specific clusters based on user-defined species classification
 #'
-#' @param profile_matrix A matrix with phylogenomic profiles, which can
-#' be obtained from the 1st element of the result list 
-#' from \code{phylogenomic_profile}.
+#' @param profile_matrix A matrix of phylogenomic profiles obtained
+#' with \code{phylogenomic_profile}.
 #' @param species_annotation A 2-column data frame with species IDs in 
 #' the first column (same as column names of profile matrix), and species
 #' annotation (e.g., higher-level taxonomic information) in the second column.
@@ -111,7 +94,7 @@ phylogenomic_profile <- function(clusters = NULL) {
 #' @rdname find_GS_clusters
 #' @examples
 #' data(clusters)
-#' profile_matrix <- phylogenomic_profile(clusters)$profile_matrix
+#' profile_matrix <- phylogenomic_profile(clusters)
 #' 
 #' # Species annotation
 #' species_order <- c(

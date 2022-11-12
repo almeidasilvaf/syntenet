@@ -11,21 +11,16 @@ phylogenomic_profile(clusters = NULL)
 \strong{Cluster} as returned by \code{cluster_network}.}
 }
 \value{
-A list with the following elements:
-\describe{
-\item{profile_matrix}{A matrix of i rows and j columns containing
+A matrix of i rows and j columns containing
 the number of genes in cluster i for each species j. The number of rows
 is equal to the number of clusters in \strong{clusters}, and
 the number of columns is equal to the number of species
-in \strong{clusters}.}
-\item{hclust}{An hclust object containing the network clusters
-grouped by ward.D based on Jaccard distances.}
-}
+in \strong{clusters}.
 }
 \description{
 Perform phylogenomic profiling for synteny network clusters
 }
 \examples{
 data(clusters)
-profiles <- phylogenomic_profile(clusters)$profile_matrix
+profiles <- phylogenomic_profile(clusters)
 }

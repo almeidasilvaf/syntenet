@@ -53,11 +53,11 @@ connected by an edge. Synteny networks have been used to explore, among others,
 global synteny patterns in mammalian and angiosperm genomes [@zhao2019network], 
 the evolution of MADS-box transcription factors [@zhao2017phylogenomic], 
 and infer a microsynteny-based phylogeny for angiosperms [@zhao2021whole].
-`r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` is a package that 
+`r BiocStyle::Biocpkg("syntenet")` is a package that 
 can be used to infer synteny networks from
 protein sequences and perform downstream network analyses that include:
 
-- **Network clustering**;
+- **Network clustering** using the Infomap algorithm;
 
 - **Phylogenomic profiling**, which consists in identifying which species 
 contain which clusters. This analysis can reveal highly conserved synteny 
@@ -65,14 +65,18 @@ clusters and taxon-specific ones (e.g., family- and order-specific clusters);
 
 - **Microsynteny-based phylogeny reconstruction** with maximum likelihood, 
 which can be achieved by inferring a phylogeny from a binary matrix of 
-phylogenomic profiles with IQTREE.
+phylogenomic profiles with IQTREE2.
 
 
 # Installation
 
+`r BiocStyle::Biocpkg("syntenet")` can be installed from Bioconductor
+with the following code:
+
 ```{r installation, eval=FALSE}
 if(!requireNamespace('BiocManager', quietly = TRUE))
   install.packages('BiocManager')
+
 BiocManager::install("syntenet")
 ```
 
@@ -100,7 +104,7 @@ head(annotation)
 # Importing data to the R session
 
 To detect synteny and infer synteny networks, 
-`r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` requires two objects
+`r BiocStyle::Biocpkg("syntenet")` requires two objects
 as input:
 
 - **seq:** A list of `AAStringSet` objects containing the translated sequences
@@ -233,21 +237,25 @@ pdata$annotation
 
 Now that we have our processed data, we can infer the synteny network.
 To detect synteny, we need the tabular output from BLASTp [@altschul1997gapped]
-or similar programs. Here, we give you two options:
+or similar programs. To get that, you can use the function `run_diamond()`, 
+which runs DIAMOND [@buchfink2021sensitive] from the R session and
+automatically parses its output to a list of data frames [^1].
 
-1. Running BLASTp, DIAMOND [@buchfink2021sensitive] or similar programs 
-on the command line, saving the output in tabular format and reading
-the output table as a data frame 
-(e.g., with the base R function `read.table()`).
+[^1]: **Alternative:** if you want to use a different program for similarity
+searches, you can run it on the command line, save the output in tabular
+format, and read the tabular output as a data frame (e.g., with the base
+R function `read.table`). 
 
-2. Using a helper function in `r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` 
-named `run_diamond()`, which runs DIAMOND from the R session and 
-automatically parses its output to a data frame.
 
-Here, we will use `run_diamond()` to demonstrate how it works. 
+Let's demonstrate how `run_diamond()` works. 
 Needless to say, you need to have DIAMOND installed in your machine 
 and in your PATH to run this function. To check if you have DIAMOND installed,
-use the function `diamond_is_installed()`.
+use the function `diamond_is_installed()` [^2].
+
+[^2]: **Note:** in the code chunk below, the if statement is not required.
+We just added it to make sure that the function `run_diamond()` is only
+executed if DIAMOND is installed, to avoid problems when building this
+vignette in machines that do not have DIAMOND installed. 
 
 ```{r run_diamond}
 data(blast_list)
@@ -257,7 +265,7 @@ if(diamond_is_installed()) {
 ```
 
 The output of `run_diamond()` is a list of data frames containing the tabular
-output of pairwise BLAST-like searches. Let's take a look at it.
+output of all-vs-all DIAMOND searches. Let's take a look at it.
 
 ```{r blast_inspect}
 # List names
@@ -267,12 +275,12 @@ names(blast_list)
 head(blast_list$Olucimarinus_Olucimarinus)
 ```
 
-Now we can use this list of BLAST-like data frames to detect synteny. Here,
+Now, we can use this list of DIAMOND data frames to detect synteny. Here,
 we reimplemented the popular MCScanX algorithm [@wang2012mcscanx], originally
 written in C++, using the `r BiocStyle::CRANpkg("Rcpp")` [@eddelbuettel2011rcpp] 
 framework for R and C++ integration. This means that
-`r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` comes with a native 
-version of MCScanX, so you can run MCScanX in R without
+`r BiocStyle::Biocpkg("syntenet")` comes with a native 
+version of the MCScanX algorithm, so you can run MCScanX in R without
 having to install it yourself. Amazing, huh?
 
 To detect synteny and infer the synteny network, use the 
@@ -302,9 +310,9 @@ for instance. Here, we will use an example network of BUSCO genes for
 25 eudicot species, which was obtained from @zhao2019network. 
 
 To obtain the phylogenomic profiles, you first need to cluster your network.
-This can be done with `cluster_network()`. [^1]
+This can be done with `cluster_network()`. [^3]
 
-[^1]: **Friendly tip:** `r BiocStyle::Githubpkg("almeidasilvaf/syntenet")` uses the *Infomap* algorithm
+[^3]: **Friendly tip:** `r BiocStyle::Biocpkg("syntenet")` uses the *Infomap* algorithm
 to cluster networks, which has been shown to have the best performance 
 [@zhao2019network]. This algorithm assigns each gene to a single cluster. 
 However, for some cases (e.g., detection of tandem arrays), 
@@ -327,51 +335,91 @@ head(clusters)
 
 Now that each gene has been assigned to a cluster, we can identify the
 phylogenomic profiles of each cluster. This function returns 
-a list of 2 elements:
-
-1. A matrix of phylogenomic profiles, with clusters in rows 
+a matrix of phylogenomic profiles, with clusters in rows 
 and species in columns.
-
-2. An `hclust` object containing the results of Ward's clustering on a matrix
-of Ruzicka distances obtained from the phylogenomic profiles matrix.
-
 
 ```{r phylogenomic_profile}
 # Phylogenomic profiling
 profiles <- phylogenomic_profile(clusters)
 
 # Exploring the output
-str(profiles)
-
-head(profiles$profile_matrix)
+head(profiles)
 ```
 
-As a plot is worth a thousand words (or numbers), you can visualize the
-phylogenomic profiles as a heatmap with `plot_profiles()`. Let's also add some
-species annotation.
+As a plot is worth a thousand words (or numbers), you can use the function
+`plot_profiles()` to visualize the phylogenomic profiles as a heatmap with 
+species in rows and synteny network clusters in columns. The heatmap
+generated by this function is highly customizable by users. Some
+important remarks are:
+
+1. You can add a legend for species metadata (e.g., taxonomic information) 
+by passing a 2-column data frame to the parameter *species_annotation*.
+
+2. Columns (network clusters) are grouped with Ward's clustering on a matrix
+of distances. The method to compute the distance matrix can be defined by users
+in parameters *dist_function* and *dist_params*. By default, it uses
+the function `stats::dist()` with parameter `method = "euclidean"`.
+
+3. The order in which species are displayed can be defined by users in 
+parameter *cluster_species*. We strongly recommend passing a vector of 
+species order that matches the species tree, so that patterns can be
+explored in a phylogenetic context. Importantly, if the character vector is
+named, vector names will be used as species names in the plot. This a nice
+way to replace species abbreviations with their full names.
+
+
+Here, to briefly demonstrate how to play with the parameters we just mentioned
+in the 3 remarks above, we will:
+
+- Create a vector with the order in which we want species to be displayed,
+with longer species names in vector names.
+
+- Create a metadata data frame containing the family of each species.
+
+- Use the function `dsvdis()` from the `r BiocStyle::CRANpkg("labdsv")` package
+to calculate Ruzicka distances when clustering columns.
 
 ```{r plot_profiles}
-# Create a vector of custom species order to plot
-species_order <- c(
-    "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",
-    "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
-    "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
-) 
+# 1) Create a named vector of custom species order to plot
+species_order <- setNames(
+    # vector elements
+    c(
+        "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",
+        "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
+        "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
+    ),
+    # vector names
+    c(
+        "V. radiata", "V. angularis", "P. vulgaris", "G. max", "C. cajan",
+        "T. pratense", "M. truncatula", "A. duranensis", "L. japonicus",
+        "L. angustifolius", "C. arietinum", "P. mume", "P. persica",
+        "P. bretschneideri", "M. domestica", "R. occidentalis", 
+        "F. vesca", "M. notabilis", "Z. jujuba",
+        "J. curcas", "M. esculenta", "R. communis", 
+        "L. usitatissimum", "P. trichocarpa"
+    )
+)
+species_order
 
-# Create a data frame of families for each species
+# 2) Create a metadata data frame containing the family of each species
 species_annotation <- data.frame(
-   Species = species_order,
-   Family = c(rep("Fabaceae", 11), rep("Rosaceae", 6),
-              "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
-              "Linaceae", "Salicaceae")
+    Species = species_order,
+    Family = c(
+        rep("Fabaceae", 11), rep("Rosaceae", 6),
+        "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
+        "Linaceae", "Salicaceae"
+    )
 )
 head(species_annotation)
 
-# Plot phylogenomic profiles
+
+# 3) Plot phylogenomic profiles, but using Ruzicka distances
 plot_profiles(
-    profiles, species_annotation, 
+    profiles, 
+    species_annotation, 
     cluster_species = species_order, 
-    cluster_columns = TRUE
+    dist_function = labdsv::dsvdis,
+    dist_params = list(index = "ruzicka")
 )
 ```
 
@@ -386,7 +434,7 @@ species groups).
 
 ```{r find_GS_clusters}
 # Find group-specific clusters
-gs_clusters <- find_GS_clusters(profiles$profile_matrix, species_annotation)
+gs_clusters <- find_GS_clusters(profiles, species_annotation)
 
 head(gs_clusters)
 
@@ -399,13 +447,12 @@ in the network. Let's plot a heatmap of group-specific clusters only.
 
 ```{r heatmap_filtered}
 # Filter profiles matrix to only include group-specific clusters
-pgs <- profiles
-idx <- rownames(pgs$profile_matrix) %in% gs_clusters$Cluster
-pgs$profile_matrix <- pgs$profile_matrix[idx, ]
+idx <- rownames(profiles) %in% gs_clusters$Cluster
+p_gs <- profiles[idx, ]
 
 # Plot heatmap
 plot_profiles(
-    pgs, species_annotation, 
+    p_gs, species_annotation, 
     cluster_species = species_order, 
     cluster_columns = TRUE
 )
@@ -432,8 +479,10 @@ head(gene_df)
 plot_network(network, clusters, cluster_id = id, color_by = gene_df)
 
 # 3) Interactive visualization (zoom out and in to explore it)
-plot_network(network, clusters, cluster_id = id, 
-             interactive = TRUE, dim_interactive = c(500, 300))
+plot_network(
+    network, clusters, cluster_id = id, 
+    interactive = TRUE, dim_interactive = c(500, 300)
+)
 ```
 
 # Microsynteny-based phylogeny reconstruction
@@ -446,24 +495,26 @@ representing absence and presence, respectively) and transpose it. This can
 be done with `binarize_and_tranpose()`.
 
 ```{r binarize}
-bt_mat <- binarize_and_transpose(profiles$profile_matrix)
+bt_mat <- binarize_and_transpose(profiles)
 
 # Looking at the first 5 rows and 5 columns of the matrix
 bt_mat[1:5, 1:5]
 ```
 
-Now, you can use this transposed binary matrix as input to IQTREE [@minh2020iq] 
-to infer a phylogeny. Here, once again, we give you 2 options:
+Now, you can use this transposed binary matrix as input to 
+IQTREE2 [@minh2020iq] to infer a phylogeny. To do so, you can use the function
+`infer_microsynteny_phylogeny()`, which allows you to run IQTREE2 from 
+an R session [^4]. You need to have IQTREE2 installed in your machine and in 
+your PATH to run this function. You can check if you have IQTREE2 installed 
+with `iqtree_is_installed()`.
 
-1. Using `profiles2phylip()` to write the transposed binary matrix to a 
-PHYLIP file and running IQTREE from the command line. As you are inferring 
-a phylogeny from the profiles matrix, you need to specify `-st MORPH` to 
-indicate you have a binary alignment.
-
-2. Using the helper function `infer_microsynteny_phylogeny()`,
-which allows you to run IQTREE from an R session. You need to have 
-IQTREE installed in your machine and in your PATH to run this function.
-You can check if you have IQTREE installed with `iqtree_is_installed()`.
+[^4]: **Alternative:** if you want to use a different program rather
+than IQTREE2, you can use the function `profiles2phylip()` to write the 
+transposed binary matrix to a PHYLIP file and run your favorite program
+on the command line. However, when inferring a phylogeny from phylogenomic
+profiles, you need to make sure that the program you are using supports 
+substitution models for binary data. In IQTREE2, for instance, using
+binary, morphological models requires passing parameters `-st MORPH`.
 
 
 For the sake of demonstration, we will infer a phylogeny with 
@@ -490,10 +541,11 @@ if(iqtree_is_installed()) {
 ```
 
 The output of `infer_microsynteny_phylogeny()` is a character vector with paths
-to the output files from IQTREE. Usually, you are interested in the file
+to the output files from IQTREE2. Usually, you are interested in the file
 ending in *.treefile*. This is the species tree in Newick format, and it can
 be visualized with your favorite tree viewer. We strongly recommend using
-the `read.tree()` function from the Bioconductor package treeio [@wang2020treeio] to
+the `read.tree()` function from the Bioconductor package
+`r BiocStyle::Biocpkg("treeio")` [@wang2020treeio] to
 read the tree, and visualizing it with the `r BiocStyle::Biocpkg("ggtree")` 
 Bioc package [@yu2017ggtree].
 For example, let's visualize a microsynteny-based phylogeny for 123 angiosperm

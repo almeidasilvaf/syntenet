@@ -10,6 +10,15 @@ species_order <- c(
     "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
     "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
 )
+species_names <- c(
+    "V. radiata", "V. angularis", "P. vulgaris", "G. max", "C. cajan",
+    "T. pratense", "M. truncatula", "A. duranensis", "L. japonicus",
+    "L. angustifolius", "C. arietinum", "P. mume", "P. persica",
+    "P. bretschneideri", "M. domestica", "R. occidentalis",
+    "F. vesca", "M. notabilis", "Z. jujuba", "J. curcas",
+    "M. esculenta", "R. communis", "L. usitatissimum", "P. trichocarpa"
+)
+names(species_order) <- species_names
 species_annotation <- data.frame(
    Species = species_order,
    Family = c(rep("Fabaceae", 11), rep("Rosaceae", 6),
@@ -38,8 +47,8 @@ test_that("plot_profiles() returns a heatmap", {
     )
     p3 <- plot_profiles(
         profiles, 
-        discretize = FALSE, 
-        cluster_columns = profiles$hclust
+        species_annotation <- species_annotation[-1, ],
+        discretize = FALSE
     )
     
     cspecies <- c(species_order[1:5], "fake_species")

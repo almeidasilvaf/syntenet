@@ -17,8 +17,7 @@ infer_microsynteny_phylogeny(
 }
 \arguments{
 \item{transposed_profiles}{A binary and transposed profile matrix.
-The profile matrix is the second element of the list returned
-by \code{phylogenomic_profile()}}
+The profile matrix can be obtained with \code{phylogenomic_profile()}.}
 
 \item{bootr}{Numeric scalar with the number of bootstrap replicates.
 Default: 1000.}
@@ -51,7 +50,7 @@ Infer microsynteny-based phylogeny with IQTREE
 }
 \examples{
 data(clusters)
-profile_matrix <- phylogenomic_profile(clusters)$profile_matrix
+profile_matrix <- phylogenomic_profile(clusters)
 tmat <- binarize_and_transpose(profile_matrix)
 
 # Leave only some legumes and P. mume as an outgroup for testing purposes
