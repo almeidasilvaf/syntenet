@@ -1,7 +1,7 @@
 
 #----Load data------------------------------------------------------------------
 data(clusters)
-profile_matrix <- phylogenomic_profile(clusters)$profile_matrix
+profile_matrix <- phylogenomic_profile(clusters)
 set.seed(123)
 
 #----Start tests----------------------------------------------------------------

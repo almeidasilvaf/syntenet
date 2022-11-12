@@ -7,9 +7,8 @@
 binarize_and_transpose(profile_matrix = NULL)
 }
 \arguments{
-\item{profile_matrix}{A matrix with phylogenomic profiles, which can
-be obtained from the 1st element of the result list
-from \code{phylogenomic_profile}.}
+\item{profile_matrix}{A matrix with phylogenomic profiles obtained
+with \code{phylogenomic_profile}.}
 }
 \value{
 A binary and transposed version of the profiles matrix.
@@ -19,6 +18,6 @@ Binarize and transpose the phylogenomic profile matrix
 }
 \examples{
 data(clusters)
-profile_matrix <- phylogenomic_profile(clusters)$profile_matrix
+profile_matrix <- phylogenomic_profile(clusters)
 tmat <- binarize_and_transpose(profile_matrix)
 }

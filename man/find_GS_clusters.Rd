@@ -11,9 +11,8 @@ find_GS_clusters(
 )
 }
 \arguments{
-\item{profile_matrix}{A matrix with phylogenomic profiles, which can
-be obtained from the 1st element of the result list
-from \code{phylogenomic_profile}.}
+\item{profile_matrix}{A matrix of phylogenomic profiles obtained
+with \code{phylogenomic_profile}.}
 
 \item{species_annotation}{A 2-column data frame with species IDs in
 the first column (same as column names of profile matrix), and species
@@ -41,7 +40,7 @@ Find group-specific clusters based on user-defined species classification
 }
 \examples{
 data(clusters)
-profile_matrix <- phylogenomic_profile(clusters)$profile_matrix
+profile_matrix <- phylogenomic_profile(clusters)
 
 # Species annotation
 species_order <- c(

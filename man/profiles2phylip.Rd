@@ -8,8 +8,7 @@ profiles2phylip(transposed_profiles = NULL, outdir = tempdir())
 }
 \arguments{
 \item{transposed_profiles}{A binary and transposed profile matrix.
-The profile matrix is the second element of the list returned
-by \code{phylogenomic_profile()}}
+The profile matrix can be obtained with \code{phylogenomic_profile()}.}
 
 \item{outdir}{Path to output directory. By default, files are saved in
 a temporary directory, so they will be deleted when the R session closes.
@@ -23,7 +22,7 @@ Save the transposed binary profiles matrix to a file in PHYLIP format
 }
 \examples{
 data(clusters)
-profile_matrix <- phylogenomic_profile(clusters)$profile_matrix
+profile_matrix <- phylogenomic_profile(clusters)
 tmat <- binarize_and_transpose(profile_matrix)
 profiles2phylip(tmat)
 }
