@@ -255,7 +255,10 @@ use the function `diamond_is_installed()` [^2].
 [^2]: **Note:** in the code chunk below, the if statement is not required.
 We just added it to make sure that the function `run_diamond()` is only
 executed if DIAMOND is installed, to avoid problems when building this
-vignette in machines that do not have DIAMOND installed. 
+vignette in machines that do not have DIAMOND installed. If you want to
+reproduce the code in this vignette and do not have DIAMOND installed,
+you can use the example output of `run_diamond()` stored in the *blast_list*
+object (loaded with `data(blast_list)`).
 
 ```{r run_diamond}
 data(blast_list)
@@ -312,16 +315,20 @@ for instance. Here, we will use an example network of BUSCO genes for
 To obtain the phylogenomic profiles, you first need to cluster your network.
 This can be done with `cluster_network()`. [^3]
 
-[^3]: **Friendly tip:** `r BiocStyle::Biocpkg("syntenet")` uses the *Infomap* algorithm
-to cluster networks, which has been shown to have the best performance 
-[@zhao2019network]. This algorithm assigns each gene to a single cluster. 
+[^3]: **Friendly tip:** `r BiocStyle::Biocpkg("syntenet")` uses the *Infomap* 
+algorithm to cluster networks, which has been shown to have the best performance 
+[@zhao2019network]. However, you can use any other network clustering
+method implemented in the *cluster_* family of functions from the 
+`r BiocStyle::CRANpkg("igraph")` package by passing the function directly
+to the *clust_function* parameter (see `?cluster_network` for details).
+Importantly, the Infomap algorithm (default clustering method) 
+assigns each gene to a single cluster. 
 However, for some cases (e.g., detection of tandem arrays), 
 you may want to use an algorithm that allows community overlap 
 (i.e., a gene can be part of more than one cluster). 
 If this is your case, we recommend the *clique percolation* algorithm, 
 which is implemented in the R package
 `r BiocStyle::CRANpkg("CliquePercolation")` [@lange2021cliquepercolation].
-
 
 ```{r cluster_network}
 # Load example data and take a look at it
@@ -358,7 +365,10 @@ by passing a 2-column data frame to the parameter *species_annotation*.
 2. Columns (network clusters) are grouped with Ward's clustering on a matrix
 of distances. The method to compute the distance matrix can be defined by users
 in parameters *dist_function* and *dist_params*. By default, it uses
-the function `stats::dist()` with parameter `method = "euclidean"`.
+the function `stats::dist()` with parameter `method = "euclidean"`. Likewise,
+the function to cluster the distance matrix and additional parameters
+can be specified in *clust_function* and *clust_params*. By default,
+it uses `stats::hclust` with parameter `method = "ward.D"`.
 
 3. The order in which species are displayed can be defined by users in 
 parameter *cluster_species*. We strongly recommend passing a vector of 
@@ -560,6 +570,31 @@ ggtree(angiosperm_phylogeny) +
     geom_tiplab(size = 3) +
     xlim(0, 0.3)
 ```
+
+# FAQ {.unnumbered}
+
+## How do I execute an external dependency that is not in my PATH? {.unnumbered}
+
+If you have DIAMOND and/or IQTREE2 installed, but in a directory that is not in 
+your PATH, you can add this given directory to your PATH with the function
+`Sys.setenv()`. 
+
+For example, suppose your DIAMOND binary is in `/home/username/bioinfo_tools`.
+To add this directory to your PATH, you would run:
+
+```{r faq1}
+# Add example directory /home/username/bioinfo_tools to PATH
+Sys.setenv(
+    PATH = paste(
+        Sys.getenv("PATH"), "/home/username/bioinfo_tools", sep = ":"
+    )
+)
+```
+
+Note that your R PATH is not the same as your system's PATH. Thus, even if you
+add the directory `/home/username/bioinfo_tools` to your system's path (e.g.,
+by editing your ~/.bashrc file if you are on Linux), you would still need to
+update your R PATH.
 
 # Session information {.unnumbered}
 
