@@ -14,6 +14,13 @@
 #' @param dist_params A list with parameters to be passed to the function
 #' specified in parameter \strong{dist_function}. 
 #' Default: list(method = "euclidean").
+#' @param clust_function Function to use to cluster the distance matrix
+#' returned by the function specified in \code{dist_function}. Examples include
+#' \code{stats::hclust} and \code{Rclusterpp::Rclusterpp.hclust}.
+#' Default: stats::hclust.
+#' @param clust_params A list with additional parameters (if any) to be
+#' passed to the function specified in parameter \strong{clust_function}.
+#' Default: list(method = "ward.D").
 #' @param cluster_species Either a logical scalar (TRUE or FALSE) or 
 #' a character vector with the order in which species should be arranged. 
 #' TRUE or FALSE indicate whether hierarchical clustering should be applied
@@ -63,7 +70,7 @@
 #'    Family = c(rep("Fabaceae", 11), rep("Rosaceae", 6),
 #'               "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
 #'               "Linaceae", "Salicaceae")
-#')
+#' )
 #' p <- plot_profiles(profile_matrix, species_annotation, 
 #'                    cluster_species = species_order)
 #'                    
@@ -76,6 +83,8 @@ plot_profiles <- function(
         palette = "Greens",
         dist_function = stats::dist,
         dist_params = list(method = "euclidean"),
+        clust_function = stats::hclust,
+        clust_params = list(method = "ward.D"),
         cluster_species = FALSE,
         show_colnames = FALSE,
         discretize = TRUE, ...
@@ -109,8 +118,11 @@ plot_profiles <- function(
         list(x = profile_matrix), dist_params
     )
     dist_mat <- do.call(dist_function, dparams)
-    ## Apply Ward's clustering on distance matrix
-    cluster_columns <- stats::hclust(dist_mat, method = "ward.D")
+    ## Cluster based on the distance matrix
+    cparams <- c(
+        list(d = dist_mat), clust_params
+    )
+    cluster_columns <- do.call(clust_function, cparams)
 
     # Handle reordering of species names and change names for better viz
     if(is.character(cluster_species)) {

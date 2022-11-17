@@ -10,6 +10,8 @@ plot_profiles(
   palette = "Greens",
   dist_function = stats::dist,
   dist_params = list(method = "euclidean"),
+  clust_function = stats::hclust,
+  clust_params = list(method = "ward.D"),
   cluster_species = FALSE,
   show_colnames = FALSE,
   discretize = TRUE,
@@ -34,6 +36,15 @@ synteny clusters. Popular examples include \code{stats::dist},
 \item{dist_params}{A list with parameters to be passed to the function
 specified in parameter \strong{dist_function}.
 Default: list(method = "euclidean").}
+
+\item{clust_function}{Function to use to cluster the distance matrix
+returned by the function specified in \code{dist_function}. Examples include
+\code{stats::hclust} and \code{Rclusterpp::Rclusterpp.hclust}.
+Default: stats::hclust.}
+
+\item{clust_params}{A list with additional parameters (if any) to be
+passed to the function specified in parameter \strong{clust_function}.
+Default: list(method = "ward.D").}
 
 \item{cluster_species}{Either a logical scalar (TRUE or FALSE) or
 a character vector with the order in which species should be arranged.

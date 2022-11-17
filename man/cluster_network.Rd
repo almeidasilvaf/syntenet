@@ -4,12 +4,24 @@
 \alias{cluster_network}
 \title{Cluster the synteny network using the Infomap algorithm}
 \usage{
-cluster_network(network = NULL)
+cluster_network(
+  network = NULL,
+  clust_function = igraph::cluster_infomap,
+  clust_params = NULL
+)
 }
 \arguments{
 \item{network}{A network represented as an edge list, which is a 2-column
 data frame with node 1 in the first column and node 2 in the second column.
 In a synteny network, node 1 and node are the anchor pairs.}
+
+\item{clust_function}{Function to be used to cluster the network. It must
+be one the functions from the \strong{cluster_*} family in
+the \strong{igraph} package (e.g., cluster_infomap, cluster_leiden, etc).
+Default: igraph::cluster_infomap.}
+
+\item{clust_params}{A list with additional parameters (if any) to be passed
+to the igraph clustering function. Default: NULL (no additional parameters).}
 }
 \value{
 A 2-column data frame with the following variables:

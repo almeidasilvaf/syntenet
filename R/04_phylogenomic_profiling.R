@@ -5,7 +5,12 @@
 #' @param network A network represented as an edge list, which is a 2-column
 #' data frame with node 1 in the first column and node 2 in the second column.
 #' In a synteny network, node 1 and node are the anchor pairs.
-#' 
+#' @param clust_function Function to be used to cluster the network. It must
+#' be one the functions from the \strong{cluster_*} family in 
+#' the \strong{igraph} package (e.g., cluster_infomap, cluster_leiden, etc). 
+#' Default: igraph::cluster_infomap.
+#' @param clust_params A list with additional parameters (if any) to be passed 
+#' to the igraph clustering function. Default: NULL (no additional parameters).
 #' 
 #' @return A 2-column data frame with the following variables:
 #' \describe{
@@ -13,19 +18,27 @@
 #'   \item{Cluster}{Cluster ID as identified by infomap.}
 #' }
 #'
-#'
 #' @importFrom igraph graph_from_data_frame cluster_infomap simplify
 #' @export
 #' @rdname cluster_network
 #' @examples 
 #' data(network)
 #' clusters <- cluster_network(network[1:500, ])
-cluster_network <- function(network = NULL) {
+cluster_network <- function(network = NULL, 
+                            clust_function = igraph::cluster_infomap,
+                            clust_params = NULL) {
     
+    # Create a graph and remove loops
     graph <- igraph::graph_from_data_frame(network, directed = FALSE)
     graph <- igraph::simplify(graph)
+
+    # Cluster the graph    
+    cparams <- c(
+        list(graph = graph), clust_params
+    )
+    clusters <- do.call(clust_function, cparams)
     
-    clusters <- igraph::cluster_infomap(graph)
+    # Create a data frame of genes and their corresponding clusters
     clusters_df <- data.frame(
         Gene = clusters$names,
         Cluster = clusters$membership
