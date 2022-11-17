@@ -22,7 +22,7 @@ GRangesList, respectively.
 * Updated vignette to instruct users on how to load FASTA and GFF/GTF files
 to the R session.
 
-# syntenet 1.0.1
+# syntenet 1.1.1
 
 NEW FEATURES
 
@@ -38,4 +38,18 @@ easily replaced with species' full names to make plots look better.
 * Added parameters *dist_function* and *dist_params* to allow users to specify
 function and parameters to calculate the distance matrix that will be passed
 to Ward's clustering.
+
+# syntenet 1.1.2
+
+NEW FEATURES
+
+* Added parameters *clust_function* and *clust_params* in `cluster_network()`
+to let users pass any igraph::cluster_* function to cluster the synteny network.
+
+* Added parameters *clust_function* and *clust_params* in `plot_profiles()` to
+let users have more control on the method used to cluster the distance matrix
+(columns in phylogenomic profiles).
+
+* Updated vignette to reflect the changes mentioned above and included an FAQ
+item with instructions on how to update the R PATH variable.
 
