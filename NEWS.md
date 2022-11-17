@@ -39,3 +39,19 @@ easily replaced with species' full names to make plots look better.
 function and parameters to calculate the distance matrix that will be passed
 to Ward's clustering.
 
+# syntenet 1.0.2
+
+NEW FEATURES
+
+* Added parameters *clust_function* and *clust_params* in `cluster_network()`
+to let users pass any igraph::cluster_* function to cluster the synteny network.
+
+* Added parameters *clust_function* and *clust_params* in `plot_profiles()` to
+let users have more control on the method used to cluster the distance matrix
+(columns in phylogenomic profiles).
+
+* Updated vignette to reflect the changes mentioned above and included an FAQ
+item with instructions on how to update the R PATH variable.
+
+
+
