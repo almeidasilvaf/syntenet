@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">syntenet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,11 @@
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cluster_network</span><span class="op">(</span>network <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">cluster_network</span><span class="op">(</span></span>
+<span>  network <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  clust_function <span class="op">=</span> <span class="fu">igraph</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/igraph/man/cluster_infomap.html" class="external-link">cluster_infomap</a></span>,</span>
+<span>  clust_params <span class="op">=</span> <span class="cn">NULL</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -63,6 +67,18 @@
 <dd><p>A network represented as an edge list, which is a 2-column
 data frame with node 1 in the first column and node 2 in the second column.
 In a synteny network, node 1 and node are the anchor pairs.</p></dd>
+
+
+<dt>clust_function</dt>
+<dd><p>Function to be used to cluster the network. It must
+be one the functions from the <strong>cluster_*</strong> family in
+the <strong>igraph</strong> package (e.g., cluster_infomap, cluster_leiden, etc).
+Default: igraph::cluster_infomap.</p></dd>
+
+
+<dt>clust_params</dt>
+<dd><p>A list with additional parameters (if any) to be passed
+to the igraph clustering function. Default: NULL (no additional parameters).</p></dd>
 
 </dl></div>
     <div class="section level2">
