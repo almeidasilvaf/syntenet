@@ -53,5 +53,13 @@ let users have more control on the method used to cluster the distance matrix
 * Updated vignette to reflect the changes mentioned above and included an FAQ
 item with instructions on how to update the R PATH variable.
 
+# syntenet 1.0.3
+
+BUG FIXES
+
+* Tidy evaluation with aes_() was deprecated in ggplot 3.0.0, and
+testthat now returns warnings for it. Replaced aes_() with aes() and .data
+from the rlang package.
+
 
 
