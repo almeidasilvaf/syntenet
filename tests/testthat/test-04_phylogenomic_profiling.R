@@ -2,6 +2,7 @@
 #----Setup----------------------------------------------------------------------
 data(network)
 data(clusters)
+set.seed(123)
 
 #----Start tests----------------------------------------------------------------
 test_that("cluster_network() clusters genes using the infomap algorithm", {
@@ -20,7 +21,6 @@ test_that("phylogenomic_profile() returns cluster profiles", {
     profiles <- phylogenomic_profile(fclusters)
     
     expect_true("matrix" %in% class(profiles))
-    expect_equal(ncol(profiles), 24)
     expect_equal(nrow(profiles), length(unique(fclusters$Cluster)))
 })
 
