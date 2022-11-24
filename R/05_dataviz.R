@@ -178,7 +178,7 @@ plot_profiles <- function(
 #' @importFrom ggnetwork ggnetwork theme_blank geom_edges geom_nodes
 #' @importFrom networkD3 igraph_to_networkD3 forceNetwork
 #' @importFrom igraph graph_from_data_frame
-#' @importFrom ggplot2 aes_ ggplot scale_color_manual guides
+#' @importFrom ggplot2 aes ggplot scale_color_manual guides
 #' @importFrom grDevices colorRampPalette
 #' @import intergraph
 #' @export
@@ -253,11 +253,14 @@ plot_network <- function(network = NULL, clusters = NULL,
     } else {
         n <- ggnetwork::ggnetwork(graph, arrow.gap = 0)
         # Plot graph
-        p <- ggplot2::ggplot(n, ggplot2::aes_(x = ~x, y = ~y, 
-                                              xend = ~xend, yend = ~yend)) +
+        p <- ggplot2::ggplot(
+            n, aes(x = .data$x, y = .data$y, xend = .data$xend, yend = .data$yend)
+        ) +
             ggnetwork::geom_edges(color = "grey75", alpha = 0.5, 
                                   show.legend = FALSE) +
-            ggnetwork::geom_nodes(aes_(size = ~Degree, color = ~Group)) +
+            ggnetwork::geom_nodes(
+                aes(size = .data$Degree, color = .data$Group)
+            ) +
             ggplot2::guides(size = "none") +
             ggplot2::scale_color_manual(values = palette) +
             ggnetwork::theme_blank()

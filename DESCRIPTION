@@ -52,6 +52,7 @@ RoxygenNote: 7.2.1
 Imports:
     Rcpp (>= 1.0.8),
     GenomicRanges,
+    rlang,
     Biostrings,
     rtracklayer,
     utils,
