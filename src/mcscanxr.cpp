@@ -103,7 +103,7 @@ void read_gff(const string gff_infile){
     char gfn[LABEL_LEN];
     Gene_feat gf;
     const char *gff_fn = gff_infile.c_str();
-    sprintf(gfn,"%s",gff_fn);
+    snprintf(gfn, sizeof(gfn), "%s", gff_fn);
     ifstream in(gfn);
     if(VERBOSE){
         Rcpp::Rcout<<"Reading GFF file and pre-processing"<<endl;
@@ -143,7 +143,7 @@ void read_blast(const string blast_infile){
         Rcpp::Rcout<<"Reading BLAST file and pre-processing"<<endl;
     }
     const char *blast_fn = blast_infile.c_str();
-    sprintf(bfn,"%s",blast_fn);
+    snprintf(bfn, sizeof(bfn), "%s", blast_fn);
     ifstream in(bfn);
     while (!in.eof()){
         getline(in,line);
@@ -781,7 +781,7 @@ void mark_tandem(const char *prefix_fn){
     if(tpair1.size()>0){
         ofstream result;
         char fn[LABEL_LEN];
-        sprintf(fn, "%s.tandem", prefix_fn);
+        snprintf(fn, sizeof(fn), "%s.tandem", prefix_fn);
         if(VERBOSE){
             Rcpp::Rcout<<"Tandem pairs written to "<<fn<<endl;
         }
@@ -811,7 +811,7 @@ void print_html(){
                 result<<"</table></html>";
                 result.close();
             }
-            sprintf(result_dir, "%s.html", n->mol.c_str());
+            snprintf(result_dir, sizeof(result_dir), "%s.html", n->mol.c_str());
             if(VERBOSE){
                 Rcpp::Rcout<<result_dir<<endl;
             }
@@ -856,7 +856,7 @@ void msa_main(const char *prefix_fn){
     if(VERBOSE){
         Rprintf("Writing multiple syntenic blocks to HTML files\n");
     }
-    sprintf(html_fn,"%s.html",prefix_fn);
+    snprintf(html_fn, sizeof(html_fn), "%s.html", prefix_fn);
     auto html_fn_res = chdir(html_fn);
     if (html_fn_res<0){
 #ifdef WIN32
@@ -992,7 +992,7 @@ int rcpp_mcscanx_file(
         }
     }
     const char *prefix_fn = prefix.c_str();
-    sprintf(align_fn, "%s.collinearity", prefix_fn);
+    snprintf(align_fn, sizeof(align_fn), "%s.collinearity", prefix_fn);
     fw = mustOpen(align_fn, "w");
     print_align(fw);
     fclose(fw);
