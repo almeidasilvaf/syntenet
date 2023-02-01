@@ -60,3 +60,15 @@ BUG FIXES
 * Tidy evaluation with aes_() was deprecated in ggplot 3.0.0, and
 testthat now returns warnings for it. Replaced aes_() with aes() and .data
 from the rlang package.
+
+# syntenet 1.1.4
+
+BUG FIXES
+
+* Replaced sprintf calls with snprintf calls in C++ code to address warnings
+in the devel branch of Bioc
+
+
+UPDATES
+
+* Added CITATION file with reference to published paper
