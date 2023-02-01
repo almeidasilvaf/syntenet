@@ -61,5 +61,14 @@ BUG FIXES
 testthat now returns warnings for it. Replaced aes_() with aes() and .data
 from the rlang package.
 
+# syntenet 1.0.4
 
+BUG FIXES
+
+* Replaced sprintf calls with snprintf in C++ code to address warnings
+in the devel branch of Bioc
+
+UPDATES
+
+* Added CITATION file with reference to published paper
 
