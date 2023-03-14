@@ -11,7 +11,7 @@ issues](https://img.shields.io/github/issues/almeidasilvaf/syntenet)](https://gi
 stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![R-CMD-check-bioc](https://github.com/almeidasilvaf/syntenet/workflows/R-CMD-check-bioc/badge.svg)](https://github.com/almeidasilvaf/syntenet/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/almeidasilvaf/syntenet/branch/master/graph/badge.svg)](https://codecov.io/gh/almeidasilvaf/syntenet?branch=master)
+coverage](https://codecov.io/gh/almeidasilvaf/syntenet/branch/devel/graph/badge.svg)](https://codecov.io/gh/almeidasilvaf/syntenet?branch=devel)
 <!-- badges: end -->
 
 The goal of `syntenet` is to infer synteny networks from whole-genome
