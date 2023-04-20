@@ -1,6 +1,6 @@
 Package: syntenet
 Title: Inference And Analysis Of Synteny Networks
-Version: 1.1.4
+Version: 1.1.5
 Date: 2022-03-28
 Authors@R: 
     c(
