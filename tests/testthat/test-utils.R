@@ -70,9 +70,15 @@ test_that("check_gene_names() checks if sequence names match gene names", {
 })
 
 
-test_that("species_id_length() returns the best string length for IDs", {
-    len <- species_id_length(proteomes)
-    expect_true(class(len) %in% c("numeric", "integer"))
+test_that("create_species_id_table() creates a data frame of species IDs", {
+    
+    species_names <- c("Glycine max", "Glycine soja", "Olucimarinus")
+    id1 <- create_species_id_table(species_names)
+    
+    expect_true(is(id1, "data.frame"))
+    expect_equal(ncol(id1), 2)
+    expect_true(all(nchar(id1$species_id) <=5))
+    
 })
 
 

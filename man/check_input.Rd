@@ -4,7 +4,7 @@
 \alias{check_input}
 \title{Check if input objects is ready for further analyses}
 \usage{
-check_input(seq = NULL, annotation = NULL)
+check_input(seq = NULL, annotation = NULL, gene_field = "gene_id")
 }
 \arguments{
 \item{seq}{A list of AAStringSet objects, each list element containing
@@ -16,6 +16,9 @@ list elements in \strong{annotation}.}
 GRanges with the annotation for the sequences in \strong{seq}. This list must
 have names (not NULL), and names of each list element must match the names
 of list elements in \strong{seq}.}
+
+\item{gene_field}{Character, name of the column in the GRanges objects
+that contains gene IDs. Default: "gene_id".}
 }
 \value{
 TRUE if the objects pass the check.

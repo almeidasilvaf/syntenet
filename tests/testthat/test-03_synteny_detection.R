@@ -54,32 +54,33 @@ test_that("run_diamond() runs DIAMOND on the background", {
 
 
 test_that("intraspecies_synteny() detects intraspecies synteny", {
-    blast_intra <- blast_list[1]
-    annot <- as.data.frame(annotation[[1]])
-    annot <- annot[, c("seqnames", "gene_id", "start", "end")]
-    annot_list <- list(Olucimarinus = annot)
-    intrasyn <- intraspecies_synteny(blast_intra, annot_list = annot_list)
     
+    pdata <- process_input(proteomes, annotation)
+    pannotation <- pdata$annotation[1]
+    blast_intra <- blast_list[1]
+
+    # Detect intraspecies synteny
+    intrasyn <- intraspecies_synteny(blast_intra, pannotation)
+
     expect_equal(class(intrasyn), "character")
     expect_equal(length(intrasyn), 1)
 })
 
 test_that("interspecies_synteny() detects interspecies synteny", {
-    data(blast_list)
-    data(annotation)
+    
+    # Get DIAMOND and processed annotation lists
     blast_inter <- blast_list[2]
-    annot_list <- lapply(annotation, function(x) {
-        x$gene <- x$gene_id
-        return(x)
-    })
-    intersyn <- interspecies_synteny(blast_inter, annot_list = annot_list)
+    pannotation <- process_input(proteomes, annotation)$annotation
+
+    # Detect interspecies synteny
+    intersyn <- interspecies_synteny(blast_inter, pannotation)
     
     expect_equal(class(intersyn), "character")
     expect_equal(length(intersyn), 1)
 })
 
 test_that("parse_collinearity() reads MCScanX output", {
-    file <- system.file("extdata", "Olu.collinearity", package = "syntenet")
+    file <- system.file("extdata", "Scerevisiae.collinearity", package = "syntenet")
     net <- parse_collinearity(file)
     
     expect_equal(class(net), "data.frame")

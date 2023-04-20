@@ -1,0 +1,393 @@
+############### Parameters ###############
+# MATCH_SCORE: 50
+# GAP_PENALTY: -1
+# MATCH_SIZE: 5
+# OVERLAP_WINDOW: 5
+# E_VALUE: 1e-05
+# MAX GAPS: 25
+# IS_PAIRWISE: 1
+# IN_SYNTENY: 1
+############### Statistics ###############
+# Number of collinear genes: 683, Percentage: 10.35
+# Number of all genes: 6600
+##########################################
+## Alignment 0: score=446.0 e_value=1.1e-18 N=9 Sce_I&Sce_VIII plus
+  0-  0:	Sce_YAR050W	Sce_YHR211W	 2e-220
+  0-  1:	Sce_YAR060C	Sce_YHR212C	  8e-74
+  0-  2:	Sce_YAR064W	Sce_YHR213W-B	  1e-73
+  0-  3:	Sce_YAR066W	Sce_YHR214W	 5e-124
+  0-  4:	Sce_YAR068W	Sce_YHR214W-A	  6e-86
+  0-  5:	Sce_YAR069C	Sce_YHR214C-D	  8e-65
+  0-  6:	Sce_YAR070C	Sce_YHR214C-E	  4e-70
+  0-  7:	Sce_YAR071W	Sce_YHR215W	      0
+  0-  8:	Sce_YAR073W	Sce_YHR216W	 2e-256
+## Alignment 1: score=528.0 e_value=1.3e-26 N=12 Sce_I&Sce_XV minus
+  1-  0:	Sce_YAL062W	Sce_YOR375C	 3e-294
+  1-  1:	Sce_YAL056W	Sce_YOR371C	 7e-166
+  1-  2:	Sce_YAL053W	Sce_YOR365C	 6e-200
+  1-  3:	Sce_YAL051W	Sce_YOR363C	 6e-246
+  1-  4:	Sce_YAL038W	Sce_YOR347C	 2e-262
+  1-  5:	Sce_YAL037W	Sce_YOR342C	  9e-12
+  1-  6:	Sce_YAL034C	Sce_YOR338W	  5e-81
+  1-  7:	Sce_YAL030W	Sce_YOR327C	  7e-48
+  1-  8:	Sce_YAL029C	Sce_YOR326W	      0
+  1-  9:	Sce_YAL028W	Sce_YOR324C	  3e-24
+  1- 10:	Sce_YAL023C	Sce_YOR321W	      0
+  1- 11:	Sce_YAL019W	Sce_YOR304W	  4e-72
+## Alignment 2: score=572.0 e_value=1.2e-29 N=13 Sce_II&Sce_IV plus
+  2-  0:	Sce_YBR001C	Sce_YDR001C	      0
+  2-  1:	Sce_YBR005W	Sce_YDR003W	  8e-50
+  2-  2:	Sce_YBR020W	Sce_YDR009W	 3e-292
+  2-  3:	Sce_YBR031W	Sce_YDR012W	 3e-254
+  2-  4:	Sce_YBR042C	Sce_YDR018C	  2e-93
+  2-  5:	Sce_YBR048W	Sce_YDR025W	 4e-111
+  2-  6:	Sce_YBR049C	Sce_YDR026C	  2e-83
+  2-  7:	Sce_YBR052C	Sce_YDR032C	  1e-73
+  2-  8:	Sce_YBR054W	Sce_YDR033W	 4e-159
+  2-  9:	Sce_YBR066C	Sce_YDR043C	  1e-32
+  2- 10:	Sce_YBR068C	Sce_YDR046C	      0
+  2- 11:	Sce_YBR078W	Sce_YDR055W	 6e-113
+  2- 12:	Sce_YBR082C	Sce_YDR059C	 3e-103
+## Alignment 3: score=643.0 e_value=1.3e-35 N=14 Sce_II&Sce_V minus
+  3-  0:	Sce_YBL107W-A	Sce_YER138W-A	  9e-17
+  3-  1:	Sce_YBL091C-A	Sce_YER120W	  7e-33
+  3-  2:	Sce_YBL089W	Sce_YER119C	 9e-148
+  3-  3:	Sce_YBL087C	Sce_YER117W	  2e-96
+  3-  4:	Sce_YBL085W	Sce_YER114C	 1e-156
+  3-  5:	Sce_YBL079W	Sce_YER105C	      0
+  3-  6:	Sce_YBL075C	Sce_YER103W	      0
+  3-  7:	Sce_YBL072C	Sce_YER102W	 1e-139
+  3-  8:	Sce_YBL069W	Sce_YER101C	 6e-226
+  3-  9:	Sce_YBL068W	Sce_YER099C	 2e-209
+  3- 10:	Sce_YBL067C	Sce_YER098W	 8e-187
+  3- 11:	Sce_YBL061C	Sce_YER096W	  1e-85
+  3- 12:	Sce_YBL056W	Sce_YER089C	 1e-197
+  3- 13:	Sce_YBL054W	Sce_YER088C	  4e-34
+## Alignment 4: score=446.0 e_value=3.7e-21 N=10 Sce_II&Sce_XVI plus
+  4-  0:	Sce_YBR169C	Sce_YPL106C	      0
+  4-  1:	Sce_YBR172C	Sce_YPL105C	  2e-53
+  4-  2:	Sce_YBR177C	Sce_YPL095C	 4e-200
+  4-  3:	Sce_YBR181C	Sce_YPL090C	 5e-160
+  4-  4:	Sce_YBR182C	Sce_YPL089C	  1e-36
+  4-  5:	Sce_YBR183W	Sce_YPL087W	 2e-126
+  4-  6:	Sce_YBR189W	Sce_YPL081W	 2e-127
+  4-  7:	Sce_YBR191W	Sce_YPL079W	 5e-110
+  4-  8:	Sce_YBR197C	Sce_YPL077C	  2e-11
+  4-  9:	Sce_YBR205W	Sce_YPL053C	  1e-79
+## Alignment 5: score=422.0 e_value=6.8e-17 N=9 Sce_III&Sce_IV minus
+  5-  0:	Sce_YCL051W	Sce_YDR528W	  7e-34
+  5-  1:	Sce_YCL048W	Sce_YDR522C	 5e-113
+  5-  2:	Sce_YCL043C	Sce_YDR518W	 3e-133
+  5-  3:	Sce_YCL040W	Sce_YDR516C	 1e-266
+  5-  4:	Sce_YCL037C	Sce_YDR515W	  1e-27
+  5-  5:	Sce_YCL036W	Sce_YDR514C	 5e-103
+  5-  6:	Sce_YCL035C	Sce_YDR513W	  1e-50
+  5-  7:	Sce_YCL025C	Sce_YDR508C	 3e-308
+  5-  8:	Sce_YCL024W	Sce_YDR507C	 2e-241
+## Alignment 6: score=524.0 e_value=1.7e-27 N=12 Sce_III&Sce_XIV plus
+  6-  0:	Sce_YCR037C	Sce_YNR013C	 6e-166
+  6-  1:	Sce_YCR048W	Sce_YNR019W	 5e-184
+  6-  2:	Sce_YCR052W	Sce_YNR023W	  4e-43
+  6-  3:	Sce_YCR067C	Sce_YNR026C	 2e-103
+  6-  4:	Sce_YCR069W	Sce_YNR028W	  4e-44
+  6-  5:	Sce_YCR073C	Sce_YNR031C	      0
+  6-  6:	Sce_YCR073W-A	Sce_YNR034W	 3e-172
+  6-  7:	Sce_YCR091W	Sce_YNR047W	 1e-218
+  6-  8:	Sce_YCR094W	Sce_YNR048W	 2e-162
+  6-  9:	Sce_YCR099C	Sce_YNR065C	  2e-68
+  6- 10:	Sce_YCR100C	Sce_YNR066C	  1e-72
+  6- 11:	Sce_YCR102W-A	Sce_YNR075W	  2e-17
+## Alignment 7: score=338.0 e_value=6.2e-11 N=7 Sce_IV&Sce_IV plus
+  7-  0:	Sce_YDL194W	Sce_YDL138W	 1e-285
+  7-  1:	Sce_YDL192W	Sce_YDL137W	 1e-128
+  7-  2:	Sce_YDL191W	Sce_YDL136W	  2e-73
+  7-  3:	Sce_YDL188C	Sce_YDL134C	 3e-255
+  7-  4:	Sce_YDL182W	Sce_YDL131W	 1e-280
+  7-  5:	Sce_YDL181W	Sce_YDL130W-A	  2e-12
+  7-  6:	Sce_YDL179W	Sce_YDL127W	  2e-79
+## Alignment 8: score=524.0 e_value=4.5e-27 N=12 Sce_IV&Sce_VIII plus
+  8-  0:	Sce_YDR287W	Sce_YHR046C	 1e-106
+  8-  1:	Sce_YDR303C	Sce_YHR056C	  3e-47
+  8-  2:	Sce_YDR304C	Sce_YHR057C	  8e-77
+  8-  3:	Sce_YDR309C	Sce_YHR061C	  2e-21
+  8-  4:	Sce_YDR312W	Sce_YHR066W	 6e-254
+  8-  5:	Sce_YDR326C	Sce_YHR080C	 7e-243
+  8-  6:	Sce_YDR341C	Sce_YHR091C	 2e-260
+  8-  7:	Sce_YDR342C	Sce_YHR092C	      0
+  8-  8:	Sce_YDR348C	Sce_YHR097C	  5e-66
+  8-  9:	Sce_YDR351W	Sce_YHR103W	 2e-191
+  8- 10:	Sce_YDR353W	Sce_YHR106W	 1e-200
+  8- 11:	Sce_YDR358W	Sce_YHR108W	 6e-180
+## Alignment 9: score=298.0 e_value=7.6e-08 N=6 Sce_IV&Sce_X minus
+  9-  0:	Sce_YDL248W	Sce_YJR161C	 2e-270
+  9-  1:	Sce_YDL247W	Sce_YJR160C	      0
+  9-  2:	Sce_YDL246C	Sce_YJR159W	 2e-263
+  9-  3:	Sce_YDL245C	Sce_YJR158W	      0
+  9-  4:	Sce_YDL244W	Sce_YJR156C	 7e-258
+  9-  5:	Sce_YDL243C	Sce_YJR155W	 5e-194
+## Alignment 10: score=396.0 e_value=3.1e-16 N=9 Sce_IV&Sce_XII plus
+ 10-  0:	Sce_YDR107C	Sce_YLR083C	      0
+ 10-  1:	Sce_YDR111C	Sce_YLR089C	 8e-239
+ 10-  2:	Sce_YDR122W	Sce_YLR096W	      0
+ 10-  3:	Sce_YDR125C	Sce_YLR099C	 4e-117
+ 10-  4:	Sce_YDR132C	Sce_YLR108C	 3e-126
+ 10-  5:	Sce_YDR144C	Sce_YLR120C	 2e-173
+ 10-  6:	Sce_YDR146C	Sce_YLR131C	  9e-49
+ 10-  7:	Sce_YDR147W	Sce_YLR133W	 2e-111
+ 10-  8:	Sce_YDR151C	Sce_YLR136C	  6e-35
+## Alignment 11: score=260.0 e_value=6.5e-09 N=6 Sce_IV&Sce_XII minus
+ 11-  0:	Sce_YDR188W	Sce_YLR259C	  4e-12
+ 11-  1:	Sce_YDR200C	Sce_YLR238W	  4e-89
+ 11-  2:	Sce_YDR206W	Sce_YLR233C	  1e-74
+ 11-  3:	Sce_YDR213W	Sce_YLR228C	 3e-192
+ 11-  4:	Sce_YDR222W	Sce_YLR225C	 2e-144
+ 11-  5:	Sce_YDR223W	Sce_YLR223C	  2e-17
+## Alignment 12: score=383.0 e_value=9.9e-14 N=8 Sce_IV&Sce_XIII minus
+ 12-  0:	Sce_YDR436W	Sce_YML016C	 1e-239
+ 12-  1:	Sce_YDR438W	Sce_YML018C	  4e-82
+ 12-  2:	Sce_YDR441C	Sce_YML022W	  3e-74
+ 12-  3:	Sce_YDR447C	Sce_YML024W	  2e-89
+ 12-  4:	Sce_YDR450W	Sce_YML026C	 1e-104
+ 12-  5:	Sce_YDR451C	Sce_YML027W	  1e-54
+ 12-  6:	Sce_YDR453C	Sce_YML028W	 1e-128
+ 12-  7:	Sce_YDR458C	Sce_YML034W	  2e-68
+## Alignment 13: score=272.0 e_value=6.3e-08 N=6 Sce_IV&Sce_XIV plus
+ 13-  0:	Sce_YDL229W	Sce_YNL209W	      0
+ 13-  1:	Sce_YDL226C	Sce_YNL204C	  3e-40
+ 13-  2:	Sce_YDL224C	Sce_YNL197C	  3e-91
+ 13-  3:	Sce_YDL222C	Sce_YNL194C	  2e-90
+ 13-  4:	Sce_YDL214C	Sce_YNL183C	 1e-127
+ 13-  5:	Sce_YDL211C	Sce_YNL176C	  5e-11
+## Alignment 14: score=284.0 e_value=3.4e-09 N=6 Sce_IV&Sce_XV plus
+ 14-  0:	Sce_YDR259C	Sce_YOR028C	  3e-18
+ 14-  1:	Sce_YDR263C	Sce_YOR033C	 6e-146
+ 14-  2:	Sce_YDR264C	Sce_YOR034C	 3e-158
+ 14-  3:	Sce_YDR272W	Sce_YOR040W	 1e-126
+ 14-  4:	Sce_YDR273W	Sce_YOR042W	  2e-12
+ 14-  5:	Sce_YDR277C	Sce_YOR047C	 2e-160
+## Alignment 15: score=257.0 e_value=2.7e-08 N=6 Sce_IV&Sce_XV plus
+ 15-  0:	Sce_YDR368W	Sce_YOR120W	 3e-154
+ 15-  1:	Sce_YDR379W	Sce_YOR127W	 5e-121
+ 15-  2:	Sce_YDR385W	Sce_YOR133W	      0
+ 15-  3:	Sce_YDR389W	Sce_YOR134W	  6e-70
+ 15-  4:	Sce_YDR406W	Sce_YOR153W	      0
+ 15-  5:	Sce_YDR409W	Sce_YOR156C	 6e-110
+## Alignment 16: score=403.0 e_value=5.4e-16 N=9 Sce_IX&Sce_V minus
+ 16-  0:	Sce_YIL074C	Sce_YER081W	 6e-309
+ 16-  1:	Sce_YIL069C	Sce_YER074W	  1e-88
+ 16-  2:	Sce_YIL066C	Sce_YER070W	      0
+ 16-  3:	Sce_YIL057C	Sce_YER067W	  1e-80
+ 16-  4:	Sce_YIL056W	Sce_YER064C	  8e-80
+ 16-  5:	Sce_YIL053W	Sce_YER062C	 1e-175
+ 16-  6:	Sce_YIL050W	Sce_YER059W	  1e-71
+ 16-  7:	Sce_YIL045W	Sce_YER054C	  9e-82
+ 16-  8:	Sce_YIL036W	Sce_YER045C	  4e-44
+## Alignment 17: score=326.0 e_value=4.3e-07 N=7 Sce_IX&Sce_X plus
+ 17-  0:	Sce_YIL177C	Sce_YJL225C	      0
+ 17-  1:	Sce_YIL177W-A	Sce_YJL225W-A	 7e-114
+ 17-  2:	Sce_YIL176C	Sce_YJL223C	  3e-79
+ 17-  3:	Sce_YIL173W	Sce_YJL222W	      0
+ 17-  4:	Sce_YIL172C	Sce_YJL221C	      0
+ 17-  5:	Sce_YIL171W-A	Sce_YJL220W	 4e-117
+ 17-  6:	Sce_YIL156W	Sce_YJL197W	  4e-11
+## Alignment 18: score=601.0 e_value=4.4e-30 N=13 Sce_IX&Sce_XIV plus
+ 18-  0:	Sce_YIL135C	Sce_YNL074C	  9e-21
+ 18-  1:	Sce_YIL133C	Sce_YNL069C	 6e-122
+ 18-  2:	Sce_YIL131C	Sce_YNL068C	 3e-132
+ 18-  3:	Sce_YIL123W	Sce_YNL066W	 2e-176
+ 18-  4:	Sce_YIL121W	Sce_YNL065W	 3e-127
+ 18-  5:	Sce_YIL117C	Sce_YNL058C	  4e-16
+ 18-  6:	Sce_YIL114C	Sce_YNL055C	 3e-100
+ 18-  7:	Sce_YIL113W	Sce_YNL053W	  1e-47
+ 18-  8:	Sce_YIL111W	Sce_YNL052W	  1e-63
+ 18-  9:	Sce_YIL109C	Sce_YNL049C	      0
+ 18- 10:	Sce_YIL105C	Sce_YNL047C	 9e-215
+ 18- 11:	Sce_YIL094C	Sce_YNL037C	  4e-50
+ 18- 12:	Sce_YIL085C	Sce_YNL029C	 1e-198
+## Alignment 19: score=271.0 e_value=9.2e-10 N=6 Sce_V&Sce_X minus
+ 19-  0:	Sce_YEL047C	Sce_YJR051W	 4e-214
+ 19-  1:	Sce_YEL041W	Sce_YJR049C	 1e-169
+ 19-  2:	Sce_YEL039C	Sce_YJR048W	  2e-67
+ 19-  3:	Sce_YEL034W	Sce_YJR047C	 3e-102
+ 19-  4:	Sce_YEL030W	Sce_YJR045C	      0
+ 19-  5:	Sce_YEL022W	Sce_YJR031C	      0
+## Alignment 20: score=303.0 e_value=3.9e-12 N=7 Sce_VII&Sce_VIII plus
+ 20-  0:	Sce_YGR221C	Sce_YHR149C	  4e-49
+ 20-  1:	Sce_YGR238C	Sce_YHR158C	 5e-150
+ 20-  2:	Sce_YGR241C	Sce_YHR161C	 4e-136
+ 20-  3:	Sce_YGR243W	Sce_YHR162W	  6e-66
+ 20-  4:	Sce_YGR248W	Sce_YHR163W	  2e-88
+ 20-  5:	Sce_YGR254W	Sce_YHR174W	 2e-303
+ 20-  6:	Sce_YGR256W	Sce_YHR183W	      0
+## Alignment 21: score=691.0 e_value=1e-40 N=16 Sce_VII&Sce_XII plus
+ 21-  0:	Sce_YGL009C	Sce_YLR304C	  6e-35
+ 21-  1:	Sce_YGR004W	Sce_YLR324W	 3e-134
+ 21-  2:	Sce_YGR008C	Sce_YLR327C	  1e-37
+ 21-  3:	Sce_YGR010W	Sce_YLR328W	 1e-216
+ 21-  4:	Sce_YGR023W	Sce_YLR332W	  5e-47
+ 21-  5:	Sce_YGR027C	Sce_YLR333C	  3e-59
+ 21-  6:	Sce_YGR032W	Sce_YLR342W	      0
+ 21-  7:	Sce_YGR034W	Sce_YLR344W	  3e-83
+ 21-  8:	Sce_YGR038W	Sce_YLR350W	 3e-105
+ 21-  9:	Sce_YGR041W	Sce_YLR353W	  1e-27
+ 21- 10:	Sce_YGR043C	Sce_YLR354C	 8e-162
+ 21- 11:	Sce_YGR049W	Sce_YLR356W	  3e-18
+ 21- 12:	Sce_YGR056W	Sce_YLR357W	 2e-273
+ 21- 13:	Sce_YGR070W	Sce_YLR371W	      0
+ 21- 14:	Sce_YGR071C	Sce_YLR373C	  1e-79
+ 21- 15:	Sce_YGR094W	Sce_YLR382C	  5e-21
+## Alignment 22: score=590.0 e_value=1.7e-29 N=13 Sce_VII&Sce_XVI plus
+ 22-  0:	Sce_YGR085C	Sce_YPR102C	 3e-124
+ 22-  1:	Sce_YGR092W	Sce_YPR111W	 4e-312
+ 22-  2:	Sce_YGR097W	Sce_YPR115W	 1e-207
+ 22-  3:	Sce_YGR108W	Sce_YPR119W	 1e-175
+ 22-  4:	Sce_YGR118W	Sce_YPR132W	 7e-102
+ 22-  5:	Sce_YGR121C	Sce_YPR138C	 3e-288
+ 22-  6:	Sce_YGR124W	Sce_YPR145W	      0
+ 22-  7:	Sce_YGR131W	Sce_YPR149W	  3e-72
+ 22-  8:	Sce_YGR136W	Sce_YPR154W	  1e-55
+ 22-  9:	Sce_YGR138C	Sce_YPR156C	      0
+ 22- 10:	Sce_YGR141W	Sce_YPR157W	 3e-210
+ 22- 11:	Sce_YGR142W	Sce_YPR158W	  3e-18
+ 22- 12:	Sce_YGR143W	Sce_YPR159W	      0
+## Alignment 23: score=315.0 e_value=1.8e-10 N=7 Sce_VII&Sce_XVI minus
+ 23-  0:	Sce_YGL096W	Sce_YPL177C	  8e-27
+ 23-  1:	Sce_YGL089C	Sce_YPL187W	  3e-34
+ 23-  2:	Sce_YGL084C	Sce_YPL189W	 2e-230
+ 23-  3:	Sce_YGL082W	Sce_YPL191C	  6e-92
+ 23-  4:	Sce_YGL076C	Sce_YPL198W	 1e-164
+ 23-  5:	Sce_YGL071W	Sce_YPL202C	  1e-54
+ 23-  6:	Sce_YGL063W	Sce_YPL212C	  1e-88
+## Alignment 24: score=398.0 e_value=1.5e-20 N=10 Sce_VIII&Sce_XIV minus
+ 24-  0:	Sce_YHR088W	Sce_YNL075W	  2e-26
+ 24-  1:	Sce_YHR090C	Sce_YNL097C	  9e-19
+ 24-  2:	Sce_YHR115C	Sce_YNL116W	 5e-148
+ 24-  3:	Sce_YHR117W	Sce_YNL121C	 9e-183
+ 24-  4:	Sce_YHR123W	Sce_YNL130C	 7e-159
+ 24-  5:	Sce_YHR131C	Sce_YNL144C	  6e-82
+ 24-  6:	Sce_YHR135C	Sce_YNL154C	 6e-228
+ 24-  7:	Sce_YHR139C	Sce_YNL160W	  4e-79
+ 24-  8:	Sce_YHR141C	Sce_YNL162W	  1e-73
+ 24-  9:	Sce_YHR146W	Sce_YNL173C	  9e-30
+## Alignment 25: score=788.0 e_value=1.5e-44 N=17 Sce_X&Sce_XI minus
+ 25-  0:	Sce_YJL139C	Sce_YKR061W	 9e-198
+ 25-  1:	Sce_YJL138C	Sce_YKR059W	 4e-280
+ 25-  2:	Sce_YJL137C	Sce_YKR058W	  6e-94
+ 25-  3:	Sce_YJL136C	Sce_YKR057W	  3e-61
+ 25-  4:	Sce_YJL134W	Sce_YKR053C	 2e-156
+ 25-  5:	Sce_YJL133W	Sce_YKR052C	 3e-168
+ 25-  6:	Sce_YJL129C	Sce_YKR050W	 5e-237
+ 25-  7:	Sce_YJL116C	Sce_YKR042W	 9e-146
+ 25-  8:	Sce_YJL112W	Sce_YKR036C	  9e-86
+ 25-  9:	Sce_YJL110C	Sce_YKR034W	  2e-25
+ 25- 10:	Sce_YJL105W	Sce_YKR029C	  2e-75
+ 25- 11:	Sce_YJL098W	Sce_YKR028W	 2e-237
+ 25- 12:	Sce_YJL084C	Sce_YKR021W	 2e-179
+ 25- 13:	Sce_YJL083W	Sce_YKR019C	  2e-59
+ 25- 14:	Sce_YJL082W	Sce_YKR018C	      0
+ 25- 15:	Sce_YJL079C	Sce_YKR013W	  6e-77
+ 25- 16:	Sce_YJL076W	Sce_YKR010C	  1e-23
+## Alignment 26: score=448.0 e_value=1e-20 N=10 Sce_XI&Sce_XIII minus
+ 26-  0:	Sce_YKL141W	Sce_YMR118C	  3e-53
+ 26-  1:	Sce_YKL133C	Sce_YMR115W	  9e-75
+ 26-  2:	Sce_YKL132C	Sce_YMR113W	 5e-118
+ 26-  3:	Sce_YKL129C	Sce_YMR109W	      0
+ 26-  4:	Sce_YKL127W	Sce_YMR105C	      0
+ 26-  5:	Sce_YKL126W	Sce_YMR104C	      0
+ 26-  6:	Sce_YKL121W	Sce_YMR102C	 2e-175
+ 26-  7:	Sce_YKL105C	Sce_YMR086W	  2e-16
+ 26-  8:	Sce_YKL104C	Sce_YMR084W	 4e-104
+ 26-  9:	Sce_YKL091C	Sce_YMR079W	 3e-142
+## Alignment 27: score=263.0 e_value=6.9e-08 N=6 Sce_XI&Sce_XIII minus
+ 27-  0:	Sce_YKL072W	Sce_YMR053C	 6e-232
+ 27-  1:	Sce_YKL068W	Sce_YMR047C	  2e-58
+ 27-  2:	Sce_YKL065C	Sce_YMR040W	  2e-41
+ 27-  3:	Sce_YKL062W	Sce_YMR037C	  5e-28
+ 27-  4:	Sce_YKL050C	Sce_YMR031C	  8e-67
+ 27-  5:	Sce_YKL043W	Sce_YMR016C	  9e-57
+## Alignment 28: score=262.0 e_value=6.3e-08 N=6 Sce_XI&Sce_XV plus
+ 28-  0:	Sce_YKR059W	Sce_YOR046C	  7e-85
+ 28-  1:	Sce_YKR072C	Sce_YOR054C	 1e-118
+ 28-  2:	Sce_YKR075C	Sce_YOR062C	  5e-61
+ 28-  3:	Sce_YKR078W	Sce_YOR069W	  1e-29
+ 28-  4:	Sce_YKR084C	Sce_YOR076C	  3e-26
+ 28-  5:	Sce_YKR089C	Sce_YOR081C	 9e-234
+## Alignment 29: score=333.0 e_value=8.1e-12 N=7 Sce_XII&Sce_XIII minus
+ 29-  0:	Sce_YLR432W	Sce_YML056C	      0
+ 29-  1:	Sce_YLR433C	Sce_YML057W	 1e-262
+ 29-  2:	Sce_YLR441C	Sce_YML063W	 1e-163
+ 29-  3:	Sce_YLR442C	Sce_YML065W	  1e-88
+ 29-  4:	Sce_YLR448W	Sce_YML073C	  7e-92
+ 29-  5:	Sce_YLR449W	Sce_YML074C	  3e-92
+ 29-  6:	Sce_YLR450W	Sce_YML075C	      0
+## Alignment 30: score=413.0 e_value=1.5e-15 N=9 Sce_XII&Sce_XV plus
+ 30-  0:	Sce_YLR264W	Sce_YOR167C	  4e-41
+ 30-  1:	Sce_YLR266C	Sce_YOR172W	  6e-56
+ 30-  2:	Sce_YLR270W	Sce_YOR173W	 2e-182
+ 30-  3:	Sce_YLR273C	Sce_YOR178C	  6e-42
+ 30-  4:	Sce_YLR277C	Sce_YOR179C	  8e-31
+ 30-  5:	Sce_YLR284C	Sce_YOR180C	  8e-82
+ 30-  6:	Sce_YLR287C-A	Sce_YOR182C	  6e-40
+ 30-  7:	Sce_YLR293C	Sce_YOR185C	 3e-156
+ 30-  8:	Sce_YLR300W	Sce_YOR190W	 8e-228
+## Alignment 31: score=278.0 e_value=6e-08 N=6 Sce_XIII&Sce_XIII minus
+ 31-  0:	Sce_YML118W	Sce_YMR285C	 3e-130
+ 31-  1:	Sce_YML116W	Sce_YMR279C	 5e-226
+ 31-  2:	Sce_YML111W	Sce_YMR275C	 7e-304
+ 31-  3:	Sce_YML109W	Sce_YMR273C	  7e-87
+ 31-  4:	Sce_YML106W	Sce_YMR271C	 8e-118
+ 31-  5:	Sce_YML100W	Sce_YMR261C	      0
+## Alignment 32: score=311.0 e_value=2.6e-11 N=7 Sce_XIII&Sce_XV plus
+ 32-  0:	Sce_YMR222C	Sce_YOR280C	  3e-67
+ 32-  1:	Sce_YMR230W	Sce_YOR293W	  1e-72
+ 32-  2:	Sce_YMR233W	Sce_YOR295W	  1e-40
+ 32-  3:	Sce_YMR237W	Sce_YOR299W	 1e-291
+ 32-  4:	Sce_YMR242C	Sce_YOR312C	 1e-122
+ 32-  5:	Sce_YMR243C	Sce_YOR316C	 6e-157
+ 32-  6:	Sce_YMR246W	Sce_YOR317W	      0
+## Alignment 33: score=472.0 e_value=2e-20 N=10 Sce_XIII&Sce_XVI minus
+ 33-  0:	Sce_YMR177W	Sce_YPL224C	 1e-143
+ 33-  1:	Sce_YMR180C	Sce_YPL228W	  1e-15
+ 33-  2:	Sce_YMR181C	Sce_YPL229W	  3e-13
+ 33-  3:	Sce_YMR182C	Sce_YPL230W	  1e-26
+ 33-  4:	Sce_YMR183C	Sce_YPL232W	 7e-135
+ 33-  5:	Sce_YMR186W	Sce_YPL240C	      0
+ 33-  6:	Sce_YMR192W	Sce_YPL249C	  8e-85
+ 33-  7:	Sce_YMR194W	Sce_YPL249C-A	  1e-62
+ 33-  8:	Sce_YMR198W	Sce_YPL253C	  3e-23
+ 33-  9:	Sce_YMR199W	Sce_YPL256C	 6e-198
+## Alignment 34: score=326.0 e_value=9.8e-12 N=7 Sce_XIV&Sce_XV plus
+ 34-  0:	Sce_YNL307C	Sce_YOL128C	 5e-105
+ 34-  1:	Sce_YNL302C	Sce_YOL121C	 7e-100
+ 34-  2:	Sce_YNL301C	Sce_YOL120C	 5e-129
+ 34-  3:	Sce_YNL299W	Sce_YOL115W	 2e-195
+ 34-  4:	Sce_YNL298W	Sce_YOL113W	 2e-202
+ 34-  5:	Sce_YNL293W	Sce_YOL112W	 3e-152
+ 34-  6:	Sce_YNL283C	Sce_YOL105C	  4e-33
+## Alignment 35: score=378.0 e_value=1.5e-13 N=8 Sce_XIV&Sce_XV minus
+ 35-  0:	Sce_YNL108C	Sce_YOR110W	 4e-116
+ 35-  1:	Sce_YNL106C	Sce_YOR109W	      0
+ 35-  2:	Sce_YNL104C	Sce_YOR108W	      0
+ 35-  3:	Sce_YNL098C	Sce_YOR101W	 1e-104
+ 35-  4:	Sce_YNL096C	Sce_YOR096W	 4e-116
+ 35-  5:	Sce_YNL095C	Sce_YOR092W	 1e-246
+ 35-  6:	Sce_YNL093W	Sce_YOR089C	  6e-75
+ 35-  7:	Sce_YNL087W	Sce_YOR086C	      0
+## Alignment 36: score=471.0 e_value=1.8e-20 N=10 Sce_XV&Sce_XVI minus
+ 36-  0:	Sce_YOR204W	Sce_YPL119C	 2e-280
+ 36-  1:	Sce_YOR213C	Sce_YPL129W	  9e-32
+ 36-  2:	Sce_YOR222W	Sce_YPL134C	 3e-140
+ 36-  3:	Sce_YOR226C	Sce_YPL135W	  2e-81
+ 36-  4:	Sce_YOR227W	Sce_YPL137C	 4e-270
+ 36-  5:	Sce_YOR229W	Sce_YPL139C	  2e-99
+ 36-  6:	Sce_YOR231W	Sce_YPL140C	 1e-194
+ 36-  7:	Sce_YOR233W	Sce_YPL141C	 2e-171
+ 36-  8:	Sce_YOR234C	Sce_YPL143W	  2e-74
+ 36-  9:	Sce_YOR237W	Sce_YPL145C	 1e-221
+## Alignment 37: score=297.0 e_value=5.9e-08 N=6 Sce_XV&Sce_XVI minus
+ 37-  0:	Sce_YOR389W	Sce_YPL278C	  1e-69
+ 37-  1:	Sce_YOR390W	Sce_YPL279C	 2e-277
+ 37-  2:	Sce_YOR391C	Sce_YPL280W	 8e-176
+ 37-  3:	Sce_YOR393W	Sce_YPL281C	      0
+ 37-  4:	Sce_YOR394W	Sce_YPL282C	 3e-104
+ 37-  5:	Sce_YOR396W	Sce_YPL283C	      0

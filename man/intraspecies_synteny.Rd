@@ -6,8 +6,8 @@
 \usage{
 intraspecies_synteny(
   blast_intra = NULL,
+  annotation = NULL,
   intra_dir = file.path(tempdir(), "intra"),
-  annot_list = NULL,
   anchors = 5,
   max_gaps = 25,
   is_pairwise = TRUE,
@@ -16,12 +16,14 @@ intraspecies_synteny(
 )
 }
 \arguments{
-\item{blast_intra}{A list of BLAST data frames for intraspecies comparisons.}
+\item{blast_intra}{A list of BLAST/DIAMOND data frames for
+intraspecies comparisons as returned by \code{run_diamond()}.}
 
-\item{intra_dir}{Output directory.}
-
-\item{annot_list}{A processed GRangesList or CompressedGRangesList object
+\item{annotation}{A processed GRangesList or CompressedGRangesList object
 as returned by \code{process_input()}.}
+
+\item{intra_dir}{Path to output directory where .collinearity files will
+be stored.}
 
 \item{anchors}{Numeric indicating the minimum required number of genes
 to call a syntenic block. Default: 5.}
@@ -45,11 +47,13 @@ Paths to .collinearity files.
 Detect intraspecies synteny
 }
 \examples{
-data(blast_list)
-data(annotation)
-blast_intra <- blast_list[1]
-annot <- as.data.frame(annotation[[1]])
-annot <- annot[, c("seqnames", "gene_id", "start", "end")]
-annot_list <- list(Olucimarinus = annot)
-intrasyn <- intraspecies_synteny(blast_intra, annot_list = annot_list)
+# Load data
+data(scerevisiae_annot)
+data(scerevisiae_diamond)
+
+# Detect intragenome synteny
+intra_syn <- intraspecies_synteny(
+    scerevisiae_diamond, scerevisiae_annot
+)
+
 }

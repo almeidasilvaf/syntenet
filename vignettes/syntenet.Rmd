@@ -26,7 +26,7 @@ bibliography: vignette_bibliography.bib
 vignette: >
   %\VignetteIndexEntry{Inference and Analysis of Synteny Networks}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}  ---
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r setup, include = FALSE}
@@ -65,7 +65,7 @@ clusters and taxon-specific ones (e.g., family- and order-specific clusters);
 
 - **Microsynteny-based phylogeny reconstruction** with maximum likelihood, 
 which can be achieved by inferring a phylogeny from a binary matrix of 
-phylogenomic profiles with IQTREE2.
+phylogenomic profiles with IQ-TREE.
 
 
 # Installation
@@ -185,6 +185,12 @@ this may not always stand true because of non-protein-coding genes.
 
 3. For each species, sequence names (i.e., `names(seq[[x]])`,
 equivalent to FASTA headers) match gene names in `annotation`.
+By default, `r BiocStyle::Biocpkg("syntenet")` looks for gene IDs
+in a column named "gene_id" in the GRanges objects (default field
+in GFF3 files). If your gene IDs are in a different column (e.g., "Name"),
+you can specify it in the *gene_field* parameter of `check_input()`
+and `process_input()`.
+
 
 Let's check if the example data sets satisfy these 3 criteria:
 
@@ -242,10 +248,10 @@ which runs DIAMOND [@buchfink2021sensitive] from the R session and
 automatically parses its output to a list of data frames [^1].
 
 [^1]: **Alternative:** if you want to use a different program for similarity
-searches, you can run it on the command line, save the output in tabular
-format, and read the tabular output as a data frame (e.g., with the base
-R function `read.table`). 
-
+searches, you can run it on the command line, save the output in
+a DIAMOND/BLAST-like tabular format, and read the output files
+as a list of data frames with the function `read_diamond()` (see the FAQ 
+for details).
 
 Let's demonstrate how `run_diamond()` works. 
 Needless to say, you need to have DIAMOND installed in your machine 
@@ -301,7 +307,21 @@ head(net)
 
 In a synteny network, each row of the edge list represents an anchor pair. 
 In the edge list above, for example, 
-the genes `r net[1,1]` and `r net[1,2]` are in the same syntenic block.
+the genes `r net[1,1]` and `r net[1,2]` are an anchor pair (i.e., duplicates
+derived from a large-scale duplication event).
+
+Note that gene IDs are preceded by IDs created with `process_input()`.
+Under the hood, `process_input()` uses the function `create_species_id_table()`
+to create unique IDs from the names of the **seq** and **annotation** lists.
+To obtain a data frame of all IDs and their corresponding species, you can
+use the following code:
+
+```{r create_species_id_table}
+# Get a 2-column data frame of species IDs and names
+id_table <- create_species_id_table(names(proteomes))
+
+id_table
+```
 
 # Phylogenomic profiling
 
@@ -512,18 +532,18 @@ bt_mat[1:5, 1:5]
 ```
 
 Now, you can use this transposed binary matrix as input to 
-IQTREE2 [@minh2020iq] to infer a phylogeny. To do so, you can use the function
-`infer_microsynteny_phylogeny()`, which allows you to run IQTREE2 from 
-an R session [^4]. You need to have IQTREE2 installed in your machine and in 
-your PATH to run this function. You can check if you have IQTREE2 installed 
+IQ-TREE [@minh2020iq] to infer a phylogeny. To do so, you can use the function
+`infer_microsynteny_phylogeny()`, which allows you to run IQ-TREE from 
+an R session [^4]. You need to have IQ-TREE installed in your machine and in 
+your PATH to run this function. You can check if you have IQ-TREE installed 
 with `iqtree_is_installed()`.
 
 [^4]: **Alternative:** if you want to use a different program rather
-than IQTREE2, you can use the function `profiles2phylip()` to write the 
+than IQ-TREE, you can use the function `profiles2phylip()` to write the 
 transposed binary matrix to a PHYLIP file and run your favorite program
 on the command line. However, when inferring a phylogeny from phylogenomic
 profiles, you need to make sure that the program you are using supports 
-substitution models for binary data. In IQTREE2, for instance, using
+substitution models for binary data. In IQ-TREE, for instance, using
 binary, morphological models requires passing parameters `-st MORPH`.
 
 
@@ -551,7 +571,7 @@ if(iqtree_is_installed()) {
 ```
 
 The output of `infer_microsynteny_phylogeny()` is a character vector with paths
-to the output files from IQTREE2. Usually, you are interested in the file
+to the output files from IQ-TREE. Usually, you are interested in the file
 ending in *.treefile*. This is the species tree in Newick format, and it can
 be visualized with your favorite tree viewer. We strongly recommend using
 the `read.tree()` function from the Bioconductor package
@@ -571,11 +591,85 @@ ggtree(angiosperm_phylogeny) +
     xlim(0, 0.3)
 ```
 
+## __syntenet__ as a synteny detection tool
+
+In some cases, users do not want to infer a synteny network, but only want to
+identify syntenic regions within a single genome or between two genomes. This
+can be accomplished with the functions `intraspecies_synteny()` and 
+`interspecies_synteny()`. In fact, these functions are used under the hood
+by `infer_syntenet()` to infer a network. 
+
+To detect synteny, you will need:
+
+1. A list of DIAMOND/BLAST data frames as returned by `run_diamond()`. 
+For `intraspecies_synteny()`, only intraspecies comparisons must be
+included; for `interspecies_synteny()`, only interspecies comparisons
+must be included.
+2. A `GRangesList` object containing the processed annotation for your 
+species of interest, as returned by `process_input()`.
+
+The output of `intraspecies_synteny()` and `interspecies_synteny()` is 
+the path to the *.collinearity* files generated by MCScanX [@wang2012mcscanx], 
+which can be read and parsed with the `parse_collinearity()` function.
+
+
+To demonstrate the usage of `intraspecies_synteny()`, let's identify syntenic
+regions in the genome of *Saccharomyces cerevisiae*. The processed annotation
+and DIAMOND output are stored in the example data sets `scerevisiae_annot`
+and `scerevisiae_diamond`.
+
+```{r}
+# Load data
+data(scerevisiae_annot)
+data(scerevisiae_diamond)
+
+# Take a look at the data
+head(scerevisiae_annot) 
+
+names(scerevisiae_diamond)
+head(scerevisiae_diamond$Scerevisiae_Scerevisiae)
+
+# Detect intragenome synteny
+intra_syn <- intraspecies_synteny(
+    scerevisiae_diamond, scerevisiae_annot
+)
+
+intra_syn # see where the .collinearity file is
+
+# Read .collinearity file
+scerevisiae_syn <- parse_collinearity(intra_syn)
+head(scerevisiae_syn)
+```
+
+To demonstrate the usage of `interspecies_synteny()`, let's detect syntenic
+regions between the genomes of *Ostreococcus lucimarinus* and 
+*Ostreococcus sp RCC809*. For these genomes, we already have processed 
+annotation and the DIAMOND list in the objects `pdata` and `blast_list`,
+obtained in previous sections of this vignette.
+
+```{r}
+# Keep only interspecies DIAMOND comparisons
+names(blast_list)
+diamond_inter <- blast_list[c(2, 3)]
+
+# Double-check if we have processed annotation for these 2 species
+names(pdata$annotation)
+
+# Detect interspecies synteny
+intersyn <- interspecies_synteny(diamond_inter, pdata$annotation)
+
+intersyn # see where the .collinearity file is
+
+# Read .collinearity file
+ostreoccocus_syn <- parse_collinearity(intersyn)
+head(ostreoccocus_syn)
+```
+
 # FAQ {.unnumbered}
 
 ## How do I execute an external dependency that is not in my PATH? {.unnumbered}
 
-If you have DIAMOND and/or IQTREE2 installed, but in a directory that is not in 
+If you have DIAMOND and/or IQ-TREE installed, but in a directory that is not in 
 your PATH, you can add this given directory to your PATH with the function
 `Sys.setenv()`. 
 
@@ -595,6 +689,58 @@ Note that your R PATH is not the same as your system's PATH. Thus, even if you
 add the directory `/home/username/bioinfo_tools` to your system's path (e.g.,
 by editing your ~/.bashrc file if you are on Linux), you would still need to
 update your R PATH.
+
+## Can I run the DIAMOND searches on the command line and import the results? {.unnumbered}
+
+Yes. This case is quite common for users who have a large amount
+of data and want to execute DIAMOND or any similarity search program 
+in an HPC cluster (by submitting a job with `qsub` to execute a Bash script). 
+
+To do that, you will have to follow the 3 steps below:
+
+1. Export the processed sequences (as returned by `process_input()`) with the function `export_sequences()`. This function will write the sequences
+to FASTA files in the directory specified in the **outdir**
+parameter.
+
+2. Navigate (i.e., `cd`) to the directory specified in **outdir**, where
+the FASTA files are, and execute all-vs-all similarity searches. The
+output files must be named *<species>_<species>.tsv*, where <species>
+indicates the basename of the FASTA files (e.g., "speciesA" for a FASTA
+file named *speciesA.fasta*). For DIAMOND, you can use the following 
+code (with adaptations, if you prefer):
+
+```{bash eval=FALSE}
+#!/bin/bash
+
+# Create output directories `dbs` and `results`
+mkdir -p dbs
+mkdir -p results
+
+# 1. Make dbs for each species
+for seqfile in *.fasta
+do
+    dbfile="dbs/$(basename "$seqfile" .fasta)"
+    diamond makedb --in "$seqfile" -d "$dbfile" --quiet
+done
+
+# 2. Perform all-vs-all pairwise similarity searches
+species=( $(basename -s .fasta *.fasta) )
+for (( i=0; i<${#species[@]}; i++ ))
+do
+    query="${species[$i]}.fasta"
+    for (( j=0; j<${#species[@]}; j++ ))
+    do
+        db="dbs/${species[$j]}"
+        outfile="results/${species[$i]}_${species[$j]}.tsv"
+        diamond blastp -q "$query" -d "$db" -o "$outfile" \
+          --max-hsps 1 -k 5 --quiet 
+    done
+done
+```
+
+3. Read the output of the similarity searches into a list of 
+data frames with the `read_diamond()` function. As input, `read_diamond()`
+takes the path to the directory containing the DIAMOND/BLAST output files.
 
 # Session information {.unnumbered}
 

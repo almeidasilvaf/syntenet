@@ -9,6 +9,8 @@
 #' GRanges with the annotation for the sequences in \strong{seq}. This list must
 #' have names (not NULL), and names of each list element must match the names
 #' of list elements in \strong{seq}.
+#' @param gene_field Character, name of the column in the GRanges objects
+#' that contains gene IDs. Default: "gene_id".
 #'
 #' @details 
 #' This function checks the input data for 3 required conditions:
@@ -33,13 +35,13 @@
 #' data(annotation) 
 #' data(proteomes)
 #' check_input(proteomes, annotation)
-check_input <- function(seq = NULL, annotation = NULL) {
+check_input <- function(seq = NULL, annotation = NULL, gene_field = "gene_id") {
     
     valid <- valid_seq(seq) & valid_annot(annotation)
 
     check1 <- check_list_names(seq, annotation)
     check2 <- check_ngenes(seq, annotation)
-    check3 <- check_gene_names(seq, annotation)
+    check3 <- check_gene_names(seq, annotation, gene_field = gene_field)
     
     return(TRUE)
 }
@@ -55,6 +57,8 @@ check_input <- function(seq = NULL, annotation = NULL) {
 #' GRanges with the annotation for the sequences in \strong{seq}. This list must
 #' have names (not NULL), and names of each list element must match the names
 #' of list elements in \strong{seq}.
+#' @param gene_field Character, name of the column in the GRanges objects
+#' that contains gene IDs. Default: "gene_id".
 #'
 #' @return A list of 2 elements:
 #' \describe{
@@ -95,24 +99,30 @@ check_input <- function(seq = NULL, annotation = NULL) {
 #' data(proteomes)
 #' seq <- proteomes
 #' clean_data <- process_input(seq, annotation)
-process_input <- function(seq = NULL, annotation = NULL) {
+process_input <- function(seq = NULL, annotation = NULL, 
+                          gene_field = "gene_id") {
     
-    check <- check_input(seq, annotation)
-    ab_len <- species_id_length(seq)
-    s_abbrev <- substr(names(seq), 1, ab_len)
-    a_abbrev <- substr(names(annotation), 1, ab_len)
+    check <- check_input(seq, annotation, gene_field = gene_field)
+    
+    seq_ids <- create_species_id_table(names(seq))$species_id
+    annot_ids <- create_species_id_table(names(annotation))$species_id
+    
     # Clean 'seq' object first
     clean_seqs <- lapply(seq_along(seq), function(x) {
         sequence <- seq[[x]]
         gene_names <- names(sequence)
-        # 1. Remove everything after space
+        
+        ## 1. Remove everything after space
         gene_names <- gsub(" .*", "", gene_names)
-        # 2. Remove period + number at the end of gene IDs
+        
+        ## 2. Remove period + number at the end of gene IDs
         gene_names <- gsub("\\.[0-9]$", "", gene_names)
-        # 3. Add unique identifier in front of gene names
-        gene_names <- paste(s_abbrev[x], gene_names, sep = "_")
+        
+        ## 3. Add unique identifier in front of gene names
+        gene_names <- paste(seq_ids[x], gene_names, sep = "_")
         names(sequence) <- gene_names
-        # 4. Remove "*" as stop codon (if any)
+        
+        ## 4. Remove "*" as stop codon (if any)
         last_aa <- sequence[[1]][Biostrings::width(sequence)[1]]
         if(identical(toString(last_aa), "*")) {
             sequence <- Biostrings::subseq(sequence, 1, width(sequence)-1)
@@ -120,17 +130,16 @@ process_input <- function(seq = NULL, annotation = NULL) {
         return(sequence)
     })
     names(clean_seqs) <- names(seq)
+    
     # Clean annotation object
     clean_annotation <- lapply(seq_along(annotation), function(x) {
-        # 5. Add unique identifier in front of chromosome and gene names
+        
+        ## 5. Add unique identifier in front of chromosome and gene names
         annot_df <- annotation[[x]][annotation[[x]]$type == "gene"]
         annot_df <- as.data.frame(annot_df)
-        annot_df$seqnames <- paste(a_abbrev[x], annot_df$seqnames, sep = "_")
-        if("gene_id" %in% colnames(annot_df)) {
-            annot_df$gene <- paste(a_abbrev[x], annot_df$gene_id, sep = "_")
-        } else {
-            annot_df$gene <- paste(a_abbrev[x], annot_df$Name, sep = "_")
-        }
+        annot_df$seqnames <- paste(annot_ids[x], annot_df$seqnames, sep = "_")
+        annot_df$gene <- paste(annot_ids[x], annot_df[[gene_field]], sep = "_")
+
         # 6. Keep only seqnames, ranges, and gene ID
         annot_df <- annot_df[, c("seqnames", "start", "end", "gene")]
         return(makeGRangesFromDataFrame(annot_df, keep.extra.columns = TRUE))

@@ -84,6 +84,8 @@ check_ngenes <- function(seq = NULL, annotation = NULL) {
 #' @param seq A list of AAStringSet objects.
 #' @param annotation A GRangesList or CompressedGRangesList object 
 #' with the annotation for the sequences in \strong{seq}.
+#' @param gene_field Character, name of the column in the GRanges objects
+#' that contains gene IDs. Default: "gene_id".
 #'
 #' @return TRUE if the objects pass the check.
 #' @noRd 
@@ -93,18 +95,18 @@ check_ngenes <- function(seq = NULL, annotation = NULL) {
 #' data(proteomes)
 #' seq <- proteomes
 #' check_gene_names(seq, annotation)
-check_gene_names <- function(seq = NULL, annotation = NULL) {
+check_gene_names <- function(seq = NULL, annotation = NULL, 
+                             gene_field = "gene_id") {
     
     seq_names <- lapply(seq, names)
     gene_names <- lapply(annotation, function(x) {
-        cols <- names(GenomicRanges::mcols(x))
-        if("gene_id" %in% cols) {
-            nam <- unique(x$gene_id)
-        } else if("Name" %in% cols) {
-            nam <- unique(x$Name)
-        } else {
-            stop("Could not find 'gene_id' or 'Name' column in GRanges.")
+        
+        ranges_cols <- GenomicRanges::mcols(x)
+        if(!gene_field %in% names(ranges_cols)) {
+            stop("Could not find column '", gene_field, "' in GRanges.")
         }
+        nam <- unique(ranges_cols[[gene_field]])
+        
         return(nam)
     })
     
@@ -126,28 +128,64 @@ check_gene_names <- function(seq = NULL, annotation = NULL) {
     return(TRUE)
 }
 
-
-#' Pick best length for unique species identifiers
-#'
-#' @param input_list A list of AAStringSet objects or a 
-#' GRangesList/CompressedGRangesList object.
+#' Create a data frame of species IDs (3-5-character abbreviations)
 #' 
-#' @return Numeric scalar with the length of the 
-#' species ID (either 3, 4, or 5).
-#' @noRd
-species_id_length <- function(input_list = NULL) {
+#' @param species_names A character vector of names extracted from 
+#' the \strong{seq} or \strong{annotation} lists, which can be extracted with
+#' \code{names(seq)} or \code{names(annotation)}.
+#' 
+#' @return A 2-column data frame with the following variables:
+#' \describe{
+#'   \item{species_id}{Character, species ID consisting of 3-5 characters.}
+#'   \item{species_name}{Character, original names passed as input.}
+#' }
+#' @export
+#' @importFrom stats ave
+#' @rdname create_species_id_table
+#' @examples
+#' # Load 'seq' list (list of AAStringSet objects)
+#' data(proteomes)
+#' 
+#' # Create ID table
+#' create_species_id_table(names(proteomes))
+create_species_id_table <- function(species_names) {
     
-    nam <- names(input_list)
-    nam <- gsub(" ", "_", nam)
+    # Replace space with 'X'
+    list_names <- gsub(" ", "X", species_names)
     
-    for(n in seq(3, 5)) { 
-        abbrev <- lapply(nam, substr, 1, n)
-        count <- table(unlist(abbrev))
+    # Get the minimum number of characters possible
+    for(n in seq(3, 6)) { 
+        abbrev <- substr(list_names, 1, n)
+        count <- table(abbrev)
         if (!any(count > 1)) break
     }
-    return(n)
+    
+    # Create a data frame of species IDs and names
+    abbrev_df <- data.frame(
+        species_id = abbrev,
+        species_name = species_names
+    )
+    
+    # If there are duplicated names with 5 characters, append LETTER to the end
+    if(n > 5) {
+        abbrev <- substr(list_names, 1, 5)
+        abbrev_df <- data.frame(
+            species_name = species_names,
+            species_id = abbrev,
+            count = as.numeric(ave(
+                as.character(abbrev), abbrev, FUN = seq_along
+            ))
+        )
+        abbrev_df$species_id <- ifelse(
+            abbrev_df$count > 1, 
+            paste0(substr(abbrev_df$species_id, 1, 4), LETTERS[abbrev_df$count]),
+            abbrev_df$species_id
+        )
+        abbrev_df <- abbrev_df[, c("species_id", "species_name")]
+    }
+    
+    return(abbrev_df)
 }
-
 
 #' Wrapper to check if command is found in PATH
 #'

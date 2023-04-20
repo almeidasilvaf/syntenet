@@ -6,7 +6,7 @@
 \usage{
 interspecies_synteny(
   blast_inter = NULL,
-  annot_list = NULL,
+  annotation = NULL,
   inter_dir = file.path(tempdir(), "inter"),
   anchors = 5,
   max_gaps = 25,
@@ -16,12 +16,14 @@ interspecies_synteny(
 )
 }
 \arguments{
-\item{blast_inter}{A list of BLAST tables for interspecies comparisons.}
+\item{blast_inter}{A list of BLAST/DIAMOND data frames for
+interspecies comparisons as returned by \code{run_diamond()}.}
 
-\item{annot_list}{A processed GRangesList or CompressedGRangesList object
+\item{annotation}{A processed GRangesList or CompressedGRangesList object
 as returned by \code{process_input()}.}
 
-\item{inter_dir}{Output directory.}
+\item{inter_dir}{Path to output directory where .collinearity files will
+be stored.}
 
 \item{anchors}{Numeric indicating the minimum required number of genes
 to call a syntenic block. Default: 5.}
@@ -45,12 +47,15 @@ Paths to .collinearity files.
 Detect interspecies synteny
 }
 \examples{
+# Load data
+data(proteomes)
 data(blast_list)
 data(annotation)
+
+# Get DIAMOND and processed annotation lists
 blast_inter <- blast_list[2]
-annot_list <- lapply(annotation, function(x) {
-    x$gene <- x$gene_id
-    return(x)
-})
-intersyn <- interspecies_synteny(blast_inter, annot_list = annot_list)
+annotation <- process_input(proteomes, annotation)$annotation
+
+# Detect interspecies synteny
+intersyn <- interspecies_synteny(blast_inter, annotation)
 }

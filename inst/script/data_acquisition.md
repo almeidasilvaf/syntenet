@@ -120,30 +120,30 @@ identifies major differences and genomic outliers in mammalian and
 angiosperm genomes](https://doi.org/10.1073/pnas.1801757116). The
 dataset was filtered to only include the following species:
 
--   *Vigna radiata*
--   *Vigna angularis*
--   *Phaseolus vulgaris*
--   *Glycine max*
--   *Cajanus cajan*
--   *Trifolium pratense*
--   *Medicago truncatula*
--   *Arachis duranensis*
--   *Lotus japonicus*
--   *Lupinus angustifolius*
--   *Cicer arietinum*
--   *Prunus mume*
--   *Prunus persica*
--   *Pyrus x bretschneideri*
--   *Malus domestica*
--   *Rubus occidentalis*
--   *Fragaris vesca*
--   *Morus notabilis*
--   *Ziziphus jujuba*
--   *Jatropha curcas*
--   *Manihot esculenta*
--   *Ricinus communis*
--   *Linum usitatissimum*
--   *Populus trichocarpa*
+- *Vigna radiata*
+- *Vigna angularis*
+- *Phaseolus vulgaris*
+- *Glycine max*
+- *Cajanus cajan*
+- *Trifolium pratense*
+- *Medicago truncatula*
+- *Arachis duranensis*
+- *Lotus japonicus*
+- *Lupinus angustifolius*
+- *Cicer arietinum*
+- *Prunus mume*
+- *Prunus persica*
+- *Pyrus x bretschneideri*
+- *Malus domestica*
+- *Rubus occidentalis*
+- *Fragaris vesca*
+- *Morus notabilis*
+- *Ziziphus jujuba*
+- *Jatropha curcas*
+- *Manihot esculenta*
+- *Ricinus communis*
+- *Linum usitatissimum*
+- *Populus trichocarpa*
 
 ``` r
 #----Download file--------------------------------------------------------------
@@ -401,21 +401,63 @@ angiosperm_phylogeny$tip.label <- stringr::str_replace_all(
 usethis::use_data(angiosperm_phylogeny, compress = "xz", overwrite = TRUE)
 ```
 
-# Data in inst/extdata
+## scerevisiae_annot.rda + scerevisiae_diamond.rda
 
-## Olu.collinearity
+These files contain a processed annotation list (as returned by
+`process_input()`) and a list of intragenome DIAMOND comparisons.
 
 ``` r
+library(doubletrouble)
+
+# Load data from {doubletrouble}
+data("yeast_annot")
+data("yeast_seq")
+data("diamond_intra")
+
+pdata <- process_input(yeast_seq, yeast_annot)
+
+# Create objects
+scerevisiae_annot <- pdata$annotation[1]
+scerevisiae_diamond <- list(
+    Scerevisiae_Scerevisiae = diamond_intra$Scerevisiae_Scerevisiae |>
+        dplyr::filter(evalue <= 1e-10)
+)
+
+# Save objects
+usethis::use_data(scerevisiae_annot, compress = "xz")
+usethis::use_data(scerevisiae_diamond, compress = "xz", overwrite = TRUE)
+```
+
+# Data in inst/extdata
+
+## Scerevisiae.collinearity
+
+This file contains the intragenome synteny blocks for *S. cerevisiae*.
+
+``` r
+# Load data
+data(scerevisiae_annot)
+data(scerevisiae_diamond)
+
+# Detect intragenome synteny
+intra_syn <- intraspecies_synteny(
+    scerevisiae_diamond, scerevisiae_annot
+)
+
+# Move file to inst/extdata
+fs::file_move(
+    path = intra_syn,
+    new_path = here::here("inst", "extdata")
+)
+
 data(proteomes)
 data(annotation)
 processed <- process_input(proteomes, annotation) 
-seq <- processed$seq
-annotation <- processed$annotation
 if(diamond_is_installed()) {
-    blast_list <- run_diamond(seq)
+    blast_list <- run_diamond(processed$seq, ... = "--sensitive")
 }
 
-net <- infer_syntenet(blast_list, annotation)
+net <- infer_syntenet(blast_list, processed$annotation)
 
 # Move file
 olu_col <- file.path(tempdir(), "intraspecies_synteny", "Olu.collinearity")

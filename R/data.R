@@ -124,3 +124,30 @@
 #' data(angiosperm_phylogeny)
 #' @usage data(angiosperm_phylogeny)
 "angiosperm_phylogeny"
+
+
+#' Genome annotation of the yeast species S. cerevisiae
+#'
+#' Data obtained from Ensembl Fungi. Only annotation data for primary
+#' transcripts were included.
+#' 
+#' @name scerevisiae_annot
+#' @format A GRangesList as returned by \code{process_input()} containing 
+#' the element \strong{Scerevisiae}.
+#' @examples
+#' data(scerevisiae_annot)
+#' @usage data(scerevisiae_annot)
+"scerevisiae_annot"
+
+
+#' Intraspecies DIAMOND output for S. cerevisiae
+#'
+#' List obtained with \code{run_diamond()}.
+#' 
+#' @name scerevisiae_diamond
+#' @format A list of data frames (length 1) containing the whole paranome of
+#' S. cerevisiae resulting from intragenome similarity searches.
+#' @examples 
+#' data(scerevisiae_diamond)
+#' @usage data(scerevisiae_diamond)
+"scerevisiae_diamond"
