@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">syntenet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.4</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.6</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,6 +88,22 @@
 <ul><li>Replaced sprintf calls with snprintf calls in C++ code to address warnings in the devel branch of Bioc</li>
 </ul><p>UPDATES</p>
 <ul><li>Added CITATION file with reference to published paper</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.5" id="syntenet-115">syntenet 1.1.5<a class="anchor" aria-label="anchor" href="#syntenet-115"></a></h2>
+<p>BUG FIXES</p>
+<ul><li><p>Fixed species ID retrieval by adding an exported function named <code><a href="../reference/create_species_id_table.html">create_species_id_table()</a></code> that correctly creates unique species IDs (3-5 characters), even when the first 5 characters are equal.</p></li>
+<li><p><code><a href="../reference/intraspecies_synteny.html">intraspecies_synteny()</a></code> and <code><a href="../reference/interspecies_synteny.html">interspecies_synteny()</a></code> (originally unexported) now take the same output of <code><a href="../reference/process_input.html">process_input()</a></code>, which makes them consistent with the entire package.</p></li>
+</ul><p>NEW FEATURES</p>
+<ul><li><p>To make it easier for users who want to run DIAMOND from the command line, I added the functions <code><a href="../reference/export_sequences.html">export_sequences()</a></code> and <code><a href="../reference/read_diamond.html">read_diamond()</a></code>, which write processed sequences to FASTA files and read the DIAMOND output, respectively. An example code on how to run DIAMOND from the command line has been added to the vignette.</p></li>
+<li><p>Included a section in the vignette on how to use syntenet as a synteny detection program (i.e., to find synteny within a single genome or between two genomes).</p></li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.1.6" id="syntenet-116">syntenet 1.1.6<a class="anchor" aria-label="anchor" href="#syntenet-116"></a></h2>
+<p>BUG FIXES</p>
+<ul><li>Added a check for which IQ-TREE version is installed. If IQ-TREE2 is installed (and not IQ-TREE), arguments and call are modified accordingly, because IQ-TREE developers changed some parameters (e.g., -bb is now -B).</li>
+</ul><p>NEW FEATURES</p>
+<ul><li>Added a parameter <code>as</code> to <code><a href="../reference/parse_collinearity.html">parse_collinearity()</a></code> that allows the extraction on synteny block information from .collinearity files. The vignette was updated accordingly.</li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>

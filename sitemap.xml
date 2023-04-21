@@ -46,10 +46,16 @@
     <loc>/reference/clusters.html</loc>
   </url>
   <url>
+    <loc>/reference/create_species_id_table.html</loc>
+  </url>
+  <url>
     <loc>/reference/diamond_is_installed.html</loc>
   </url>
   <url>
     <loc>/reference/edges.html</loc>
+  </url>
+  <url>
+    <loc>/reference/export_sequences.html</loc>
   </url>
   <url>
     <loc>/reference/fasta2AAStringSetlist.html</loc>
@@ -79,6 +85,9 @@
     <loc>/reference/iqtree_is_installed.html</loc>
   </url>
   <url>
+    <loc>/reference/iqtree_version.html</loc>
+  </url>
+  <url>
     <loc>/reference/network.html</loc>
   </url>
   <url>
@@ -106,7 +115,16 @@
     <loc>/reference/rcpp_mcscanx_file.html</loc>
   </url>
   <url>
+    <loc>/reference/read_diamond.html</loc>
+  </url>
+  <url>
     <loc>/reference/run_diamond.html</loc>
+  </url>
+  <url>
+    <loc>/reference/scerevisiae_annot.html</loc>
+  </url>
+  <url>
+    <loc>/reference/scerevisiae_diamond.html</loc>
   </url>
   <url>
     <loc>/reference/syntenet-package.html</loc>
