@@ -81,10 +81,21 @@ test_that("interspecies_synteny() detects interspecies synteny", {
 
 test_that("parse_collinearity() reads MCScanX output", {
     file <- system.file("extdata", "Scerevisiae.collinearity", package = "syntenet")
+    
     net <- parse_collinearity(file)
+    blocks <- parse_collinearity(file, as = "blocks")
+    all <- parse_collinearity(file, as = "all")
+    
+    expect_error(parse_collinearity(file, as = "random_argument"))
     
     expect_equal(class(net), "data.frame")
     expect_equal(ncol(net), 2)
+    
+    expect_equal(class(blocks), "data.frame")
+    expect_equal(ncol(blocks), 4)
+    
+    expect_equal(class(all), "data.frame")
+    expect_equal(ncol(all), 6)
 })
 
 

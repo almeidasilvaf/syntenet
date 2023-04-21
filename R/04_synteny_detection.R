@@ -53,14 +53,113 @@ get_comp <- function(species, compare = "all") {
     return(comb_df)
 }
 
+#' Get edges (anchor pairs) from .collinearity files obtained with MCScan
+#' 
+#' @param collinearity_paths Character vector of paths to .collinearity files.
+#' 
+#' @return A data frame with variables:
+#' \describe{
+#'   \item{Block}{Numeric, synteny block ID}
+#'   \item{Anchor1}{Character, gene ID of anchor 1.}
+#'   \item{Anchor2}{Character, gene ID of anchor 2.}
+#' }
+#' 
+#' @importFrom utils read.table
+#' @noRd
+edges_from_collinearity <- function(collinearity_paths = NULL) {
+    
+    edges <- lapply(seq_along(collinearity_paths), function(x) {
+        lines <- readLines(collinearity_paths[x])
+        nlines <- length(lines[!startsWith(lines, "#")])
+        
+        df <- NULL
+        if(nlines > 0) {
+            df <- read.table(collinearity_paths[x], sep = "\t", comment.char = "#")
+            df <- df[, c(1, 2, 3)]
+            names(df) <- c("Block", "Anchor1", "Anchor2")
+            df$Block <- as.numeric(gsub("-.*", "", df$Block))
+            
+        }
+        return(df)
+    })
+    
+    edges <- Reduce(rbind, edges)
+    return(edges)
+}
+
+#' Get synteny blocks from .collinearity files obtained with MCScan
+#' 
+#' @param collinearity_paths Character vector of paths to .collinearity files.
+#' 
+#' @return A data frame with variables:
+#' \describe{
+#'   \item{Block}{Numeric, synteny block ID}
+#'   \item{Block_score}{Numeric, score of synteny block.}
+#'   \item{Chr}{Character, query and target chromosome of the synteny
+#'              block formatted as "<querychr>&<targetchr>".}
+#'   \item{Orientation}{Character, the orientation of genes within blocks,
+#'                      with "plus" indicating that genes are in the same 
+#'                      direction, and "minus" indicating that genes are 
+#'                      in opposite directions.}
+#' }
+#' 
+#' @noRd
+blocks_from_collinearity <- function(collinearity_paths = NULL) {
+    
+    blocks <- lapply(seq_along(collinearity_paths), function(x) {
+        lines <- readLines(collinearity_paths[x])
+        nlines <- length(lines[!startsWith(lines, "#")])
+        
+        block_df <- NULL
+        if(nlines > 0) {
+            
+            # Extract synteny block information
+            brows <- lines[grep("^## Alignment", lines)]
+            binfo <- strsplit(gsub("## Alignment ", "", brows), split = " ")
+            
+            # Create a data frame with synteny block information
+            block_df <- as.data.frame(do.call(rbind, binfo))[, c(1, 2, 5, 6)]
+            names(block_df) <- c("Block", "Block_score", "Chr", "Orientation")
+            block_df$Block <- as.numeric(gsub(":.*", "", block_df$Block))
+            block_df$Block_score <- as.numeric(
+                gsub("score=", "", block_df$Block_score)
+            )
+        }
+        return(block_df)
+    })
+    
+    blocks <- Reduce(rbind, blocks)
+    return(blocks)
+}
 
 
-#' Parse .collinearity files into an edge list
+#' Parse .collinearity files obtained with MCScan
+#' 
+#' The .collinearity files can be obtained with \code{intraspecies_synteny}
+#' and \code{interspecies_synteny}, which execute a native version of the
+#' MCScan algorithm.
 #'
 #' @param collinearity_paths Character vector of paths to .collinearity files.
+#' @param as Character specifying what to extract. 
+#' One of "anchors" (default), "blocks", or "all".
 #'
-#' @return A 2-column data frame with each gene from the anchor pair in each
-#' column.
+#' @return If \strong{as} is "anchors", a data frame with variables "Anchor1",
+#' and "Anchor2". If \strong{as} is "blocks", a data frame with 
+#' variables "Block", "Block_score", "Chr", and "Orientation". 
+#' If \strong{as} is "all", a data frame with all aforementioned variables,
+#' which indicate:
+#' \describe{
+#'   \item{Block}{Numeric, synteny block ID}
+#'   \item{Block_score}{Numeric, score of synteny block.}
+#'   \item{Chr}{Character, query and target chromosome of the synteny
+#'              block formatted as "<querychr>&<targetchr>".}
+#'   \item{Orientation}{Character, the orientation of genes within blocks,
+#'                      with "plus" indicating that genes are in the same 
+#'                      direction, and "minus" indicating that genes are 
+#'                      in opposite directions.}
+#'   \item{Anchor1}{Character, gene ID of anchor 1.}
+#'   \item{Anchor2}{Character, gene ID of anchor 2.}
+#' }
 #'
 #' @importFrom utils read.table
 #' @export
@@ -70,25 +169,33 @@ get_comp <- function(species, compare = "all") {
 #'     "extdata", "Scerevisiae.collinearity", package = "syntenet"
 #' )
 #' net <- parse_collinearity(collinearity_paths)
-parse_collinearity <- function(collinearity_paths = NULL) {
+parse_collinearity <- function(
+        collinearity_paths = NULL, as = "anchors"
+) {
     
+    # Add clean names to file paths (basename)
     fname <- gsub("\\.collinearity", "", basename(collinearity_paths))
     names(collinearity_paths) <- fname
     
-    netdb <- lapply(seq_along(collinearity_paths), function(x) {
-        lines <- readLines(collinearity_paths[x])
-        nlines <- length(lines[!startsWith(lines, "#")])
+    # Get parsed files
+    if(as == "anchors") {
+        parsed <- edges_from_collinearity(collinearity_paths)
+        parsed <- parsed[, c("Anchor1", "Anchor2")]
         
-        df <- NULL
-        if(nlines > 0) {
-            df <- read.table(collinearity_paths[x], sep = "\t", comment.char = "#")
-            df <- df[, c(2,3)]
-            names(df) <- c("Anchor1", "Anchor2")
-        }
-        return(df)
-    })
-    netdb <- Reduce(rbind, netdb)
-    return(netdb)
+    } else if(as == "blocks") {
+        parsed <- blocks_from_collinearity(collinearity_paths)
+        
+    } else if(as == "all") {
+        parsed <- merge(
+            blocks_from_collinearity(collinearity_paths),
+            edges_from_collinearity(collinearity_paths)
+        )
+    } else {
+        
+        stop("Invalid argument passed to 'as' parameter.")
+    }
+    
+    return(parsed)
 }
 
 

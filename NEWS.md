@@ -72,3 +72,43 @@ in the devel branch of Bioc
 UPDATES
 
 * Added CITATION file with reference to published paper
+
+# syntenet 1.1.5
+
+BUG FIXES
+
+* Fixed species ID retrieval by adding an exported function
+named `create_species_id_table()` that correctly creates unique species 
+IDs (3-5 characters), even when the first 5 characters are equal.
+
+* `intraspecies_synteny()` and `interspecies_synteny()` (originally unexported) 
+now take the same output of `process_input()`, which makes them consistent
+with the entire package. 
+
+
+NEW FEATURES
+
+* To make it easier for users who want to run DIAMOND from the command line,
+I added the functions `export_sequences()` and `read_diamond()`, which
+write processed sequences to FASTA files and read the DIAMOND output, 
+respectively. An example code on how to run DIAMOND from the command line
+has been added to the vignette.
+
+* Included a section in the vignette on how to use syntenet as a synteny
+detection program (i.e., to find synteny within a single genome or between
+two genomes).
+
+# syntenet 1.1.6
+
+BUG FIXES
+
+* Added a check for which IQ-TREE version is installed. If IQ-TREE2 is 
+installed (and not IQ-TREE), arguments and call are modified accordingly,
+because IQ-TREE developers changed some parameters (e.g., -bb is now -B).
+
+NEW FEATURES
+
+* Added a parameter `as` to `parse_collinearity()` that allows the extraction
+on synteny block information from .collinearity files. The vignette was 
+updated accordingly.
+

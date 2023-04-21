@@ -116,29 +116,47 @@ infer_microsynteny_phylogeny <- function(transposed_profiles = NULL,
                                          outgroup = NULL,
                                          verbose = FALSE) {
     
+    if(!iqtree_is_installed()) { stop("Could not find IQ-TREE in PATH.") }
+    
     # Create a file containing a header and the matrix below it
     matrix_file <- profiles2phylip(transposed_profiles, outdir)
     
     # Handle arguments
+    stdout <- FALSE
+    if(verbose) { stdout <- "" }
+    
     root <- NULL
     if(!is.null(outgroup)) {
         root <- paste0("-o ", outgroup)
     }
-    iqtree_args <- c("-s ", matrix_file, 
-                     "-bb", bootr, 
-                     "-alrt", alrtboot, 
-                     "-nt", threads, 
-                     root,
-                     "-m", model,
-                     "-st MORPH -redo")
     
-    # Run IQTREE
-    stdout <- FALSE
-    if(verbose) { stdout <- "" }
-    iqtree <- system2("iqtree", args = iqtree_args, stdout = stdout)
+    # Run IQ-TREE
+    if(iqtree_version() == 1) { # IQ-TREE v1
+        iqtree_args <- c(
+            "-s ", matrix_file, 
+            "-bb", bootr, 
+            "-alrt", alrtboot, 
+            "-nt", threads, 
+            root,
+            "-m", model,
+            "-st MORPH -redo"
+        )
+        iqtree <- system2("iqtree", args = iqtree_args, stdout = stdout)
+    } else { # IQ-TREE v2
+        iqtree_args <- c(
+            "-s ", matrix_file, 
+            "-B", bootr, 
+            "-alrt", alrtboot, 
+            "-T", threads, 
+            root,
+            "-m", model,
+            "-st MORPH -redo"
+        )
+        iqtree <- system2("iqtree2", args = iqtree_args, stdout = stdout)
+    }
     
-    paths <- list.files(path = outdir, 
-                        pattern = basename(matrix_file), 
-                        full.names = TRUE)
+    paths <- list.files(
+        path = outdir, pattern = basename(matrix_file), full.names = TRUE
+    )
     return(paths)
 }

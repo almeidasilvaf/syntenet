@@ -149,3 +149,12 @@ test_that("valid_blast() checks class of blast list object", {
     expect_equal(check, TRUE)
 })
 
+test_that("iqtree_version() returns IQ-TREE version", {
+    
+    v <- iqtree_version()
+    
+    expect_true(v %in% c(1, 2, NA))
+})
+
+
+

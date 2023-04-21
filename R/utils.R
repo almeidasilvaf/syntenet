@@ -220,6 +220,27 @@ diamond_is_installed <- function() {
     return(valid)
 }
 
+#' Get IQ-TREE version
+#'
+#' @return Numeric indicating IQ-TREE version, with either 1 or 2.
+#' @export
+#' @rdname iqtree_version
+#' @examples
+#' iqtree_version()
+iqtree_version <- function() {
+    
+    is_v1 <- is_valid(cmd = "iqtree", args = "-h")
+    is_v2 <- is_valid(cmd = "iqtree2", args = "-h")
+    
+    v <- NA
+    if(is_v1) { 
+        v <- 1 
+    } else if(is_v2) {
+        v <- 2
+    }
+    return(v)
+}
+
 
 #' Check if IQTREE is installed
 #'
@@ -229,7 +250,10 @@ diamond_is_installed <- function() {
 #' @examples
 #' iqtree_is_installed()
 iqtree_is_installed <- function() {
-    valid <- is_valid(cmd = "iqtree", args = "-h")
+    
+    v <- iqtree_version()
+    
+    valid <- !is.na(v)
     return(valid)
 }
 

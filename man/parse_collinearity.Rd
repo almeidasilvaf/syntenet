@@ -2,19 +2,39 @@
 % Please edit documentation in R/04_synteny_detection.R
 \name{parse_collinearity}
 \alias{parse_collinearity}
-\title{Parse .collinearity files into an edge list}
+\title{Parse .collinearity files obtained with MCScan}
 \usage{
-parse_collinearity(collinearity_paths = NULL)
+parse_collinearity(collinearity_paths = NULL, as = "anchors")
 }
 \arguments{
 \item{collinearity_paths}{Character vector of paths to .collinearity files.}
+
+\item{as}{Character specifying what to extract.
+One of "anchors" (default), "blocks", or "all".}
 }
 \value{
-A 2-column data frame with each gene from the anchor pair in each
-column.
+If \strong{as} is "anchors", a data frame with variables "Anchor1",
+and "Anchor2". If \strong{as} is "blocks", a data frame with
+variables "Block", "Block_score", "Chr", and "Orientation".
+If \strong{as} is "all", a data frame with all aforementioned variables,
+which indicate:
+\describe{
+\item{Block}{Numeric, synteny block ID}
+\item{Block_score}{Numeric, score of synteny block.}
+\item{Chr}{Character, query and target chromosome of the synteny
+block formatted as "\if{html}{\out{<querychr>}}&\if{html}{\out{<targetchr>}}".}
+\item{Orientation}{Character, the orientation of genes within blocks,
+with "plus" indicating that genes are in the same
+direction, and "minus" indicating that genes are
+in opposite directions.}
+\item{Anchor1}{Character, gene ID of anchor 1.}
+\item{Anchor2}{Character, gene ID of anchor 2.}
+}
 }
 \description{
-Parse .collinearity files into an edge list
+The .collinearity files can be obtained with \code{intraspecies_synteny}
+and \code{interspecies_synteny}, which execute a native version of the
+MCScan algorithm.
 }
 \examples{
 collinearity_paths <- system.file(

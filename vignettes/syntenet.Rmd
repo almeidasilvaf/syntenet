@@ -665,6 +665,25 @@ ostreoccocus_syn <- parse_collinearity(intersyn)
 head(ostreoccocus_syn)
 ```
 
+Note that `parse_collinearity()` returns a data frame of anchor pairs by
+default, but you can also obtain synteny block information, or a combination
+of both by changing the argument to the *as* parameter 
+(check the man page with `?parse_collinearity` for details):
+
+```{r parse_collinearity_examples}
+# 1) Get anchors with `parse_collinearity()`
+anchors <- parse_collinearity(intra_syn)
+head(anchors)
+
+# 2) Get synteny block with `parse_collinearity()`
+blocks <- parse_collinearity(intra_syn, as = "blocks")
+head(blocks)
+
+# 3) Get synteny blocks and anchor pairs in a single data frame
+all <- parse_collinearity(intra_syn, as = "all")
+head(all)
+```
+
 # FAQ {.unnumbered}
 
 ## How do I execute an external dependency that is not in my PATH? {.unnumbered}
