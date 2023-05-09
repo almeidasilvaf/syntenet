@@ -101,7 +101,7 @@ check_gene_names <- function(seq = NULL, annotation = NULL,
     seq_names <- lapply(seq, names)
     gene_names <- lapply(annotation, function(x) {
         
-        ranges_cols <- GenomicRanges::mcols(x)
+        ranges_cols <- GenomicRanges::mcols(x[x$type == "gene"])
         if(!gene_field %in% names(ranges_cols)) {
             stop("Could not find column '", gene_field, "' in GRanges.")
         }

@@ -3,6 +3,7 @@
 export(binarize_and_transpose)
 export(check_input)
 export(cluster_network)
+export(collapse_protein_ids)
 export(create_species_id_table)
 export(diamond_is_installed)
 export(export_sequences)

@@ -1,5 +1,104 @@
 
-#' Check if input objects is ready for further analyses
+
+#' Collapse protein IDs into gene IDs in sequence names of AAStringSet objects
+#' 
+#' This function can be used if the sequence names of the AAStringSet objects
+#' contain protein IDs instead of gene IDs (what syntenet requires)
+#'
+#' @param seq A list of AAStringSet objects, each list element containing
+#' protein sequences for a given species. This list must have names 
+#' (not NULL), and names of each list element must match the names of
+#' list elements in \strong{protein2gene}.
+#' @param protein2gene A list of 2-column data frames containing
+#' protein-to-gene ID correspondences, where the first column contains 
+#' protein IDs, and the second column contains gene IDs. Names of list elements
+#' must match names of \strong{seq}.
+#' 
+#' @return A list of AAStringSet objects as in \strong{seq}, but with
+#' protein IDs replaced with gene IDs.
+#' 
+#' @details
+#' For each species, this function will replace the protein IDs in sequence
+#' names with gene IDs using the protein-to-gene correspondence table in
+#' \strong{protein2gene}. After replacing protein IDs with gene IDs, if
+#' there are multiple sequences with the same gene ID (indicating different
+#' isoforms of the same gene), only the longest sequence is kept, so that
+#' the number of sequences is not greater than the number of genes.
+#' 
+#' @importFrom Biostrings width
+#' @export
+#' @rdname collapse_protein_ids
+#' @examples
+#' # Load data
+#' seq_path <- system.file(
+#'     "extdata", "RefSeq_parsing_example", package = "syntenet"
+#' )
+#' seq <- fasta2AAStringSetlist(seq_path)
+#' annot <- gff2GRangesList(seq_path)
+#' 
+#' # Clean sequence names
+#' names(seq$Aalosa) <- gsub(" .*", "", names(seq$Aalosa))
+#' 
+#' # Create a correspondence data frame
+#' cor_df <- as.data.frame(annot$Aalosa[annot$Aalosa$type == "CDS", ])
+#' cor_df <- cor_df[, c("Name", "gene")]
+#' 
+#' # Create a list of correspondence data frames
+#' protein2gene <- list(Aalosa = cor_df)
+#' 
+#' # Collapse IDs
+#' new_seqs <- collapse_protein_ids(seq, protein2gene)
+collapse_protein_ids <- function(seq, protein2gene = NULL) {
+    
+    if(!is(protein2gene, "list") | !is(protein2gene[[1]], "data.frame")) {
+        stop("`protein2gene` must be a list of data frames.")
+    }
+    
+    if(!all(names(seq) %in% names(protein2gene))) {
+        stop("All species in `seq` must be in `protein2gene`.")
+    }
+    
+    new_seqs <- lapply(seq_along(seq), function(x) {
+        
+        species <- names(seq)[x]
+        
+        nseq <- seq[[species]]
+        pgene <- protein2gene[[species]]
+        
+        ## Get indices of matches
+        idx <- unique(match(
+            names(nseq), 
+            pgene[, 1]
+        ))
+        if(length(idx) <= 1) {
+            
+            m <- paste0(
+                "None of the protein IDs in column 1 of `protein2gene[['",
+                species, "']]` match sequence names in `seq[['", 
+                species, "']]`."
+                
+            )
+            stop(m)
+        }
+        
+        ## Replace names
+        names(nseq) <- pgene[, 2][idx]
+        
+        # Keep only longest protein for each gene
+        nseq <- nseq[order(Biostrings::width(nseq), decreasing = TRUE), ]
+        nseq <- nseq[!duplicated(names(nseq)), ]
+        
+        return(nseq)
+    })
+    names(new_seqs) <- names(seq)
+    
+    return(new_seqs)
+    
+}
+
+
+
+#' Check if input objects are ready for further analyses
 #' 
 #' @param seq A list of AAStringSet objects, each list element containing
 #' protein sequences for a given species. This list must have names 
