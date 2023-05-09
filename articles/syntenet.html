@@ -15,8 +15,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Atkinson_Hyperlegible-0.4.5/font.css" rel="stylesheet">
-<link href="../deps/Source_Code_Pro-0.4.5/font.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><link href="../deps/Atkinson_Hyperlegible-0.4.6/font.css" rel="stylesheet">
+<link href="../deps/Source_Code_Pro-0.4.6/font.css" rel="stylesheet">
 <!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Inference and Analysis of Synteny Networks">
@@ -35,7 +35,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">syntenet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -902,8 +902,8 @@ visualize the group-specific clusters.</p>
 <span>    <span class="va">network</span>, <span class="va">clusters</span>, cluster_id <span class="op">=</span> <span class="va">id</span>, </span>
 <span>    interactive <span class="op">=</span> <span class="cn">TRUE</span>, dim_interactive <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">500</span>, <span class="fl">300</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<div id="htmlwidget-ec9da5f2b737bba758e5" style="width:500px;height:300px;" class="forceNetwork html-widget "></div>
-<script type="application/json" data-for="htmlwidget-ec9da5f2b737bba758e5">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-10,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
+<div id="htmlwidget-98db617f6ba3fa7cf456" style="width:500px;height:300px;" class="forceNetwork html-widget "></div>
+<script type="application/json" data-for="htmlwidget-98db617f6ba3fa7cf456">{"x":{"links":{"source":[3,0,2,5,0,2,6,4,3,1,6,8,2,0,7,5,7,0,13,5,4,9,3,6,2,8,12,5,13,14,10,1,11,9,3,4,15,9,15,4,3,19,1,10,18,3,15,19,9,20,4,10,21,18,6,12,8,2,16,0,14,13,7,5,17,8,24,2,6,16,12,19,20,3,15,4,22,23,21,1,18,10,6,26,8,16,24,2,12,0,25,14,13,7,5,17,4,20,3,9,15,22,19,10,23,21,1,18,28,23,18,1,28,10,32,21,8,2,6,12,29,16,24,26,3,31,20,9,22,19,4,15,27,30,5,25,13,14,33,23,32,21,10,1,18,28,26,6,8,24,16,34,29,2,12,22,3,9,31,27,35,20,19,4,15,34,24,16,38,26,2,29,6,8,12,5,14,36,25,13,30,18,33,10,28,21,23,37,1,32,43],"target":[4,5,6,7,7,8,8,9,9,10,12,12,12,13,13,13,14,14,14,14,15,15,15,16,16,16,16,17,17,17,18,18,18,19,19,19,19,20,20,20,20,20,21,21,21,22,22,22,22,22,22,23,23,23,24,24,24,24,24,25,25,25,25,25,25,26,26,26,26,26,26,27,27,27,27,27,27,28,28,28,28,28,29,29,29,29,29,29,29,30,30,30,30,30,30,30,31,31,31,31,31,31,31,32,32,32,32,32,32,33,33,33,33,33,33,33,34,34,34,34,34,34,34,34,35,35,35,35,35,35,35,35,35,36,36,36,36,36,37,37,37,37,37,37,37,37,38,38,38,38,38,38,38,38,38,39,39,39,39,39,39,39,39,39,39,40,40,40,40,40,40,40,40,40,40,41,41,41,41,41,41,42,42,42,42,42,42,42,42,42,44],"colour":["#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666","#666"]},"nodes":{"name":["adu_Aradu.AV6RW","adu_Aradu.E0LH8","adu_Aradu.JF3WA","adu_Aradu.R0IMB","car_03056.1","car_08943.1","car_19495.1","cca_02211","cca_04052","cca_05788","gma_03G097900","gma_07G124000","gma_07G238400","gma_10G041100","gma_13G128000","gma_14G033200","gma_17G035000","Lang_109346054","Lang_109352113","Lang_109355854","Lang_109359285","Lang_109362187","lja_2g3v3059790.1lja","lja_3g3v0642560.1lja","lja_4g3v2263980.1lja","mtr_1g069385","mtr_4g122270","mtr_5g090150","mtr_8g009900","pvu_003G116100","pvu_007G154300","pvu_008G199500","pvu_010G038400","tpr_gene17355","tpr_gene25402","van_01g01830.1","van_06g14500.1","van_08g06220.1","van_11g16300.1","vra_06g02600","vra_07g24530","vra_08g07810","vra_09g06430","Zjuj_107406488","Zjuj_107435072"],"group":["1309","1170","1305","1156","1156","1309","1305","1309","1305","1156","1170","1170","1305","1309","1309","1156","1305","1309","1170","1156","1156","1170","1156","1170","1305","1309","1305","1156","1170","1305","1309","1156","1170","1170","1305","1156","1309","1170","1305","1156","1305","1309","1170","1279","1279"],"nodesize":[" 6"," 8","10","10","10"," 9","10"," 6","10"," 9"," 9"," 1","10"," 9"," 9","10","10"," 5","10","10","10"," 9","10"," 8","10"," 9","10"," 8"," 9","10"," 9"," 9"," 9"," 9","10","10"," 6"," 9","10","10","10"," 6"," 9"," 1"," 1"]},"options":{"NodeID":"name","Group":"Group","colourScale":"d3.scaleOrdinal(d3.schemeCategory20);","fontSize":12,"fontFamily":"serif","clickTextSize":30,"linkDistance":50,"linkWidth":"function(d) { return Math.sqrt(d.value); }","charge":-10,"opacity":0.8,"zoom":true,"legend":false,"arrows":false,"nodesize":true,"radiusCalculation":" Math.sqrt(d.nodesize)+6","bounded":false,"opacityNoHover":0,"clickAction":null}},"evals":[],"jsHooks":[]}</script>
 </div>
 <div class="section level2">
 <h2 id="microsynteny-based-phylogeny-reconstruction">Microsynteny-based phylogeny reconstruction<a class="anchor" aria-label="anchor" href="#microsynteny-based-phylogeny-reconstruction"></a>
@@ -1058,7 +1058,7 @@ in the example data sets <code>scerevisiae_annot</code> and
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">intra_syn</span> <span class="co"># see where the .collinearity file is</span></span>
-<span><span class="co">#&gt; [1] "/tmp/RtmpcIgaJQ/intra/Scerevisiae.collinearity"</span></span>
+<span><span class="co">#&gt; [1] "/tmp/RtmppnA5kF/intra/Scerevisiae.collinearity"</span></span>
 <span></span>
 <span><span class="co"># Read .collinearity file</span></span>
 <span><span class="va">scerevisiae_syn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_collinearity.html">parse_collinearity</a></span><span class="op">(</span><span class="va">intra_syn</span><span class="op">)</span></span>
@@ -1091,7 +1091,7 @@ sections of this vignette.</p>
 <span><span class="va">intersyn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/interspecies_synteny.html">interspecies_synteny</a></span><span class="op">(</span><span class="va">diamond_inter</span>, <span class="va">pdata</span><span class="op">$</span><span class="va">annotation</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">intersyn</span> <span class="co"># see where the .collinearity file is</span></span>
-<span><span class="co">#&gt; [1] "/tmp/RtmpcIgaJQ/inter/Olucimarinus_OspRCC809.collinearity"</span></span>
+<span><span class="co">#&gt; [1] "/tmp/RtmppnA5kF/inter/Olucimarinus_OspRCC809.collinearity"</span></span>
 <span></span>
 <span><span class="co"># Read .collinearity file</span></span>
 <span><span class="va">ostreoccocus_syn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/parse_collinearity.html">parse_collinearity</a></span><span class="op">(</span><span class="va">intersyn</span><span class="op">)</span></span>
@@ -1186,10 +1186,10 @@ parameter.</p></li>
 <li><p>Navigate (i.e., <code>cd</code>) to the directory specified in
 <strong>outdir</strong>, where the FASTA files are, and execute
 all-vs-all similarity searches. The output files must be named
-*<species>_<species>.tsv<em>, where <species> indicates the basename of
-the FASTA files (e.g., “speciesA” for a FASTA file named
-</species></em>speciesA.fasta*). For DIAMOND, you can use the following code (with
-adaptations, if you prefer):</species></species></p></li>
+“[species]_[species].tsv”, where [species] indicates the basename of the
+FASTA files (e.g., “speciesA” for a FASTA file named
+<em>speciesA.fasta</em>). For DIAMOND, you can use the following code
+(with adaptations, if you prefer):</p></li>
 </ol>
 <div class="sourceCode" id="cb27"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co">#!/bin/bash</span></span>
 <span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1224,12 +1224,313 @@ frames with the <code><a href="../reference/read_diamond.html">read_diamond()</a
 the DIAMOND/BLAST output files.</li>
 </ol>
 </div>
+<div class="section level3">
+<h3 class="unnumbered" id="my-sequence-names-do-not-match-gene-ids-in-the-annotation--what-should-i-do">My sequence names do not match gene IDs in the
+annotation. What should I do?<a class="anchor" aria-label="anchor" href="#my-sequence-names-do-not-match-gene-ids-in-the-annotation--what-should-i-do"></a>
+</h3>
+<p>When the names of your sequences (equivalent to FASTA headers) do not
+match the gene IDs in your <code>GRanges</code> objects,
+<strong>syntenet</strong> throws the following error:</p>
+<blockquote>
+<p>Sequence names in ‘seq’ do not match gene names in ‘annotation’.</p>
+</blockquote>
+<p>In most (if not all) of the cases, this error happens because users
+have protein IDs as sequence names, and <strong>syntenet</strong> looks
+for gene IDs (i.e., using rows of the <code>GRanges</code> objects for
+which the column <em>type</em> is “gene”). This is the case, for
+instance, for data obtained from NCBI’s RefSeq database. To solve the
+issue, you need to replace <strong>protein/transcript IDs</strong> with
+<strong>gene IDs</strong> in sequence names, which can be done with the
+function <code><a href="../reference/collapse_protein_ids.html">collapse_protein_ids()</a></code>.</p>
+<p>To demonstrate how this works, let’s explore an example data set
+containing protein sequences and gene annotation obtained from RefSeq.
+The data contains information on a subset of 16 genes from the fish
+species <em>Alosa alosa</em>, and it is stored in the
+<code>extdata/RefSeq_parsing_example</code> directory of this
+package.</p>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Path to directory containing data</span></span>
+<span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span></span>
+<span>    <span class="st">"extdata"</span>, <span class="st">"RefSeq_parsing_example"</span>, package <span class="op">=</span> <span class="st">"syntenet"</span></span>
+<span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/list.files.html" class="external-link">dir</a></span><span class="op">(</span><span class="va">data_dir</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "Aalosa.fa.gz"   "Aalosa.gff3.gz"</span></span>
+<span></span>
+<span><span class="co"># Reading the files to a format that syntenet understands</span></span>
+<span><span class="va">seqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fasta2AAStringSetlist.html">fasta2AAStringSetlist</a></span><span class="op">(</span><span class="va">data_dir</span><span class="op">)</span></span>
+<span><span class="va">annot</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/gff2GRangesList.html">gff2GRangesList</a></span><span class="op">(</span><span class="va">data_dir</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Taking a look at the data</span></span>
+<span><span class="va">seqs</span></span>
+<span><span class="co">#&gt; $Aalosa</span></span>
+<span><span class="co">#&gt; AAStringSet object of length 21:</span></span>
+<span><span class="co">#&gt;      width seq                                              names               </span></span>
+<span><span class="co">#&gt;  [1]   189 MTLKMAATMARCFPALVRPLSTR...KRRNWYLNDPYLKYQDRVNPRW XP_048084156.1 39...</span></span>
+<span><span class="co">#&gt;  [2]   348 MNEVNRTRLDTDGVRDISSPRRR...HVPYGIAQKVTHKPSISNTAAK XP_048095207.1 cy...</span></span>
+<span><span class="co">#&gt;  [3]   177 MPQDLPPAAAVPQGSMPPGKMPH...PALRRRARLRRLVTPEPLYAGW XP_048096060.1 un...</span></span>
+<span><span class="co">#&gt;  [4]   176 MPQDLPPAAAVPQGSMPPGKMPH...KERPAGRFYGLPCDAEPVYAGW XP_048096122.1 un...</span></span>
+<span><span class="co">#&gt;  [5]   137 MITKAMEVDYKLEDPKAPLEESS...GYRDAFGNELLRRLERLQQNAQ XP_048099323.1 GS...</span></span>
+<span><span class="co">#&gt;  ...   ... ...</span></span>
+<span><span class="co">#&gt; [17]   224 MGLFGKTSEKPPKDLINEWSLKI...EEEEEEEEDIEEMQTRLAALRS XP_048116262.1 ch...</span></span>
+<span><span class="co">#&gt; [18]   176 MSLVRGIMLSATRSKAWSVGRAS...QVLKNPQADHGCSCGSSFSVKL XP_048117248.1 ir...</span></span>
+<span><span class="co">#&gt; [19]   149 MAIREVCVLLLPLLALAYAEHVK...WELRDDNNKDLFCIKFPVQIVS XP_048117257.1 NP...</span></span>
+<span><span class="co">#&gt; [20]   149 MAIREVCVLLLPLLALAYAEHVK...WELRDDNNKDLFCIKFPVQIVS XP_048117266.1 NP...</span></span>
+<span><span class="co">#&gt; [21]   886 MSTSIGDKIEDFKVLTLLGKGSF...VKEKLQCLSSILGLLAGPAARR XP_048120688.1 LO...</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">seqs</span><span class="op">$</span><span class="va">Aalosa</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "XP_048084156.1 39S ribosomal protein L35, mitochondrial [Alosa alosa]"         </span></span>
+<span><span class="co">#&gt; [2] "XP_048095207.1 cytosolic 5'-nucleotidase 1A [Alosa alosa]"                     </span></span>
+<span><span class="co">#&gt; [3] "XP_048096060.1 uncharacterized protein si:dkey-21a6.5 isoform X1 [Alosa alosa]"</span></span>
+<span><span class="co">#&gt; [4] "XP_048096122.1 uncharacterized protein si:dkey-21a6.5 isoform X2 [Alosa alosa]"</span></span>
+<span><span class="co">#&gt; [5] "XP_048099323.1 GSK3-beta interaction protein isoform X1 [Alosa alosa]"         </span></span>
+<span><span class="co">#&gt; [6] "XP_048099396.1 GSK3-beta interaction protein isoform X2 [Alosa alosa]"</span></span>
+<span></span>
+<span><span class="va">annot</span></span>
+<span><span class="co">#&gt; GRangesList object of length 1:</span></span>
+<span><span class="co">#&gt; $Aalosa</span></span>
+<span><span class="co">#&gt; GRanges object with 226 ranges and 19 metadata columns:</span></span>
+<span><span class="co">#&gt;            seqnames        ranges strand |   source     type     score</span></span>
+<span><span class="co">#&gt;               &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;factor&gt; &lt;factor&gt; &lt;numeric&gt;</span></span>
+<span><span class="co">#&gt;     [1] NC_063189.1    9524-52877      - |   Gnomon     gene        NA</span></span>
+<span><span class="co">#&gt;     [2] NC_063189.1   52525-52682      - |   Gnomon     CDS         NA</span></span>
+<span><span class="co">#&gt;     [3] NC_063189.1   50374-50600      - |   Gnomon     CDS         NA</span></span>
+<span><span class="co">#&gt;     [4] NC_063189.1   38459-38639      - |   Gnomon     CDS         NA</span></span>
+<span><span class="co">#&gt;     [5] NC_063189.1   31087-31235      - |   Gnomon     CDS         NA</span></span>
+<span><span class="co">#&gt;     ...         ...           ...    ... .      ...      ...       ...</span></span>
+<span><span class="co">#&gt;   [222] NC_063189.1 788729-789007      - |   Gnomon      CDS        NA</span></span>
+<span><span class="co">#&gt;   [223] NC_063189.1 779818-779990      - |   Gnomon      CDS        NA</span></span>
+<span><span class="co">#&gt;   [224] NC_063189.1 778802-778982      - |   Gnomon      CDS        NA</span></span>
+<span><span class="co">#&gt;   [225] NC_063189.1 777663-778010      - |   Gnomon      CDS        NA</span></span>
+<span><span class="co">#&gt;   [226] NC_063189.1 777553-777626      - |   Gnomon      CDS        NA</span></span>
+<span><span class="co">#&gt;             phase                 ID                                  Dbxref</span></span>
+<span><span class="co">#&gt;         &lt;integer&gt;        &lt;character&gt;                         &lt;CharacterList&gt;</span></span>
+<span><span class="co">#&gt;     [1]      &lt;NA&gt;       gene-noxred1                        GeneID:125303464</span></span>
+<span><span class="co">#&gt;     [2]         0 cds-XP_048113188.1 GeneID:125303464,Genbank:XP_048113188.1</span></span>
+<span><span class="co">#&gt;     [3]         1 cds-XP_048113188.1 GeneID:125303464,Genbank:XP_048113188.1</span></span>
+<span><span class="co">#&gt;     [4]         2 cds-XP_048113188.1 GeneID:125303464,Genbank:XP_048113188.1</span></span>
+<span><span class="co">#&gt;     [5]         1 cds-XP_048113188.1 GeneID:125303464,Genbank:XP_048113188.1</span></span>
+<span><span class="co">#&gt;     ...       ...                ...                                     ...</span></span>
+<span><span class="co">#&gt;   [222]         2 cds-XP_048105503.1 GeneID:125298741,Genbank:XP_048105503.1</span></span>
+<span><span class="co">#&gt;   [223]         2 cds-XP_048105503.1 GeneID:125298741,Genbank:XP_048105503.1</span></span>
+<span><span class="co">#&gt;   [224]         0 cds-XP_048105503.1 GeneID:125298741,Genbank:XP_048105503.1</span></span>
+<span><span class="co">#&gt;   [225]         2 cds-XP_048105503.1 GeneID:125298741,Genbank:XP_048105503.1</span></span>
+<span><span class="co">#&gt;   [226]         2 cds-XP_048105503.1 GeneID:125298741,Genbank:XP_048105503.1</span></span>
+<span><span class="co">#&gt;                   Name       gbkey         gene   gene_biotype     partial</span></span>
+<span><span class="co">#&gt;            &lt;character&gt; &lt;character&gt;  &lt;character&gt;    &lt;character&gt; &lt;character&gt;</span></span>
+<span><span class="co">#&gt;     [1]        noxred1        Gene      noxred1 protein_coding        true</span></span>
+<span><span class="co">#&gt;     [2] XP_048113188.1         CDS      noxred1           &lt;NA&gt;        true</span></span>
+<span><span class="co">#&gt;     [3] XP_048113188.1         CDS      noxred1           &lt;NA&gt;        true</span></span>
+<span><span class="co">#&gt;     [4] XP_048113188.1         CDS      noxred1           &lt;NA&gt;        true</span></span>
+<span><span class="co">#&gt;     [5] XP_048113188.1         CDS      noxred1           &lt;NA&gt;        true</span></span>
+<span><span class="co">#&gt;     ...            ...         ...          ...            ...         ...</span></span>
+<span><span class="co">#&gt;   [222] XP_048105503.1         CDS LOC125298741           &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [223] XP_048105503.1         CDS LOC125298741           &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [224] XP_048105503.1         CDS LOC125298741           &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [225] XP_048105503.1         CDS LOC125298741           &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [226] XP_048105503.1         CDS LOC125298741           &lt;NA&gt;        &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;             start_range             Parent                   Note</span></span>
+<span><span class="co">#&gt;         &lt;CharacterList&gt;    &lt;CharacterList&gt;        &lt;CharacterList&gt;</span></span>
+<span><span class="co">#&gt;     [1]          .,9524                                          </span></span>
+<span><span class="co">#&gt;     [2]                 rna-XM_048257231.1 The sequence of the ..</span></span>
+<span><span class="co">#&gt;     [3]                 rna-XM_048257231.1 The sequence of the ..</span></span>
+<span><span class="co">#&gt;     [4]                 rna-XM_048257231.1 The sequence of the ..</span></span>
+<span><span class="co">#&gt;     [5]                 rna-XM_048257231.1 The sequence of the ..</span></span>
+<span><span class="co">#&gt;     ...             ...                ...                    ...</span></span>
+<span><span class="co">#&gt;   [222]                 rna-XM_048249546.1                       </span></span>
+<span><span class="co">#&gt;   [223]                 rna-XM_048249546.1                       </span></span>
+<span><span class="co">#&gt;   [224]                 rna-XM_048249546.1                       </span></span>
+<span><span class="co">#&gt;   [225]                 rna-XM_048249546.1                       </span></span>
+<span><span class="co">#&gt;   [226]                 rna-XM_048249546.1                       </span></span>
+<span><span class="co">#&gt;                      exception              inference                product</span></span>
+<span><span class="co">#&gt;                    &lt;character&gt;            &lt;character&gt;            &lt;character&gt;</span></span>
+<span><span class="co">#&gt;     [1]                   &lt;NA&gt;                   &lt;NA&gt;                   &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;     [2] annotated by transcr.. similar to RNA seque.. NADP-dependent oxido..</span></span>
+<span><span class="co">#&gt;     [3] annotated by transcr.. similar to RNA seque.. NADP-dependent oxido..</span></span>
+<span><span class="co">#&gt;     [4] annotated by transcr.. similar to RNA seque.. NADP-dependent oxido..</span></span>
+<span><span class="co">#&gt;     [5] annotated by transcr.. similar to RNA seque.. NADP-dependent oxido..</span></span>
+<span><span class="co">#&gt;     ...                    ...                    ...                    ...</span></span>
+<span><span class="co">#&gt;   [222]                   &lt;NA&gt;                   &lt;NA&gt; fibroblast growth fa..</span></span>
+<span><span class="co">#&gt;   [223]                   &lt;NA&gt;                   &lt;NA&gt; fibroblast growth fa..</span></span>
+<span><span class="co">#&gt;   [224]                   &lt;NA&gt;                   &lt;NA&gt; fibroblast growth fa..</span></span>
+<span><span class="co">#&gt;   [225]                   &lt;NA&gt;                   &lt;NA&gt; fibroblast growth fa..</span></span>
+<span><span class="co">#&gt;   [226]                   &lt;NA&gt;                   &lt;NA&gt; fibroblast growth fa..</span></span>
+<span><span class="co">#&gt;             protein_id transl_except</span></span>
+<span><span class="co">#&gt;            &lt;character&gt;   &lt;character&gt;</span></span>
+<span><span class="co">#&gt;     [1]           &lt;NA&gt;          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;     [2] XP_048113188.1          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;     [3] XP_048113188.1          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;     [4] XP_048113188.1          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;     [5] XP_048113188.1          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;     ...            ...           ...</span></span>
+<span><span class="co">#&gt;   [222] XP_048105503.1          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [223] XP_048105503.1          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [224] XP_048105503.1          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [225] XP_048105503.1          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [226] XP_048105503.1          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   -------</span></span>
+<span><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span></code></pre></div>
+<p>The first problem we can observe is that sequence names have
+additional text describing the sequences (e.g., “GSK3-beta…”), and we
+must have only the IDs. To solve this issue, we can remove whitespace
+and everything that comes after it.</p>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Remove whitespace and everything after it</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">seqs</span><span class="op">$</span><span class="va">Aalosa</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/grep.html" class="external-link">gsub</a></span><span class="op">(</span><span class="st">" .*"</span>, <span class="st">""</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">seqs</span><span class="op">$</span><span class="va">Aalosa</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Taking a look at the new names</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">seqs</span><span class="op">$</span><span class="va">Aalosa</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; [1] "XP_048084156.1" "XP_048095207.1" "XP_048096060.1" "XP_048096122.1"</span></span>
+<span><span class="co">#&gt; [5] "XP_048099323.1" "XP_048099396.1"</span></span></code></pre></div>
+<p>Great, we removed the unnecessary text! However, there is still a
+problem: sequence names start with <em>XP_….</em>. If you look closer at
+the first row of <code>annot$Aalosa</code> (which contains ranges for
+genes), you will notice that none of the columns contain such
+<em>XP_…</em> IDs. This is because RefSeq uses such IDs for CDS, not for
+genes. Let’s check if we can indeed find the <em>XP_…</em> IDs in rows
+that have “CDS” in the <code>type</code> column.</p>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Show only rows for which `type` is "CDS"</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">annot</span><span class="op">$</span><span class="va">Aalosa</span><span class="op">[</span><span class="va">annot</span><span class="op">$</span><span class="va">Aalosa</span><span class="op">$</span><span class="va">type</span> <span class="op">==</span> <span class="st">"CDS"</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="co">#&gt; GRanges object with 6 ranges and 19 metadata columns:</span></span>
+<span><span class="co">#&gt;          seqnames        ranges strand |   source     type     score     phase</span></span>
+<span><span class="co">#&gt;             &lt;Rle&gt;     &lt;IRanges&gt;  &lt;Rle&gt; | &lt;factor&gt; &lt;factor&gt; &lt;numeric&gt; &lt;integer&gt;</span></span>
+<span><span class="co">#&gt;   [1] NC_063189.1   52525-52682      - |   Gnomon      CDS        NA         0</span></span>
+<span><span class="co">#&gt;   [2] NC_063189.1   50374-50600      - |   Gnomon      CDS        NA         1</span></span>
+<span><span class="co">#&gt;   [3] NC_063189.1   38459-38639      - |   Gnomon      CDS        NA         2</span></span>
+<span><span class="co">#&gt;   [4] NC_063189.1   31087-31235      - |   Gnomon      CDS        NA         1</span></span>
+<span><span class="co">#&gt;   [5] NC_063189.1     9524-9713      - |   Gnomon      CDS        NA         2</span></span>
+<span><span class="co">#&gt;   [6] NC_063189.1 229429-229590      - |   Gnomon      CDS        NA         0</span></span>
+<span><span class="co">#&gt;                       ID                                  Dbxref           Name</span></span>
+<span><span class="co">#&gt;              &lt;character&gt;                         &lt;CharacterList&gt;    &lt;character&gt;</span></span>
+<span><span class="co">#&gt;   [1] cds-XP_048113188.1 GeneID:125303464,Genbank:XP_048113188.1 XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [2] cds-XP_048113188.1 GeneID:125303464,Genbank:XP_048113188.1 XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [3] cds-XP_048113188.1 GeneID:125303464,Genbank:XP_048113188.1 XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [4] cds-XP_048113188.1 GeneID:125303464,Genbank:XP_048113188.1 XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [5] cds-XP_048113188.1 GeneID:125303464,Genbank:XP_048113188.1 XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [6] cds-XP_048105299.1 GeneID:125298558,Genbank:XP_048105299.1 XP_048105299.1</span></span>
+<span><span class="co">#&gt;             gbkey        gene gene_biotype     partial     start_range</span></span>
+<span><span class="co">#&gt;       &lt;character&gt; &lt;character&gt;  &lt;character&gt; &lt;character&gt; &lt;CharacterList&gt;</span></span>
+<span><span class="co">#&gt;   [1]         CDS     noxred1         &lt;NA&gt;        true                </span></span>
+<span><span class="co">#&gt;   [2]         CDS     noxred1         &lt;NA&gt;        true                </span></span>
+<span><span class="co">#&gt;   [3]         CDS     noxred1         &lt;NA&gt;        true                </span></span>
+<span><span class="co">#&gt;   [4]         CDS     noxred1         &lt;NA&gt;        true                </span></span>
+<span><span class="co">#&gt;   [5]         CDS     noxred1         &lt;NA&gt;        true          .,9524</span></span>
+<span><span class="co">#&gt;   [6]         CDS       atg2b         &lt;NA&gt;        &lt;NA&gt;                </span></span>
+<span><span class="co">#&gt;                   Parent                   Note              exception</span></span>
+<span><span class="co">#&gt;          &lt;CharacterList&gt;        &lt;CharacterList&gt;            &lt;character&gt;</span></span>
+<span><span class="co">#&gt;   [1] rna-XM_048257231.1 The sequence of the .. annotated by transcr..</span></span>
+<span><span class="co">#&gt;   [2] rna-XM_048257231.1 The sequence of the .. annotated by transcr..</span></span>
+<span><span class="co">#&gt;   [3] rna-XM_048257231.1 The sequence of the .. annotated by transcr..</span></span>
+<span><span class="co">#&gt;   [4] rna-XM_048257231.1 The sequence of the .. annotated by transcr..</span></span>
+<span><span class="co">#&gt;   [5] rna-XM_048257231.1 The sequence of the .. annotated by transcr..</span></span>
+<span><span class="co">#&gt;   [6] rna-XM_048249342.1 The sequence of the .. unclassified transla..</span></span>
+<span><span class="co">#&gt;                    inference                product     protein_id</span></span>
+<span><span class="co">#&gt;                  &lt;character&gt;            &lt;character&gt;    &lt;character&gt;</span></span>
+<span><span class="co">#&gt;   [1] similar to RNA seque.. NADP-dependent oxido.. XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [2] similar to RNA seque.. NADP-dependent oxido.. XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [3] similar to RNA seque.. NADP-dependent oxido.. XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [4] similar to RNA seque.. NADP-dependent oxido.. XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [5] similar to RNA seque.. NADP-dependent oxido.. XP_048113188.1</span></span>
+<span><span class="co">#&gt;   [6]                   &lt;NA&gt; LOW QUALITY PROTEIN:.. XP_048105299.1</span></span>
+<span><span class="co">#&gt;       transl_except</span></span>
+<span><span class="co">#&gt;         &lt;character&gt;</span></span>
+<span><span class="co">#&gt;   [1]          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [2]          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [3]          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [4]          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [5]          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   [6]          &lt;NA&gt;</span></span>
+<span><span class="co">#&gt;   -------</span></span>
+<span><span class="co">#&gt;   seqinfo: 1 sequence from an unspecified genome; no seqlengths</span></span></code></pre></div>
+<p>The <em>XP_…</em> IDs can be found in the <code>Name</code> column.
+Note also that the gene IDs, which are what we need for
+<strong>syntenet</strong>, are in the <code>gene</code> column. To
+collapse protein IDs to gene IDs with
+<code><a href="../reference/collapse_protein_ids.html">collapse_protein_ids()</a></code>, we will need to create a list of
+2-column data frames containing the correspondence between protein IDs
+and gene IDs for each species. In this example, we can do that by
+extracting the columns <code>Name</code> and <code>gene</code> from rows
+that represent CDS ranges.</p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Create a list of data frames containing protein-to-gene ID correspondences</span></span>
+<span><span class="va">protein2gene</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="va">annot</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    </span>
+<span>    <span class="co"># Extract only CDS ranges</span></span>
+<span>    <span class="va">cds_ranges</span> <span class="op">&lt;-</span> <span class="va">x</span><span class="op">[</span><span class="va">x</span><span class="op">$</span><span class="va">type</span> <span class="op">==</span> <span class="st">"CDS"</span><span class="op">]</span></span>
+<span>    </span>
+<span>    <span class="co"># Create the ID correspondence data frame</span></span>
+<span>    <span class="va">df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>        protein_id <span class="op">=</span> <span class="va">cds_ranges</span><span class="op">$</span><span class="va">Name</span>,</span>
+<span>        gene_id <span class="op">=</span> <span class="va">cds_ranges</span><span class="op">$</span><span class="va">gene</span></span>
+<span>    <span class="op">)</span></span>
+<span>    </span>
+<span>    <span class="co"># Remove duplicate rows</span></span>
+<span>    <span class="va">df</span> <span class="op">&lt;-</span> <span class="va">df</span><span class="op">[</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/duplicated.html" class="external-link">duplicated</a></span><span class="op">(</span><span class="va">df</span><span class="op">$</span><span class="va">protein_id</span><span class="op">)</span>, <span class="op">]</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html" class="external-link">return</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Taking a look at the list</span></span>
+<span><span class="va">protein2gene</span></span>
+<span><span class="co">#&gt; $Aalosa</span></span>
+<span><span class="co">#&gt;         protein_id        gene_id</span></span>
+<span><span class="co">#&gt; 1   XP_048113188.1        noxred1</span></span>
+<span><span class="co">#&gt; 6   XP_048105299.1          atg2b</span></span>
+<span><span class="co">#&gt; 47  XP_048099323.1   LOC125294505</span></span>
+<span><span class="co">#&gt; 50  XP_048099476.1   LOC125294505</span></span>
+<span><span class="co">#&gt; 52  XP_048099396.1   LOC125294505</span></span>
+<span><span class="co">#&gt; 54  XP_048099557.1   LOC125294505</span></span>
+<span><span class="co">#&gt; 56  XP_048117257.1   LOC125306123</span></span>
+<span><span class="co">#&gt; 60  XP_048117266.1   LOC125306123</span></span>
+<span><span class="co">#&gt; 64  XP_048117248.1          isca2</span></span>
+<span><span class="co">#&gt; 68  XP_048105318.1           eml5</span></span>
+<span><span class="co">#&gt; 119 XP_048103211.1         itpk1b</span></span>
+<span><span class="co">#&gt; 130 XP_048115651.1   LOC125305081</span></span>
+<span><span class="co">#&gt; 132 XP_048120688.1           plk4</span></span>
+<span><span class="co">#&gt; 149 XP_048105359.1         hspa4l</span></span>
+<span><span class="co">#&gt; 168 XP_048116262.1          chmp3</span></span>
+<span><span class="co">#&gt; 176 XP_048111661.1          reep1</span></span>
+<span><span class="co">#&gt; 183 XP_048084156.1         mrpl35</span></span>
+<span><span class="co">#&gt; 187 XP_048096060.1 si:dkey-21a6.5</span></span>
+<span><span class="co">#&gt; 192 XP_048096122.1 si:dkey-21a6.5</span></span>
+<span><span class="co">#&gt; 197 XP_048095207.1        nt5c1ab</span></span>
+<span><span class="co">#&gt; 203 XP_048105503.1   LOC125298741</span></span></code></pre></div>
+<p>Finally, we can pass the list of sequences and the list of ID
+correspondences to <code><a href="../reference/collapse_protein_ids.html">collapse_protein_ids()</a></code>, which will
+return a list of <code>AAStringSet</code> objects with gene IDs in
+sequence names.</p>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Collapse protein IDs to gene IDs in list of sequences</span></span>
+<span><span class="va">new_seq</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/collapse_protein_ids.html">collapse_protein_ids</a></span><span class="op">(</span><span class="va">seqs</span>, <span class="va">protein2gene</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Looking at the new sequences</span></span>
+<span><span class="va">new_seq</span></span>
+<span><span class="co">#&gt; $Aalosa</span></span>
+<span><span class="co">#&gt; AAStringSet object of length 16:</span></span>
+<span><span class="co">#&gt;      width seq                                              names               </span></span>
+<span><span class="co">#&gt;  [1]  1946 MADRTAPNCHLRLEWVYGYRGHQ...YVISAGGDDRSLFVWKCVHTPH eml5</span></span>
+<span><span class="co">#&gt;  [2]  1882 MPWPFSESIKKRACRYLLHRYLG...MRNQIQPDARQEETQKWRLGEE atg2b</span></span>
+<span><span class="co">#&gt;  [3]   886 MSTSIGDKIEDFKVLTLLGKGSF...VKEKLQCLSSILGLLAGPAARR plk4</span></span>
+<span><span class="co">#&gt;  [4]   769 MSVVGFDVGFQNCYIAVARSGGI...GGDAKSGGSSHQPAAPGEMEVE hspa4l</span></span>
+<span><span class="co">#&gt;  [5]   480 MAAPAYVFGQKVWLSARISPLRV...HTHTHAHLESKVHQHQHIHFQC LOC125298741</span></span>
+<span><span class="co">#&gt;  ...   ... ...</span></span>
+<span><span class="co">#&gt; [12]   189 MTLKMAATMARCFPALVRPLSTR...KRRNWYLNDPYLKYQDRVNPRW mrpl35</span></span>
+<span><span class="co">#&gt; [13]   177 MPQDLPPAAAVPQGSMPPGKMPH...PALRRRARLRRLVTPEPLYAGW si:dkey-21a6.5</span></span>
+<span><span class="co">#&gt; [14]   176 MSLVRGIMLSATRSKAWSVGRAS...QVLKNPQADHGCSCGSSFSVKL isca2</span></span>
+<span><span class="co">#&gt; [15]   149 MAIREVCVLLLPLLALAYAEHVK...WELRDDNNKDLFCIKFPVQIVS LOC125306123</span></span>
+<span><span class="co">#&gt; [16]   137 MITKAMEVDYKLEDPKAPLEESS...GYRDAFGNELLRRLERLQQNAQ LOC125294505</span></span></code></pre></div>
+<p>As you can see, protein IDs have been replaced with gene IDs. If
+there are multiple proteins for the same gene (i.e., different
+isoforms), the function keeps only the longest sequence (also known as
+protein products of the primary transcript). This way, the number of
+sequences will never be greater than the number of genes, which is what
+<strong>syntenet</strong> expects.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 class="unnumbered" id="session-information">Session information<a class="anchor" aria-label="anchor" href="#session-information"></a>
 </h2>
 <p>This document was created under the following conditions:</p>
-<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html" class="external-link">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; R version 4.2.1 (2022-06-23)</span></span>
 <span><span class="co">#&gt; Platform: x86_64-pc-linux-gnu (64-bit)</span></span>
@@ -1251,12 +1552,12 @@ the DIAMOND/BLAST output files.</li>
 <span><span class="co">#&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     </span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; other attached packages:</span></span>
-<span><span class="co">#&gt; [1] ggtree_3.4.4     syntenet_1.1.6   BiocStyle_2.24.0</span></span>
+<span><span class="co">#&gt; [1] ggtree_3.4.4     syntenet_1.3.1   BiocStyle_2.24.0</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
 <span><span class="co">#&gt;   [1] nlme_3.1-162                labdsv_2.1-0               </span></span>
 <span><span class="co">#&gt;   [3] bitops_1.0-7                matrixStats_0.63.0         </span></span>
-<span><span class="co">#&gt;   [5] fs_1.6.1                    RColorBrewer_1.1-3         </span></span>
+<span><span class="co">#&gt;   [5] fs_1.6.2                    RColorBrewer_1.1-3         </span></span>
 <span><span class="co">#&gt;   [7] rprojroot_2.0.3             GenomeInfoDb_1.32.4        </span></span>
 <span><span class="co">#&gt;   [9] tools_4.2.1                 bslib_0.4.2                </span></span>
 <span><span class="co">#&gt;  [11] utf8_1.2.3                  R6_2.5.1                   </span></span>
@@ -1268,7 +1569,7 @@ the DIAMOND/BLAST output files.</li>
 <span><span class="co">#&gt;  [23] intergraph_2.0-2            network_1.18.1             </span></span>
 <span><span class="co">#&gt;  [25] desc_1.4.2                  DelayedArray_0.22.0        </span></span>
 <span><span class="co">#&gt;  [27] labeling_0.4.2              rtracklayer_1.56.1         </span></span>
-<span><span class="co">#&gt;  [29] bookdown_0.33               sass_0.4.5                 </span></span>
+<span><span class="co">#&gt;  [29] bookdown_0.33               sass_0.4.6                 </span></span>
 <span><span class="co">#&gt;  [31] scales_1.2.1                pkgdown_2.0.7              </span></span>
 <span><span class="co">#&gt;  [33] yulab.utils_0.0.6           systemfonts_1.0.4          </span></span>
 <span><span class="co">#&gt;  [35] stringr_1.5.0               digest_0.6.31              </span></span>
@@ -1276,12 +1577,12 @@ the DIAMOND/BLAST output files.</li>
 <span><span class="co">#&gt;  [39] XVector_0.36.0              pkgconfig_2.0.3            </span></span>
 <span><span class="co">#&gt;  [41] htmltools_0.5.5             MatrixGenerics_1.8.1       </span></span>
 <span><span class="co">#&gt;  [43] highr_0.10                  fastmap_1.1.1              </span></span>
-<span><span class="co">#&gt;  [45] htmlwidgets_1.6.2           rlang_1.1.0                </span></span>
+<span><span class="co">#&gt;  [45] htmlwidgets_1.6.2           rlang_1.1.1                </span></span>
 <span><span class="co">#&gt;  [47] gridGraphics_0.5-1          farver_2.1.1               </span></span>
 <span><span class="co">#&gt;  [49] jquerylib_0.1.4             BiocIO_1.6.0               </span></span>
 <span><span class="co">#&gt;  [51] generics_0.1.3              jsonlite_1.8.4             </span></span>
 <span><span class="co">#&gt;  [53] statnet.common_4.8.0        BiocParallel_1.30.4        </span></span>
-<span><span class="co">#&gt;  [55] dplyr_1.1.1                 RCurl_1.98-1.12            </span></span>
+<span><span class="co">#&gt;  [55] dplyr_1.1.2                 RCurl_1.98-1.12            </span></span>
 <span><span class="co">#&gt;  [57] magrittr_2.0.3              ggplotify_0.1.0            </span></span>
 <span><span class="co">#&gt;  [59] ggnetwork_0.5.12            GenomeInfoDbData_1.2.8     </span></span>
 <span><span class="co">#&gt;  [61] patchwork_1.1.2             Matrix_1.5-4               </span></span>
@@ -1289,7 +1590,7 @@ the DIAMOND/BLAST output files.</li>
 <span><span class="co">#&gt;  [65] S4Vectors_0.34.0            fansi_1.0.4                </span></span>
 <span><span class="co">#&gt;  [67] ape_5.7-1                   lifecycle_1.0.3            </span></span>
 <span><span class="co">#&gt;  [69] stringi_1.7.12              yaml_2.3.7                 </span></span>
-<span><span class="co">#&gt;  [71] MASS_7.3-58.3               SummarizedExperiment_1.26.1</span></span>
+<span><span class="co">#&gt;  [71] MASS_7.3-60                 SummarizedExperiment_1.26.1</span></span>
 <span><span class="co">#&gt;  [73] zlibbioc_1.42.0             Rtsne_0.16                 </span></span>
 <span><span class="co">#&gt;  [75] grid_4.2.1                  parallel_4.2.1             </span></span>
 <span><span class="co">#&gt;  [77] crayon_1.5.2                lattice_0.21-8             </span></span>
@@ -1298,13 +1599,13 @@ the DIAMOND/BLAST output files.</li>
 <span><span class="co">#&gt;  [83] igraph_1.4.2                GenomicRanges_1.48.0       </span></span>
 <span><span class="co">#&gt;  [85] rjson_0.2.21                codetools_0.2-19           </span></span>
 <span><span class="co">#&gt;  [87] stats4_4.2.1                XML_3.99-0.14              </span></span>
-<span><span class="co">#&gt;  [89] glue_1.6.2                  evaluate_0.20              </span></span>
+<span><span class="co">#&gt;  [89] glue_1.6.2                  evaluate_0.21              </span></span>
 <span><span class="co">#&gt;  [91] ggfun_0.0.9                 BiocManager_1.30.20        </span></span>
 <span><span class="co">#&gt;  [93] treeio_1.20.2               vctrs_0.6.2                </span></span>
 <span><span class="co">#&gt;  [95] networkD3_0.4               tidyr_1.3.0                </span></span>
 <span><span class="co">#&gt;  [97] gtable_0.3.3                purrr_1.0.1                </span></span>
-<span><span class="co">#&gt;  [99] cachem_1.0.7                ggplot2_3.4.2              </span></span>
-<span><span class="co">#&gt; [101] xfun_0.38                   restfulr_0.0.15            </span></span>
+<span><span class="co">#&gt;  [99] cachem_1.0.8                ggplot2_3.4.2              </span></span>
+<span><span class="co">#&gt; [101] xfun_0.39                   restfulr_0.0.15            </span></span>
 <span><span class="co">#&gt; [103] tidytree_0.4.2              coda_0.19-4                </span></span>
 <span><span class="co">#&gt; [105] ragg_1.2.5                  tibble_3.2.1               </span></span>
 <span><span class="co">#&gt; [107] pheatmap_1.0.12             aplot_0.1.10               </span></span>
