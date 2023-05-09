@@ -517,3 +517,51 @@ rtracklayer::export(
     con = file.path(annot_dir, "OspRCC809.gff3.gz")
 )
 ```
+
+## RefSeq_parsing_example/
+
+This directory contains a subset of 10 genes from the *Alosa alosa*
+genome (FASTA and GFF3 files) to demonstrate how to parse RefSeq data.
+
+Gene annotation (GFF3) and whole-genome protein sequences (FASTA) were
+downloaded from [NCBI’s Data
+Hub](https://www.ncbi.nlm.nih.gov/data-hub/taxonomy/278164/) and
+processed using the code below.
+
+- *Aalosa.gff3.gz*
+
+``` bash
+# Bash
+
+head -n 474 genomic.gff | awk '$3 == "gene" || $3 == "CDS" || $1 ~ /^#/' > Aalosa.gff3
+gzip Aalosa.gff3
+```
+
+- *Aalosa.fa*
+
+``` r
+# Read files
+ranges <- rtracklayer::import(here::here(
+    "inst", "extdata", "RefSeq_parsing_example", "Aalosa.gff3.gz"
+))
+
+sequence <- Biostrings::readAAStringSet(
+    "~/Downloads/protein.faa"
+)
+
+# Get proteins to extract from FASTA file
+proteins <- unique(ranges[ranges$type == "CDS"]$Name)
+
+# Subset sequences
+pmatch <- paste0(proteins, collapse = "|")
+final_seqs <- sequence[grep(pmatch, names(sequence))]
+
+# Write to file
+Biostrings::writeXStringSet(
+    final_seqs,
+    file = here::here(
+        "inst", "extdata", "RefSeq_parsing_example", "Aalosa.fa.gz"
+    ),
+    compress = TRUE
+)
+```

@@ -723,7 +723,7 @@ parameter.
 
 2. Navigate (i.e., `cd`) to the directory specified in **outdir**, where
 the FASTA files are, and execute all-vs-all similarity searches. The
-output files must be named *<species>_<species>.tsv*, where <species>
+output files must be named "[species]_[species].tsv", where [species]
 indicates the basename of the FASTA files (e.g., "speciesA" for a FASTA
 file named *speciesA.fasta*). For DIAMOND, you can use the following 
 code (with adaptations, if you prefer):
@@ -760,6 +760,120 @@ done
 3. Read the output of the similarity searches into a list of 
 data frames with the `read_diamond()` function. As input, `read_diamond()`
 takes the path to the directory containing the DIAMOND/BLAST output files.
+
+## My sequence names do not match gene IDs in the annotation. What should I do? {.unnumbered}
+
+When the names of your sequences (equivalent to FASTA headers) do not match
+the gene IDs in your `GRanges` objects, __syntenet__ throws the following error:
+
+> Sequence names in 'seq' do not match gene names in 'annotation'.
+
+In most (if not all) of the cases, this error happens because users have 
+protein IDs as sequence names, and __syntenet__ looks for gene IDs 
+(i.e., using rows of the `GRanges` objects for which the 
+column *type* is "gene"). This is the case, for instance, for data obtained
+from NCBI's RefSeq database. To solve the issue, you need to replace 
+**protein/transcript IDs** with **gene IDs** in sequence names, which can
+be done with the function `collapse_protein_ids()`. 
+
+
+To demonstrate how this works, let's explore an example data set containing
+protein sequences and gene annotation obtained from RefSeq. The data contains
+information on a subset of 16 genes from the fish species *Alosa alosa*, and
+it is stored in the `extdata/RefSeq_parsing_example` directory of this
+package.
+
+```{r faq3-p1}
+# Path to directory containing data
+data_dir <- system.file(
+    "extdata", "RefSeq_parsing_example", package = "syntenet"
+)
+dir(data_dir)
+
+# Reading the files to a format that syntenet understands
+seqs <- fasta2AAStringSetlist(data_dir)
+annot <- gff2GRangesList(data_dir)
+
+# Taking a look at the data
+seqs
+head(names(seqs$Aalosa))
+
+annot
+```
+
+The first problem we can observe is that sequence names have additional text
+describing the sequences (e.g., "GSK3-beta..."), and we must have only the IDs.
+To solve this issue, we can remove whitespace and everything 
+that comes after it.
+
+```{r faq3-p2}
+# Remove whitespace and everything after it
+names(seqs$Aalosa) <- gsub(" .*", "", names(seqs$Aalosa))
+
+# Taking a look at the new names
+head(names(seqs$Aalosa))
+```
+
+Great, we removed the unnecessary text! However, there is still
+a problem: sequence names start with *XP_....*. If you look closer at the
+first row of `annot$Aalosa` (which contains ranges for genes), you will
+notice that none of the columns contain such *XP_...* IDs. This is because
+RefSeq uses such IDs for CDS, not for genes. Let's check if we can indeed find
+the *XP_...* IDs in rows that have "CDS" in the `type` column.
+
+```{r faq3-p3}
+# Show only rows for which `type` is "CDS"
+head(annot$Aalosa[annot$Aalosa$type == "CDS"])
+```
+
+The *XP_...* IDs can be found in the `Name` column. Note also that the gene IDs,
+which are what we need for __syntenet__, are in the `gene` column. To collapse
+protein IDs to gene IDs with `collapse_protein_ids()`, we will need to create
+a list of 2-column data frames containing the correspondence between
+protein IDs and gene IDs for each species. In this example, we can do that 
+by extracting the columns `Name` and `gene` from rows that represent CDS 
+ranges. 
+
+```{r faq-p4}
+# Create a list of data frames containing protein-to-gene ID correspondences
+protein2gene <- lapply(annot, function(x) {
+    
+    # Extract only CDS ranges
+    cds_ranges <- x[x$type == "CDS"]
+    
+    # Create the ID correspondence data frame
+    df <- data.frame(
+        protein_id = cds_ranges$Name,
+        gene_id = cds_ranges$gene
+    )
+    
+    # Remove duplicate rows
+    df <- df[!duplicated(df$protein_id), ]
+    
+    return(df)
+})
+
+# Taking a look at the list
+protein2gene
+```
+
+Finally, we can pass the list of sequences and the list of ID correspondences
+to `collapse_protein_ids()`, which will return a list of `AAStringSet` objects
+with gene IDs in sequence names.
+
+```{r faq-p5}
+# Collapse protein IDs to gene IDs in list of sequences
+new_seq <- collapse_protein_ids(seqs, protein2gene)
+
+# Looking at the new sequences
+new_seq
+```
+
+As you can see, protein IDs have been replaced with gene IDs. If there are
+multiple proteins for the same gene (i.e., different isoforms), the function
+keeps only the longest sequence (also known as protein products of the
+primary transcript). This way, the number of sequences will never be greater
+than the number of genes, which is what __syntenet__ expects.
 
 # Session information {.unnumbered}
 

@@ -2,7 +2,7 @@
 % Please edit documentation in R/02_data_preprocessing.R
 \name{check_input}
 \alias{check_input}
-\title{Check if input objects is ready for further analyses}
+\title{Check if input objects are ready for further analyses}
 \usage{
 check_input(seq = NULL, annotation = NULL, gene_field = "gene_id")
 }
@@ -24,7 +24,7 @@ that contains gene IDs. Default: "gene_id".}
 TRUE if the objects pass the check.
 }
 \description{
-Check if input objects is ready for further analyses
+Check if input objects are ready for further analyses
 }
 \details{
 This function checks the input data for 3 required conditions:
