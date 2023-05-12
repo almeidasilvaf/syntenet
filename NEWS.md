@@ -112,3 +112,19 @@ NEW FEATURES
 on synteny block information from .collinearity files. The vignette was 
 updated accordingly.
 
+# syntenet 1.3.1
+
+NEW FEATURES
+
+* Added function `collapse_protein_ids()` to replace protein IDs in sequence
+names (equivalent to FASTA headers) with gene IDs. If there are multiple
+protein for the same gene, onlt the longest is kept. Vignette
+was updated accordingly.
+
+# syntenet 1.3.2
+
+BUG FIXES
+
+* Strand information is now preserved in the output of `process_input()` (for
+users who want to plot synteny).
+
