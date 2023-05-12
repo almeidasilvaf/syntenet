@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">syntenet</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -104,6 +104,16 @@
 <ul><li>Added a check for which IQ-TREE version is installed. If IQ-TREE2 is installed (and not IQ-TREE), arguments and call are modified accordingly, because IQ-TREE developers changed some parameters (e.g., -bb is now -B).</li>
 </ul><p>NEW FEATURES</p>
 <ul><li>Added a parameter <code>as</code> to <code><a href="../reference/parse_collinearity.html">parse_collinearity()</a></code> that allows the extraction on synteny block information from .collinearity files. The vignette was updated accordingly.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.1" id="syntenet-131">syntenet 1.3.1<a class="anchor" aria-label="anchor" href="#syntenet-131"></a></h2>
+<p>NEW FEATURES</p>
+<ul><li>Added function <code><a href="../reference/collapse_protein_ids.html">collapse_protein_ids()</a></code> to replace protein IDs in sequence names (equivalent to FASTA headers) with gene IDs. If there are multiple protein for the same gene, onlt the longest is kept. Vignette was updated accordingly.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="1.3.2" id="syntenet-132">syntenet 1.3.2<a class="anchor" aria-label="anchor" href="#syntenet-132"></a></h2>
+<p>BUG FIXES</p>
+<ul><li>Strand information is now preserved in the output of <code><a href="../reference/process_input.html">process_input()</a></code> (for users who want to plot synteny).</li>
 </ul></div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside></div>
