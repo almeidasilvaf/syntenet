@@ -53,5 +53,4 @@ protein2gene <- list(Aalosa = cor_df)
 
 # Collapse IDs
 new_seqs <- collapse_protein_ids(seq, protein2gene)
-
 }

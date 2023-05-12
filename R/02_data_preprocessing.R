@@ -240,7 +240,7 @@ process_input <- function(seq = NULL, annotation = NULL,
         annot_df$gene <- paste(annot_ids[x], annot_df[[gene_field]], sep = "_")
 
         # 6. Keep only seqnames, ranges, and gene ID
-        annot_df <- annot_df[, c("seqnames", "start", "end", "gene")]
+        annot_df <- annot_df[, c("seqnames", "start", "end", "strand", "gene")]
         return(makeGRangesFromDataFrame(annot_df, keep.extra.columns = TRUE))
     })
     names(clean_annotation) <- names(annotation)
