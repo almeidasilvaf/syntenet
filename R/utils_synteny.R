@@ -15,11 +15,15 @@
 #' reported. Default: TRUE.
 #' @param verbose Logical indicating if log messages should be printed on
 #' screen. Default: FALSE.
-#' @param ... Any additional arguments to
-#' `mcscanx`.
+#' @param bp_param BiocParallel back-end to be used. 
+#' Default: \code{BiocParallel::SerialParam()}.
+#' @param ... Any additional arguments to the `MCScanX` algorithm. For a
+#' complete list of all available options, see the man page 
+#' of \code{rcpp_mcscanx_file()}.
 #'
 #' @return Paths to .collinearity files.
 #' @importFrom methods is
+#' @importFrom BiocParallel SerialParam bplapply
 #' @rdname intraspecies_synteny
 #' @export
 #' @examples 
@@ -37,13 +41,15 @@ intraspecies_synteny <- function(
         annotation = NULL, 
         intra_dir = file.path(tempdir(), "intra"),
         anchors = 5, max_gaps = 25, is_pairwise = TRUE,
-        verbose = FALSE, ...
+        verbose = FALSE, 
+        bp_param = BiocParallel::SerialParam(),
+        ...
 ) {
     
     valid <- valid_blast(blast_intra) & valid_annot(annotation)
     if(!dir.exists(intra_dir)) { dir.create(intra_dir, recursive = TRUE) }
     
-    intrasyn <- unlist(lapply(seq_along(blast_intra), function(x) {
+    intrasyn <- BiocParallel::bplapply(seq_along(blast_intra), function(x) {
         
         # Get species name
         blast_comp <- names(blast_intra)[x]
@@ -85,8 +91,10 @@ intraspecies_synteny <- function(
         synf <- file.path(intra_dir, paste0(species, ".collinearity"))
         
         return(synf)
-    }))
+    }, BPPARAM = bp_param)
+    intrasyn <- unlist(intrasyn)
     intrasyn <- intrasyn[!is.null(intrasyn)]
+    
     return(intrasyn)
 }
 
@@ -107,13 +115,17 @@ intraspecies_synteny <- function(
 #' Default: TRUE.
 #' @param verbose Logical indicating if log messages should be printed on
 #' screen. Default: FALSE.
-#' @param ... Any additional arguments to
-#' `mcscanx`.
+#' @param bp_param BiocParallel back-end to be used. 
+#' Default: \code{BiocParallel::SerialParam()}.
+#' @param ... Any additional arguments to the `MCScanX` algorithm. For a
+#' complete list of all available options, see the man page 
+#' of \code{rcpp_mcscanx_file()}.
 #'
 #' @return Paths to .collinearity files.
 #' 
 #' @importFrom utils combn
 #' @importFrom methods is
+#' @importFrom BiocParallel bplapply SerialParam
 #' @rdname interspecies_synteny
 #' @export
 #' @examples 
@@ -133,7 +145,9 @@ interspecies_synteny <- function(
         annotation = NULL,
         inter_dir = file.path(tempdir(), "inter"), 
         anchors = 5, max_gaps = 25, is_pairwise = TRUE,
-        verbose = FALSE, ...
+        verbose = FALSE, 
+        bp_param = BiocParallel::SerialParam(),
+        ...
 ) {
     
     valid <- valid_blast(blast_inter) & valid_annot(annotation)
@@ -164,7 +178,7 @@ interspecies_synteny <- function(
     }))
     
     # Detect synteny
-    intersyn <- unlist(lapply(seq_along(minter), function(x) {
+    intersyn <- BiocParallel::bplapply(seq_along(minter), function(x) {
         
         sp <- names(minter)[x]
         blast_file <- file.path(inter_dir, paste0(sp, ".blast"))
@@ -191,7 +205,9 @@ interspecies_synteny <- function(
         unlink(c(blast_file, gff_file))
         synf <- file.path(inter_dir, paste0(sp, ".collinearity"))
         return(synf)
-    }))
+    }, BPPARAM = bp_param)
+    intersyn <- unlist(intersyn)
     intersyn <- intersyn[!is.null(intersyn)]
+    
     return(intersyn)
 }

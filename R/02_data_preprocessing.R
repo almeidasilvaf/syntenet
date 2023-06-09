@@ -86,7 +86,7 @@ collapse_protein_ids <- function(seq, protein2gene = NULL) {
         
         # Keep only longest protein for each gene
         nseq <- nseq[order(Biostrings::width(nseq), decreasing = TRUE), ]
-        nseq <- nseq[!duplicated(names(nseq)), ]
+        nseq <- nseq[!duplicated(names(nseq))]
         
         return(nseq)
     })
@@ -158,6 +158,12 @@ check_input <- function(seq = NULL, annotation = NULL, gene_field = "gene_id") {
 #' of list elements in \strong{seq}.
 #' @param gene_field Character, name of the column in the GRanges objects
 #' that contains gene IDs. Default: "gene_id".
+#' @param filter_annotation Logical indicating whether \strong{annotation}
+#' should be filtered to keep only genes that are also in \strong{seq}. This
+#' is particularly useful if users want to remove information on 
+#' non-protein coding genes from \strong{annotation}, since such genes are
+#' typically not present in sets of whole-genome protein sequences. 
+#' Default: FALSE.
 #'
 #' @return A list of 2 elements:
 #' \describe{
@@ -172,10 +178,6 @@ check_input <- function(seq = NULL, annotation = NULL, gene_field = "gene_id") {
 #'   \item Remove whitespace and anything after it in sequence names 
 #'   (i.e., \code{names(seq[[x]])}, which is equivalent to FASTA headers), if
 #'   there is any.
-#'   \item Remove period followed by number at the end of sequence names, which
-#'   typically indicates different isoforms of the same gene 
-#'   (e.g., Arabidopsis thaliana's transcript AT1G01010.1, which belongs to
-#'   gene AT1G01010).
 #'   \item Add a unique species identifier to sequence names. The species 
 #'   identifier consists of the first 3-5 strings of the element name.
 #'   For instance, if the first element of the \strong{seq} list is named
@@ -199,7 +201,7 @@ check_input <- function(seq = NULL, annotation = NULL, gene_field = "gene_id") {
 #' seq <- proteomes
 #' clean_data <- process_input(seq, annotation)
 process_input <- function(seq = NULL, annotation = NULL, 
-                          gene_field = "gene_id") {
+                          gene_field = "gene_id", filter_annotation = FALSE) {
     
     check <- check_input(seq, annotation, gene_field = gene_field)
     
@@ -214,14 +216,11 @@ process_input <- function(seq = NULL, annotation = NULL,
         ## 1. Remove everything after space
         gene_names <- gsub(" .*", "", gene_names)
         
-        ## 2. Remove period + number at the end of gene IDs
-        gene_names <- gsub("\\.[0-9]$", "", gene_names)
-        
-        ## 3. Add unique identifier in front of gene names
+        ## 2. Add unique identifier in front of gene names
         gene_names <- paste(seq_ids[x], gene_names, sep = "_")
         names(sequence) <- gene_names
         
-        ## 4. Remove "*" as stop codon (if any)
+        ## 3. Remove "*" as stop codon (if any)
         last_aa <- sequence[[1]][Biostrings::width(sequence)[1]]
         if(identical(toString(last_aa), "*")) {
             sequence <- Biostrings::subseq(sequence, 1, width(sequence)-1)
@@ -238,14 +237,21 @@ process_input <- function(seq = NULL, annotation = NULL,
         annot_df <- as.data.frame(annot_df)
         annot_df$seqnames <- paste(annot_ids[x], annot_df$seqnames, sep = "_")
         annot_df$gene <- paste(annot_ids[x], annot_df[[gene_field]], sep = "_")
-
+        
         # 6. Keep only seqnames, ranges, and gene ID
         annot_df <- annot_df[, c("seqnames", "start", "end", "strand", "gene")]
+        
+        # Keep in annotation only genes in `seq`
+        if(filter_annotation) {
+            genes_in_seq <- names(clean_seqs[[x]])
+            annot_df <- annot_df[annot_df$gene %in% genes_in_seq, ]
+        }
+        
         return(makeGRangesFromDataFrame(annot_df, keep.extra.columns = TRUE))
     })
     names(clean_annotation) <- names(annotation)
+    
     flist <- list(seq = clean_seqs, annotation = clean_annotation)
     return(flist)
 }
-
 

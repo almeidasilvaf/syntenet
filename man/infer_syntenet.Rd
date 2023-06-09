@@ -12,6 +12,7 @@ infer_syntenet(
   max_gaps = 25,
   is_pairwise = TRUE,
   verbose = FALSE,
+  bp_param = BiocParallel::SerialParam(),
   ...
 )
 }
@@ -42,8 +43,12 @@ Default: TRUE}
 \item{verbose}{Logical indicating if log messages should be printed on
 screen. Default: FALSE.}
 
-\item{...}{Any additional arguments to
-\code{mcscanx}.}
+\item{bp_param}{BiocParallel back-end to be used.
+Default: \code{BiocParallel::SerialParam()}.}
+
+\item{...}{Any additional arguments to the \code{MCScanX} algorithm. For a
+complete list of all available options, see the man page
+of \code{rcpp_mcscanx_file()}.}
 }
 \value{
 A network represented as an edge list.
