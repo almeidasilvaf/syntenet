@@ -220,8 +220,11 @@ parse_collinearity <- function(
 #' Default: TRUE
 #' @param verbose Logical indicating if log messages should be printed on
 #' screen. Default: FALSE.
-#' @param ... Any additional arguments to
-#' `mcscanx`.
+#' @param bp_param BiocParallel back-end to be used. 
+#' Default: \code{BiocParallel::SerialParam()}.
+#' @param ... Any additional arguments to the `MCScanX` algorithm. For a
+#' complete list of all available options, see the man page 
+#' of \code{rcpp_mcscanx_file()}.
 #' 
 #' @return A network represented as an edge list.
 #'
@@ -244,7 +247,9 @@ infer_syntenet <- function(
         annotation = NULL, 
         outdir = tempdir(),
         anchors = 5, max_gaps = 25, is_pairwise = TRUE, 
-        verbose = FALSE, ...
+        verbose = FALSE, 
+        bp_param = BiocParallel::SerialParam(),
+        ...
 ) {
 
     valid <- valid_blast(blast_list) & valid_annot(annotation)
@@ -267,6 +272,7 @@ infer_syntenet <- function(
         max_gaps = max_gaps, 
         is_pairwise = is_pairwise,
         verbose = verbose, 
+        bp_param = bp_param,
         ...
     )
     
@@ -283,6 +289,7 @@ infer_syntenet <- function(
         max_gaps = max_gaps, 
         is_pairwise = is_pairwise,
         verbose = verbose, 
+        bp_param = bp_param,
         ...
     )
     

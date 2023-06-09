@@ -207,24 +207,19 @@ This function processes the input sequences and annotation to:
 (i.e., `names(seq[[x]])`, which is equivalent to FASTA headers), if
 there is any.
 
-2. Remove period followed by number at the end of sequence names, which
-typically indicates different isoforms of the same gene 
-(e.g., Arabidopsis thaliana's transcript AT1G01010.1, which belongs to
-gene AT1G01010).
-
-3. Add a unique species identifier to sequence names. The species 
+2. Add a unique species identifier to sequence names. The species 
 identifier consists of the first 3-5 strings of the element name.
 For instance, if the first element of the **seq** list is named
 "Athaliana", each sequence in it will have an identifier "Atha_" added
 to the beginning of each gene name (e.g., Atha_AT1G01010).
 
-4. If sequences have an asterisk (*) representing stop codon, remove it.
+3. If sequences have an asterisk (*) representing stop codon, remove it.
 
-5. Add a unique species identifier (same as above) to 
+4. Add a unique species identifier (same as above) to 
 gene and chromosome names of each element of the **annotation**
 `GRangesList`/`CompressedGRangesList`.
 
-6. Filter each element of the **annotation** 
+5. Filter each element of the **annotation** 
 `GRangesList`/`CompressedGRangesList` to keep only seqnames, 
 ranges, and gene ID.
 

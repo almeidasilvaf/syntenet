@@ -54,9 +54,9 @@ list
 }
 \description{
 MCSanX provides a clustering module for viewing the
-relationship of colinear segments in multiple genomes (or heavily redundant
+relationship of collinear segments in multiple genomes (or heavily redundant
 genomes). It takes the predicted pairwise segments from dynamic programming
-(DAGchainer in particular) and then try to build consensus segments from a
+(DAGchainer in particular) and then tries to build consensus segments from a
 set of related, overlapping segments.
 }
 \references{
