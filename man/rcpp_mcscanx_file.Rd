@@ -17,43 +17,62 @@ rcpp_mcscanx_file(
   overlap_window = 5L,
   is_pairwise = FALSE,
   in_synteny = 0L,
+  species_id_length = 3L,
   verbose = FALSE
 )
 }
 \arguments{
-\item{blast_file}{blast input}
+\item{blast_file}{Character indicating the path to the BLAST/DIAMOND output
+file.}
 
-\item{gff_file}{gff input}
+\item{gff_file}{Character indicating the path to the "gff" file, which
+is a tab-delimited file with 4 columns indicating the chromosome name,
+gene id, gene start position, and gene end position, respectively.}
 
-\item{prefix}{output prefix (default: out)}
+\item{prefix}{Character indicating the prefix to output files.
+Default: "out".}
 
-\item{outdir}{output directory (default: "")}
+\item{outdir}{Character indicating the path to the output directory.
+Default: "".}
 
-\item{match_score}{match score (default: 50)}
+\item{match_score}{Numeric indicating the match score. Default: 50.}
 
-\item{gap_penalty}{gap penalty (default: -1)}
+\item{gap_penalty}{Numeric indicating the gap penalty. Default: -1.}
 
-\item{match_size}{match_size (default: 5)}
+\item{match_size}{Numeric indicating the minimum number of genes
+required to call synteny. Default: 5.}
 
-\item{e_value}{e_value (default: 1e-5)}
+\item{e_value}{Numeric indicating the minimum e-value allowed.
+Default: 1e-5.}
 
-\item{max_gaps}{max gaps (default: 25)}
+\item{max_gaps}{Numeric indicating the maximum number of gaps between
+genes allowed. The unit measure of gaps is number of genes,
+so \code{max_gaps = 20} indicates that a maximum of 20 genes can
+exist between two homologous genes for synteny to be called. Default: 25.}
 
-\item{overlap_window}{overlap window (default: 5)}
+\item{overlap_window}{Numeric indicating the overlap window. Default: 5.}
 
-\item{is_pairwise}{specify if only pairwise blocks should be reported
-(default: FALSE)}
+\item{is_pairwise}{Logical indicating whether only pairwise blocks
+should be reported. Default: FALSE.}
 
-\item{in_synteny}{specify patterns of collinear blocks.
+\item{in_synteny}{Numeric indicating the patterns of collinear blocks,
+where 0 indicates intra and interspecies comparisons, 1 indicates
+intraspecies comparisons, and 2 indicates interspecies comparisons.
+Default: 0.}
+
+\item{species_id_length}{Integer indicating the length of the species IDs.
+Default: 3.
 0: intra- and inter-species (default); 1: intra-species; 2: inter-species}
 
-\item{verbose}{specify if verbose output (default: FALSE)}
+\item{verbose}{Logical indicating whether to print progress messages
+to the screen. Default: FALSE.}
 }
 \value{
-list
+NULL, and a .collinearity file is created in the directory
+specified in \strong{\code{outdir}}.
 }
 \description{
-MCSanX provides a clustering module for viewing the
+MCSCanX provides a clustering module for viewing the
 relationship of collinear segments in multiple genomes (or heavily redundant
 genomes). It takes the predicted pairwise segments from dynamic programming
 (DAGchainer in particular) and then tries to build consensus segments from a
@@ -69,5 +88,5 @@ genome duplications and synteny. \emph{Bioinformatics}. \bold{20.18}
 3643-3646.
 }
 \author{
-Kristian K Ullrich
+Kristian K Ullrich and Fabricio Almeida-Silva
 }

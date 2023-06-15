@@ -49,13 +49,19 @@ intraspecies_synteny <- function(
     valid <- valid_blast(blast_intra) & valid_annot(annotation)
     if(!dir.exists(intra_dir)) { dir.create(intra_dir, recursive = TRUE) }
     
+    # Get species ID length
+    example_gene <- as.character(blast_intra[[1]][1, 1])
+    species_id_length <- nchar(gsub("_.*", "", example_gene))
+    
     intrasyn <- BiocParallel::bplapply(seq_along(blast_intra), function(x) {
         
         # Get species name
         blast_comp <- names(blast_intra)[x]
         all_species <- names(annotation)
-        counts <- unlist(lapply(all_species, function(y) {
-            return(length(unlist(gregexpr(y, blast_comp))))
+        counts <- unlist(lapply(all_species, function(y) { 
+            match1 <- grepl(paste0(y, "_"), blast_comp) 
+            match2 <- grepl(paste0(y, "$"), blast_comp)
+            return(match1 + match2)
         }))
         species <- all_species[counts == 2]
         
@@ -82,7 +88,8 @@ intraspecies_synteny <- function(
         rcpp_mcscanx_file(
             blast_file = blast_file, gff_file = gff_file, prefix = species,
             outdir = intra_dir, match_size = anchors, max_gaps = max_gaps,
-            is_pairwise = is_pairwise, in_synteny = 1, verbose = verbose, ...
+            is_pairwise = is_pairwise, in_synteny = 1, verbose = verbose, 
+            species_id_length = species_id_length, ...
         )
         
         # Delete intermediate files
@@ -177,6 +184,10 @@ interspecies_synteny <- function(
         return(paste0(x[1], "_", x[2]))
     }))
     
+    # Get species ID length
+    example_chr <- as.character(minter[[1]]$gff[1, 1])
+    species_id_length <- nchar(gsub("_.*", "", example_chr))
+    
     # Detect synteny
     intersyn <- BiocParallel::bplapply(seq_along(minter), function(x) {
         
@@ -198,7 +209,8 @@ interspecies_synteny <- function(
         rcpp_mcscanx_file(
             blast_file = blast_file, gff_file = gff_file, prefix = sp,
             outdir = inter_dir, match_size = anchors, max_gaps = max_gaps,
-            is_pairwise = is_pairwise, in_synteny = 2, verbose = verbose, ...
+            is_pairwise = is_pairwise, in_synteny = 2, verbose = verbose, 
+            species_id_length = species_id_length, ...
         )
         
         # Delete intermediate files
