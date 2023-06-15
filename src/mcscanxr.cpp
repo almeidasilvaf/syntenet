@@ -5,6 +5,8 @@
  *
  * Modified by Author: Kristian Ullrich <ullrich@evolbio.mpg.de>, May 29, 2022
  * 
+ * Modified by Author: Fabricio Almeida-Silva <fabricio_almeidasilva@hotmail.com>, June 15, 2023
+ * 
  * Original files can be found here: https://github.com/wyp1125/MCScanX
  * 
  * Combined multiple cpp files into one cpp file: mcscanx.cpp
@@ -43,6 +45,7 @@ geneSet allg;
 
 /***** CONSTANTS *****/
 
+int ID_LENGTH;
 int MATCH_SCORE;
 int MATCH_SIZE;
 int GAP_PENALTY;
@@ -139,6 +142,7 @@ void read_blast(const string blast_infile){
     int total_num = 0;
     int selected_num = 0;
     int pair_id = 0;
+    
     if(VERBOSE){
         Rcpp::Rcout<<"Reading BLAST file and pre-processing"<<endl;
     }
@@ -199,7 +203,8 @@ void read_blast(const string blast_infile){
         if (gf1->mol.empty() || gf2->mol.empty()){
             continue;
         }
-        if (IN_SYNTENY==1 && gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)){
+        
+        if (IN_SYNTENY==1 && gf1->mol.substr(0, ID_LENGTH)!=gf2->mol.substr(0, ID_LENGTH)){
             continue;
         }
         i = gf1->mol.compare(gf2->mol);
@@ -221,7 +226,7 @@ void read_blast(const string blast_infile){
             br.gene2 = gene1;
             br.mol_pair = gf2->mol+"&"+gf1->mol;
         }
-        if(IN_SYNTENY!=2 || gf1->mol.substr(0,2)!=gf2->mol.substr(0,2)){
+        if(IN_SYNTENY!=2 || gf1->mol.substr(0,ID_LENGTH)!=gf2->mol.substr(0,ID_LENGTH)){
             mol_pairs[br.mol_pair]++;
         }
         br.pair_id = pair_id++;
@@ -618,8 +623,9 @@ void print_align_homology(FILE* fw){
         fprintf(fw, "## Alignment %d: score=%.1f e_value=%.2g N=%d %s %s\n",
                 i, s->score, s->e_value, nanchor, s->mol_pair.c_str(),
                 s->sameStrand?"plus":"minus");
-        sp1 = (s->s1)->mol.substr(0,2);
-        sp2 = (s->s2)->mol.substr(0,2);
+        
+        sp1 = (s->s1)->mol.substr(0,ID_LENGTH);
+        sp2 = (s->s2)->mol.substr(0,ID_LENGTH);
         spc = sp1+"&"+sp2; 
         cmp_sp[spc].syn_num += nanchor;
         
@@ -897,27 +903,44 @@ context("cpp_tests"){
 //' @import Rcpp
 //' @title rcpp_mcscanx_file
 //' @name rcpp_mcscanx_file
-//' @description MCSanX provides a clustering module for viewing the
-//' relationship of colinear segments in multiple genomes (or heavily redundant
+//' @description MCSCanX provides a clustering module for viewing the
+//' relationship of collinear segments in multiple genomes (or heavily redundant
 //' genomes). It takes the predicted pairwise segments from dynamic programming
-//' (DAGchainer in particular) and then try to build consensus segments from a
+//' (DAGchainer in particular) and then tries to build consensus segments from a
 //' set of related, overlapping segments.
-//' @return list
-//' @param blast_file blast input
-//' @param gff_file gff input
-//' @param prefix output prefix (default: out)
-//' @param outdir output directory (default: "")
-//' @param match_score match score (default: 50)
-//' @param gap_penalty gap penalty (default: -1)
-//' @param match_size match_size (default: 5)
-//' @param e_value e_value (default: 1e-5)
-//' @param max_gaps max gaps (default: 25)
-//' @param overlap_window overlap window (default: 5)
-//' @param is_pairwise specify if only pairwise blocks should be reported
-//' (default: FALSE)
-//' @param in_synteny specify patterns of collinear blocks.
+//' @return NULL, and a .collinearity file is created in the directory
+//' specified in \strong{`outdir`}.
+//' @param blast_file Character indicating the path to the BLAST/DIAMOND output
+//' file.
+//' @param gff_file Character indicating the path to the "gff" file, which
+//' is a tab-delimited file with 4 columns indicating the chromosome name,
+//' gene id, gene start position, and gene end position, respectively.
+//' @param prefix Character indicating the prefix to output files. 
+//' Default: "out".
+//' @param outdir Character indicating the path to the output directory. 
+//' Default: "".
+//' @param match_score Numeric indicating the match score. Default: 50.
+//' @param gap_penalty Numeric indicating the gap penalty. Default: -1.
+//' @param match_size Numeric indicating the minimum number of genes 
+//' required to call synteny. Default: 5.
+//' @param e_value Numeric indicating the minimum e-value allowed. 
+//' Default: 1e-5.
+//' @param max_gaps Numeric indicating the maximum number of gaps between
+//' genes allowed. The unit measure of gaps is number of genes, 
+//' so \code{max_gaps = 20} indicates that a maximum of 20 genes can
+//' exist between two homologous genes for synteny to be called. Default: 25.
+//' @param overlap_window Numeric indicating the overlap window. Default: 5.
+//' @param is_pairwise Logical indicating whether only pairwise blocks 
+//' should be reported. Default: FALSE.
+//' @param in_synteny Numeric indicating the patterns of collinear blocks,
+//' where 0 indicates intra and interspecies comparisons, 1 indicates
+//' intraspecies comparisons, and 2 indicates interspecies comparisons. 
+//' Default: 0.
+//' @param species_id_length Integer indicating the length of the species IDs.
+//' Default: 3.
 //' 0: intra- and inter-species (default); 1: intra-species; 2: inter-species
-//' @param verbose specify if verbose output (default: FALSE)
+//' @param verbose Logical indicating whether to print progress messages
+//' to the screen. Default: FALSE.
 //' @references Wang et al. (2012) MCScanX: a toolkit for detection and
 //' evolutionary analysis of gene synteny and collinearity.
 //' \emph{Nucleic acids research}. \bold{40.7}, e49-e49.
@@ -925,7 +948,7 @@ context("cpp_tests"){
 //' genome duplications and synteny. \emph{Bioinformatics}. \bold{20.18}
 //' 3643-3646.
 //' @export rcpp_mcscanx_file
-//' @author Kristian K Ullrich
+//' @author Kristian K Ullrich and Fabricio Almeida-Silva
 // [[Rcpp::export]]
 int rcpp_mcscanx_file(
     std::string blast_file,
@@ -940,7 +963,8 @@ int rcpp_mcscanx_file(
     int overlap_window=5,
     bool is_pairwise=false,
     int in_synteny=0,
-    bool verbose=false){
+    int species_id_length=3,
+    bool verbose=false) {
     gene_map.clear();
     mol_pairs.clear();
     seg_list.clear();
@@ -962,6 +986,7 @@ int rcpp_mcscanx_file(
     IN_SYNTENY = in_synteny;
     CUTOFF_SCORE = MATCH_SCORE*MATCH_SIZE;
     VERBOSE = verbose;
+    ID_LENGTH = species_id_length;
     map<string, int>::const_iterator ip;
     char align_fn[LABEL_LEN];
     FILE *fw;

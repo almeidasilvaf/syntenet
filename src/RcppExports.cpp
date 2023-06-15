@@ -11,8 +11,8 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // rcpp_mcscanx_file
-int rcpp_mcscanx_file(std::string blast_file, std::string gff_file, std::string prefix, std::string outdir, int match_score, int gap_penalty, int match_size, double e_value, int max_gaps, int overlap_window, bool is_pairwise, int in_synteny, bool verbose);
-RcppExport SEXP _syntenet_rcpp_mcscanx_file(SEXP blast_fileSEXP, SEXP gff_fileSEXP, SEXP prefixSEXP, SEXP outdirSEXP, SEXP match_scoreSEXP, SEXP gap_penaltySEXP, SEXP match_sizeSEXP, SEXP e_valueSEXP, SEXP max_gapsSEXP, SEXP overlap_windowSEXP, SEXP is_pairwiseSEXP, SEXP in_syntenySEXP, SEXP verboseSEXP) {
+int rcpp_mcscanx_file(std::string blast_file, std::string gff_file, std::string prefix, std::string outdir, int match_score, int gap_penalty, int match_size, double e_value, int max_gaps, int overlap_window, bool is_pairwise, int in_synteny, int species_id_length, bool verbose);
+RcppExport SEXP _syntenet_rcpp_mcscanx_file(SEXP blast_fileSEXP, SEXP gff_fileSEXP, SEXP prefixSEXP, SEXP outdirSEXP, SEXP match_scoreSEXP, SEXP gap_penaltySEXP, SEXP match_sizeSEXP, SEXP e_valueSEXP, SEXP max_gapsSEXP, SEXP overlap_windowSEXP, SEXP is_pairwiseSEXP, SEXP in_syntenySEXP, SEXP species_id_lengthSEXP, SEXP verboseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -28,8 +28,9 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type overlap_window(overlap_windowSEXP);
     Rcpp::traits::input_parameter< bool >::type is_pairwise(is_pairwiseSEXP);
     Rcpp::traits::input_parameter< int >::type in_synteny(in_syntenySEXP);
+    Rcpp::traits::input_parameter< int >::type species_id_length(species_id_lengthSEXP);
     Rcpp::traits::input_parameter< bool >::type verbose(verboseSEXP);
-    rcpp_result_gen = Rcpp::wrap(rcpp_mcscanx_file(blast_file, gff_file, prefix, outdir, match_score, gap_penalty, match_size, e_value, max_gaps, overlap_window, is_pairwise, in_synteny, verbose));
+    rcpp_result_gen = Rcpp::wrap(rcpp_mcscanx_file(blast_file, gff_file, prefix, outdir, match_score, gap_penalty, match_size, e_value, max_gaps, overlap_window, is_pairwise, in_synteny, species_id_length, verbose));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -37,7 +38,7 @@ END_RCPP
 RcppExport SEXP run_testthat_tests(void *);
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_syntenet_rcpp_mcscanx_file", (DL_FUNC) &_syntenet_rcpp_mcscanx_file, 13},
+    {"_syntenet_rcpp_mcscanx_file", (DL_FUNC) &_syntenet_rcpp_mcscanx_file, 14},
     {"run_testthat_tests", (DL_FUNC) &run_testthat_tests, 1},
     {NULL, NULL, 0}
 };
