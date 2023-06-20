@@ -84,6 +84,15 @@ jobs:
             rm /tmp/diamond-linux64.tar.gz
 
 
+          # Install last
+          wget https://gitlab.com/mcfrith/last/-/archive/1456/last-1456.tar.gz -O /tmp/last-1456.tar.gz && \
+            tar -xzf /tmp/last-1456.tar.gz && \
+            cd /tmp/last-1456/ && make && \
+            cp /tmp/last-1456/* /usr/local/bin && \
+            rm /tmp/last-1456.tar.gz && \
+            rm -rf /tmp/last-1456/
+
+
       - name: Checkout Repository
         uses: actions/checkout@v2
 
