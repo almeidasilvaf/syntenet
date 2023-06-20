@@ -8,7 +8,7 @@ run_last(
   seq = NULL,
   verbose = FALSE,
   outdir = tempdir(),
-  threads = NULL,
+  threads = 1,
   compare = "all",
   lastD = 1e6,
   ...
