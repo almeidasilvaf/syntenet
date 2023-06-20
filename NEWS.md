@@ -128,3 +128,9 @@ BUG FIXES
 * Strand information is now preserved in the output of `process_input()` (for
 users who want to plot synteny).
 
+# syntenet 1.4.5
+
+NEW FEATURES
+
+* Added function `run_last()` to run alternative BLAST search.
+
