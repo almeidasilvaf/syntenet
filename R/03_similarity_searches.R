@@ -85,7 +85,6 @@ run_diamond <- function(seq = NULL, top_hits = 5, verbose = FALSE,
 #'
 #' @param seq A processed list of AAStringSet objects 
 #' as returned by \code{process_input()}.
-#' @param top_hits Number of top hits to keep in last search. Default: 5.
 #' @param verbose Logical indicating if progress messages should be printed.
 #' Default: FALSE. 
 #' @param outdir Output directory for last results. By default, output files
@@ -115,7 +114,7 @@ run_diamond <- function(seq = NULL, top_hits = 5, verbose = FALSE,
 #' if(last_is_installed()) {
 #'     last_results <- run_last(seq)
 #' }
-run_last <- function(seq = NULL, top_hits = 5, verbose = FALSE, 
+run_last <- function(seq = NULL, verbose = FALSE, 
                         outdir = tempdir(), threads = 1, 
                         compare = "all", lastD=1e6, ...) {
     
