@@ -18,8 +18,6 @@ run_last(
 \item{seq}{A processed list of AAStringSet objects
 as returned by \code{process_input()}.}
 
-\item{top_hits}{Number of top hits to keep in last search. Default: 5.}
-
 \item{verbose}{Logical indicating if progress messages should be printed.
 Default: FALSE.}
 
