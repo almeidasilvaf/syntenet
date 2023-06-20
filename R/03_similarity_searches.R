@@ -251,11 +251,12 @@ read_diamond <- function(diamond_dir = NULL) {
 #' @export
 #' @importFrom utils read.csv
 #' @examples
-#' # Path to output directory
-#' last_dir <- system.file("extdata", package = "syntenet")
-#' 
-#' # Read output
-#' l <- read_last(last_dir)
+#' data(proteomes)
+#' data(annotation)
+#' seq <- process_input(proteomes, annotation)$seq[1:2]
+#' if(last_is_installed()) {
+#'     last_results <- run_last(seq)
+#' }
 read_last <- function(last_dir = NULL) {
     
     if(!dir.exists(last_dir) | is.null(last_dir)) {
