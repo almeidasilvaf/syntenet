@@ -4,7 +4,7 @@
 \alias{run_last}
 \title{Wrapper to run last from an R session}
 \usage{
-run_diamond(
+run_last(
   seq = NULL,
   verbose = FALSE,
   outdir = tempdir(),
