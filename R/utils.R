@@ -220,6 +220,20 @@ diamond_is_installed <- function() {
     return(valid)
 }
 
+
+#' Check if last is installed
+#'
+#' @return Logical indicating whether last is installed or not.
+#' @export
+#' @rdname last_is_installed
+#' @examples
+#' last_is_installed()
+last_is_installed <- function() {
+    valid <- is_valid(cmd = "lastal", args = "-h")
+    return(valid)
+}
+
+
 #' Get IQ-TREE version
 #'
 #' @return Numeric indicating IQ-TREE version, with either 1 or 2.
