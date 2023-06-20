@@ -269,7 +269,7 @@ read_last <- function(last_dir = NULL) {
         names(df) <- c(
             "query", "db", "perc_identity", "length", "mismatches", 
             "gap_open", "qstart", "qend", "tstart", "tend",
-            "evalue", "bitscore", "qlen", "tlen", "rawscore"
+            "evalue", "bitscore", "qlen", "tlen"
         )
         return(df)
     })
