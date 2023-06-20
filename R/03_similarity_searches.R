@@ -226,7 +226,7 @@ read_diamond <- function(diamond_dir = NULL) {
     # Read files as a list of data frames
     result_files <- list.files(diamond_dir, pattern = ".tsv", full.names = TRUE)
     final_list <- lapply(result_files, function(x) {
-        df <- read.csv(x, header = FALSE, sep = "\t")
+        df <- read.csv(x, header = FALSE, sep = "\t", comment.char = "#")
         names(df) <- c(
             "query", "db", "perc_identity", "length", "mismatches", 
             "gap_open", "qstart", "qend", "tstart", "tend",
