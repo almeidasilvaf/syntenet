@@ -265,7 +265,7 @@ read_last <- function(last_dir = NULL) {
     # Read files as a list of data frames
     result_files <- list.files(last_dir, pattern = ".tsv", full.names = TRUE)
     final_list <- lapply(result_files, function(x) {
-        df <- read.csv(x, header = FALSE, sep = "\t", comment = "#")
+        df <- read.csv(x, header = FALSE, sep = "\t")
         names(df) <- c(
             "query", "db", "perc_identity", "length", "mismatches", 
             "gap_open", "qstart", "qend", "tstart", "tend",
