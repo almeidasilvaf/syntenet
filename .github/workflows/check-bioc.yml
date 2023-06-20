@@ -86,11 +86,11 @@ jobs:
 
           # Install last
           wget https://gitlab.com/mcfrith/last/-/archive/1456/last-1456.tar.gz -O /tmp/last-1456.tar.gz && \
-            tar -xzf /tmp/last-1456.tar.gz && \
-            cd /tmp/last-1456/ && make && \
+            tar -xzf /tmp/last-1456.tar.gz -C /tmp && \
+            cd /tmp/last-1456 && make && cd && \
             cp /tmp/last-1456/* /usr/local/bin && \
             rm /tmp/last-1456.tar.gz && \
-            rm -rf /tmp/last-1456/
+            rm -rf /tmp/last-1456
 
 
       - name: Checkout Repository
