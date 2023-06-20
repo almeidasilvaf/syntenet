@@ -150,11 +150,11 @@ run_last <- function(seq = NULL, verbose = FALSE,
         outfile <- paste(comb_df[x, 1], comb_df[x, 2], sep = "_")
         outfile <- paste0(file.path(resdir, outfile), sep =  ".tsv")
         
-        bargs <- c("-f", "BlastTab+", "-P", threads, "-D", lastD, db, query, ..., ">", outfile)
+        bargs <- c("-f", "BlastTab", "-P", threads, "-D", lastD, db, query, ..., ">", outfile)
         run_last <- system2("lastal", args = bargs)
     })
     
-    final_list <- read_last(resdir)
+    final_list <- read_diamond(resdir)
     return(final_list)
 }
 
@@ -231,46 +231,6 @@ read_diamond <- function(diamond_dir = NULL) {
             "query", "db", "perc_identity", "length", "mismatches", 
             "gap_open", "qstart", "qend", "tstart", "tend",
             "evalue", "bitscore"
-        )
-        return(df)
-    })
-    names(final_list) <- gsub("\\.tsv", "", basename(result_files))
-    
-    return(final_list)
-}
-
-
-#' Read last/BLAST tables as a list of data frames
-#'
-#' @param last_dir Path to directory containing the tabular output
-#' of last or similar programs (e.g., BLAST).
-#'
-#' @return A list of data frames with the tabular last output.
-#' 
-#' @rdname read_last
-#' @export
-#' @importFrom utils read.csv
-#' @examples
-#' data(proteomes)
-#' data(annotation)
-#' seq <- process_input(proteomes, annotation)$seq[1:2]
-#' if(last_is_installed()) {
-#'     last_results <- run_last(seq)
-#' }
-read_last <- function(last_dir = NULL) {
-    
-    if(!dir.exists(last_dir) | is.null(last_dir)) {
-        stop("Could not find the directory specified in 'last_dir'.")
-    }
-    
-    # Read files as a list of data frames
-    result_files <- list.files(last_dir, pattern = ".tsv", full.names = TRUE)
-    final_list <- lapply(result_files, function(x) {
-        df <- read.csv(x, header = FALSE, sep = "\t")
-        names(df) <- c(
-            "query", "db", "perc_identity", "length", "mismatches", 
-            "gap_open", "qstart", "qend", "tstart", "tend",
-            "evalue", "bitscore", "qlen", "tlen", "rawscore"
         )
         return(df)
     })
