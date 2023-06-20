@@ -238,15 +238,15 @@ pdata$annotation
 
 Now that we have our processed data, we can infer the synteny network.
 To detect synteny, we need the tabular output from BLASTp [@altschul1997gapped]
-or similar programs. To get that, you can use the function `run_diamond()`, 
-which runs DIAMOND [@buchfink2021sensitive] from the R session and
-automatically parses its output to a list of data frames [^1].
+or similar programs. To get that, you can use the functions `run_diamond()`,
+or `run_last()`, which runs DIAMOND [@buchfink2021sensitive] or last [@kielbasa2011adaptive]
+from the R session and automatically parses its output to a list of data frames [^1].
 
 [^1]: **Alternative:** if you want to use a different program for similarity
 searches, you can run it on the command line, save the output in
 a DIAMOND/BLAST-like tabular format, and read the output files
-as a list of data frames with the function `read_diamond()` (see the FAQ 
-for details).
+as a list of data frames with the function `read_diamond()` or `read_last()`
+(see the FAQ for details).
 
 Let's demonstrate how `run_diamond()` works. 
 Needless to say, you need to have DIAMOND installed in your machine 
