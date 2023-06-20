@@ -34,6 +34,7 @@ test_that("get_comp() returns a data frame of comparisons", {
     expect_true(all(names(t1) %in% c("sp1", "sp2")))
 })
 
+
 test_that("run_diamond() runs DIAMOND on the background", {
     
     seq <- process_input(proteomes, annotation)$seq[1:2]
@@ -50,6 +51,25 @@ test_that("run_diamond() runs DIAMOND on the background", {
     expect_equal(class(diamond), "list")
     expect_equal(length(diamond), length(seq) ^ 2)
     expect_equal(class(diamond[[1]]), "data.frame")
+})
+
+
+test_that("run_last() runs last on the background", {
+    
+    seq <- process_input(proteomes, annotation)$seq[1:2]
+    if(last_is_installed()) {
+        last <- run_last(seq, verbose = TRUE, threads = 1)
+    } else {
+        last <- list(
+            A = data.frame(),
+            B = data.frame(),
+            C = data.frame(),
+            D = data.frame()
+        )
+    }
+    expect_equal(class(last), "list")
+    expect_equal(length(last), length(seq) ^ 2)
+    expect_equal(class(last[[1]]), "data.frame")
 })
 
 
