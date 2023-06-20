@@ -154,7 +154,7 @@ run_last <- function(seq = NULL, verbose = FALSE,
         run_last <- system2("lastal", args = bargs)
     })
     
-    final_list <- read_diamond(resdir)
+    final_list <- read_last(resdir)
     return(final_list)
 }
 
