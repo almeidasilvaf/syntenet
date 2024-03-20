@@ -35,7 +35,7 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP run_testthat_tests(void *);
+RcppExport SEXP run_testthat_tests(SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_syntenet_rcpp_mcscanx_file", (DL_FUNC) &_syntenet_rcpp_mcscanx_file, 14},

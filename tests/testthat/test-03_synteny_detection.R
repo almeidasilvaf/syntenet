@@ -81,8 +81,12 @@ test_that("intraspecies_synteny() detects intraspecies synteny", {
 
     # Detect intraspecies synteny
     intrasyn <- intraspecies_synteny(blast_intra, pannotation)
+    intrasyn2 <- intraspecies_synteny(
+        blast_intra, pannotation, verbose = TRUE, is_pairwise = TRUE
+    )
 
     expect_equal(class(intrasyn), "character")
+    expect_equal(class(intrasyn2), "character")
     expect_equal(length(intrasyn), 1)
 })
 

@@ -586,7 +586,7 @@ ggtree(angiosperm_phylogeny) +
     xlim(0, 0.3)
 ```
 
-## __syntenet__ as a synteny detection tool
+# __syntenet__ as a synteny detection tool
 
 In some cases, users do not want to infer a synteny network, but only want to
 identify syntenic regions within a single genome or between two genomes. This

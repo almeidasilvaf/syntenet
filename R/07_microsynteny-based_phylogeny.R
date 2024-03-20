@@ -133,13 +133,7 @@ infer_microsynteny_phylogeny <- function(transposed_profiles = NULL,
     # Run IQ-TREE
     if(iqtree_version() == 1) { # IQ-TREE v1
         iqtree_args <- c(
-            "-s ", matrix_file, 
-            "-bb", bootr, 
-            "-alrt", alrtboot, 
-            "-nt", threads, 
-            root,
-            "-m", model,
-            "-st MORPH -redo"
+            "-s ", matrix_file, "-bb", bootr, "-alrt", alrtboot, "-nt", threads, root, "-m", model, "-st MORPH -redo"
         )
         iqtree <- system2("iqtree", args = iqtree_args, stdout = stdout)
     } else { # IQ-TREE v2

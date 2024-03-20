@@ -1,7 +1,6 @@
 
 #' Check if the names of list of sequences and annotations match.
 #' 
-#'
 #' @param seq A list of AAStringSet objects.
 #' @param annotation A GRangesList, CompressedGRangesList, or list of
 #' GRanges with the annotation for the sequences in \strong{seq}.
@@ -17,17 +16,36 @@ check_list_names <- function(seq = NULL, annotation = NULL) {
     
     annot_names <- names(annotation)
     seq_names <- names(seq)
-    n_match <- annot_names %in% seq_names
     
+    # Check for differences in both sets
+    diff_seq <- setdiff(seq_names, annot_names)
+    diff_annot <- setdiff(annot_names, seq_names)
+    
+    check <- TRUE
     if(is.null(annot_names) | is.null(seq_names)) {
         stop("List-like arguments 'seq' and 'annotation' must have names.")
-    } else if(any(n_match == FALSE)) {
-        stop("Names of list elements in 'seq' and 'annotation' must match.")
-    } else {
-        check <- TRUE
+    } else if(length(diff_seq) != 0 & length(diff_annot) == 0) {
+        stop(
+            "The following elements in `seq` were not found in `annotation`:\n",
+            paste0(diff_seq, collapse = "\n")
+        )
+    } else if(length(diff_seq) == 0 & length(diff_annot) != 0) {
+        stop(
+            "The following elements in `annotation` were not found in `seq:`\n",
+            paste0(diff_annot, collapse = "\n")
+        )
+    } else if(length(diff_seq) != 0 & length(diff_annot) != 0) {
+        stop(
+            "Element in `seq` but not in `annotation`: \n",
+            paste0(diff_seq, collapse = "\n"),
+            "\n\nElements in `annotation` but not in `seq`: \n",
+            paste0(diff_annot, collapse = "\n")
+        )
     }
+    
     return(check)
 }
+
 
 #' Check if the number of sequences is less than the number of genes
 #'
@@ -37,6 +55,7 @@ check_list_names <- function(seq = NULL, annotation = NULL) {
 #'
 #' @return TRUE if the objects pass the check.
 #' @noRd 
+#' @importFrom utils capture.output
 #' @examples 
 #' data(proteomes)
 #' data(annotation)
@@ -47,34 +66,31 @@ check_ngenes <- function(seq = NULL, annotation = NULL) {
     # Data frame of species and gene count based on annotation
     gene_count <- Reduce(rbind, lapply(seq_along(annotation), function(x) {
         count <- length(annotation[[x]][annotation[[x]]$type == "gene"])
-        count_df <- data.frame(
-            Species = names(annotation)[x],
-            Genes = count
-        )
+        count_df <- data.frame(species = names(annotation)[x], ngenes = count)
         return(count_df)
     }))
     
     # Data frame of species and gene count based on sequences
     seq_count <- Reduce(rbind, lapply(seq_along(seq), function(x) {
         count <- length(seq[[x]])
-        count_df <- data.frame(
-            Species = names(annotation)[x],
-            Seqs = count
-        )
+        count_df <- data.frame(species = names(annotation)[x], nseqs = count)
         return(count_df)
     }))
     
     # Check if number of sequences is <= gene count (accounting for ncRNAs)
-    counts <- merge(gene_count, seq_count, by = "Species")
-    check_count <- counts$Seqs <= counts$Genes
-    idx_error <- which(check_count == FALSE)
-    if(length(idx_error) != 0) {
-        name <- counts$Species[idx_error]
-        name <- paste0(seq_along(name), ". ", name)
-        name <- paste0(name, collapse = "\n")
-        stop("Number of sequences in greater than the number of genes for:\n",
-             name)
-    } 
+    counts <- merge(gene_count, seq_count, by = "species")
+    check_count <- counts[counts$nseqs > counts$ngenes, ]
+    if(nrow(check_count) > 0) {
+        msg <- paste0(
+            "One or more species have more sequences in `seq` than ", 
+            "there are genes in `annotation`.\n",
+            "Did you remember to keep only one protein isoform per gene?\n",
+            "Problematic species:\n"
+        )
+        out <- capture.output(print(check_count, row.names = FALSE))
+        stop(paste(c(msg, out), collapse = "\n"))
+    }
+    
     return(TRUE)
 }
 
@@ -90,17 +106,18 @@ check_ngenes <- function(seq = NULL, annotation = NULL) {
 #' @return TRUE if the objects pass the check.
 #' @noRd 
 #' @importFrom GenomicRanges mcols
+#' @importFrom utils capture.output head
 #' @examples
 #' data(annotation)
 #' data(proteomes)
 #' seq <- proteomes
 #' check_gene_names(seq, annotation)
-check_gene_names <- function(seq = NULL, annotation = NULL, 
-                             gene_field = "gene_id") {
+check_gene_names <- function(
+        seq = NULL, annotation = NULL, gene_field = "gene_id"
+) {
     
     seq_names <- lapply(seq, names)
     gene_names <- lapply(annotation, function(x) {
-        
         ranges_cols <- GenomicRanges::mcols(x[x$type == "gene"])
         if(!gene_field %in% names(ranges_cols)) {
             stop("Could not find column '", gene_field, "' in GRanges.")
@@ -112,21 +129,36 @@ check_gene_names <- function(seq = NULL, annotation = NULL,
     
     # Check if names in `seq` match gene names in `annotation`
     check_names <- lapply(seq_along(seq_names), function(x) {
-        c <- seq_names[[x]] %in% gene_names[[x]]
-        c <- any(c == FALSE)
-        return(c)
+        sp <- names(seq_names)[x]
+        diff <- seq_names[[x]][!seq_names[[x]] %in% gene_names[[sp]]]
+        return(diff)
     })
+    names(check_names) <- names(seq_names)
     
-    idx_error <- which(check_names == TRUE) # TRUE means error
-    if(length(idx_error) != 0) {
-        name <- names(seq_names)[idx_error]
-        name <- paste0(seq_along(name), ". ", name)
-        name <- paste0(name, collapse = "\n")
-        stop("Sequence names in 'seq' do not match gene names in 'annotation' for:\n",
-             name)
+    # If there at least one species with a mismatch, show species name + info
+    n_mismatch <- lengths(check_names)
+    if(any(n_mismatch > 0)) {
+        m <- names(n_mismatch[n_mismatch > 0])
+        
+        firstn <- function(x, n = 2) {
+            return(lapply(x, function(y) paste(head(y, n), collapse = ",")))
+        }
+        m_df <- data.frame(
+            species = m,
+            sample_seqs = unlist(firstn(check_names[m])),
+            sample_genes = unlist(firstn(gene_names[m]))
+        )
+        out <- capture.output(print(m_df, row.names = FALSE))
+        msg <- paste0(
+            "Sequence names in `seq` do not match gene names ", 
+            "in `annotation` for the following ", length(m), " species:\n"
+        )
+        stop(paste(c(msg, out), collapse = "\n"))
     }
+    
     return(TRUE)
 }
+
 
 #' Create a data frame of species IDs (3-5-character abbreviations)
 #' 

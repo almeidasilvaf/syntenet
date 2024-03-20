@@ -10,7 +10,7 @@ run_last(
   outdir = tempdir(),
   threads = 1,
   compare = "all",
-  lastD = 1e6,
+  lastD = 1e+06,
   ...
 )
 }
@@ -27,7 +27,7 @@ are saved to a temporary directory.}
 \item{threads}{Number of threads to use. Default: 1.}
 
 \item{compare}{Character scalar indicating which comparisons
-should be made when running DIAMOND.
+should be made when running last.
 Possible modes are "all" (all-vs-all comparisons),
 "intraspecies" (intraspecies comparisons only), or
 "interspecies" (interspecies comparisons only). Alternatively, users can
@@ -36,7 +36,7 @@ compared.}
 
 \item{lastD}{last option D: query letters per random alignment. Default: 1e6.}
 
-\item{...}{Any additional arguments to \verb{diamond blastp}.}
+\item{...}{Any additional arguments to \code{lastal}.}
 }
 \value{
 A list of data frames containing last's tabular output
