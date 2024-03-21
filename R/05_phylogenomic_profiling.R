@@ -163,7 +163,7 @@ find_GS_clusters <- function(profile_matrix = NULL,
         perc_zero <- sum(group_count$perc == 0)
         if(perc_zero == n - 1) {
             # How many families are represented by >x% of the genes?
-            fgroup_count <- group_count[group_count$perc > min_percentage, ]
+            fgroup_count <- group_count[group_count$perc >= min_percentage, ]
             if(nrow(fgroup_count) == 1) {
                 gs <- fgroup_count[, c("Var1", "perc")]
                 gs$Cluster <- names(prof_list)[x]
