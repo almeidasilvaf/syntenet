@@ -4,4 +4,4 @@ pkgdown_sha: ~
 articles:
   vignette_01_inference_and_analysis_of_synteny_networks: vignette_01_inference_and_analysis_of_synteny_networks.html
   vignette_02_synteny_detection_with_syntenet: vignette_02_synteny_detection_with_syntenet.html
-last_built: 2025-07-23T11:33Z
+last_built: 2025-07-23T11:48Z
