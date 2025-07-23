@@ -1,0 +1,788 @@
+---
+title: "Inference and Analysis of Synteny Networks"
+author: 
+  - name: Fabricio Almeida-Silva
+    affiliation: 
+    - VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
+    - Department of Plant Biotechnology and Bioinformatics, Ghent University, Ghent, Belgium
+  - name: Tao Zhao
+    affiliation:
+    - State Key Laboratory of Crop Stress Biology for Arid Areas/Shaanxi Key Laboratory of Apple, College of Horticulture, Northwest A&F University, Yangling, China
+  - name: Kristian K Ullrich
+    affiliation:
+    - Department of Evolutionary Biology, Max Planck Institute For Evolutionary Biology, Ploen, Germany
+  - name: Yves Van de Peer
+    affiliation: 
+    - VIB-UGent Center for Plant Systems Biology, Ghent, Belgium
+    - Department of Plant Biotechnology and Bioinformatics, Ghent University, Ghent, Belgium
+    - College of Horticulture, Academy for Advanced Interdisciplinary Studies, Nanjing Agricultural University, Nanjing, China
+    - Center for Microbial Ecology and Genomics, Department of Biochemistry, Genetics and Microbiology, University of Pretoria, Pretoria, South Africa
+output: 
+  BiocStyle::html_document:
+    toc: true
+    toc_float: true
+    number_sections: yes
+bibliography: vignette_bibliography.bib
+vignette: >
+  %\VignetteIndexEntry{Inference and Analysis of Synteny Networks}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    crop = NULL ## Related to https://stat.ethz.ch/pipermail/bioc-devel/2020-April/016656.html
+)
+```
+
+# Introduction
+
+The analysis of synteny (i.e., conserved gene content and order in a genomic
+segment across species) can help understand the trajectory of duplicated 
+genes through evolution. In particular, synteny analyses are widely used to
+investigate the evolution of genes derived from whole-genome duplication (WGD)
+events, as they can reveal genomic rearrangements that happened following the
+duplication of all chromosomes. However, synteny analysis are typically
+performed in a pairwise manner, which can be difficult to explore and interpret
+when comparing several species. To understand global patterns of synteny,
+@zhao2017network proposed a network-based approach to analyze synteny. 
+In synteny networks, genes in a given syntenic block are represented as nodes
+connected by an edge. Synteny networks have been used to explore, among others,
+global synteny patterns in mammalian and angiosperm genomes [@zhao2019network], 
+the evolution of MADS-box transcription factors [@zhao2017phylogenomic], 
+and infer a microsynteny-based phylogeny for angiosperms [@zhao2021whole].
+`r BiocStyle::Biocpkg("syntenet")` is a package that 
+can be used to infer synteny networks from
+protein sequences and perform downstream network analyses that include:
+
+- **Network clustering** using the Infomap algorithm;
+
+- **Phylogenomic profiling**, which consists in identifying which species 
+contain which clusters. This analysis can reveal highly conserved synteny 
+clusters and taxon-specific ones (e.g., family- and order-specific clusters);
+
+- **Microsynteny-based phylogeny reconstruction** with maximum likelihood, 
+which can be achieved by inferring a phylogeny from a binary matrix of 
+phylogenomic profiles with IQ-TREE.
+
+
+# Installation
+
+`r BiocStyle::Biocpkg("syntenet")` can be installed from Bioconductor
+with the following code:
+
+```{r installation, eval=FALSE}
+if(!requireNamespace('BiocManager', quietly = TRUE))
+  install.packages('BiocManager')
+
+BiocManager::install("syntenet")
+```
+
+```{r load_package, message=FALSE}
+# Load package after installation
+library(syntenet)
+```
+
+# Data description
+
+For this vignette, we will use the proteomes and gene annotation of the algae 
+species *Ostreococcus lucimarinus* and *Ostreococcus sp RCC809*, which were 
+obtained from Pico-PLAZA 3.0 [@vandepoele2013pico]. 
+
+```{r data}
+# Protein sequences
+data(proteomes)
+head(proteomes)
+
+# Annotation (ranges)
+data(annotation)
+head(annotation)
+```
+
+# Importing data to the R session
+
+To detect synteny and infer synteny networks, 
+`r BiocStyle::Biocpkg("syntenet")` requires two objects
+as input:
+
+- **seq:** A list of `AAStringSet` objects containing the translated sequences
+of primary transcripts for each species.
+- **annotation:** A `GRangesList` or `CompressedGRangesList` object containing
+the coordinates for the genes in **seq**.
+
+
+If you have whole-genome protein sequences in FASTA files, store all FASTA
+files in the same directory and use the function `fasta2AAStringSetlist()` to
+read all FASTA files into a list of `AAStringSet` objects.
+
+Likewise, if you have gene annotation in GFF/GFF3/GTF files, 
+store all files in the same directory and use the function `gff2GRangesList()`
+to read all GFF/GFF3/GTF files into a `GRangesList object`.
+
+For a demonstration, we will read example FASTA and GFF3 files stored in 
+subdirectories named **sequences/** and **annotation/**, which are located 
+in the `extdata/` directory of this package.
+
+## From FASTA files to a list of `AAStringSet` objects
+
+Here is how you can use `fasta2AAStringSetlist()` to read FASTA files 
+in a directory as a list of `AAStringSet` objects.
+
+```{r fasta2AAStringSetlist}
+# Path to directory containing FASTA files
+fasta_dir <- system.file("extdata", "sequences", package = "syntenet")
+fasta_dir
+
+dir(fasta_dir) # see the contents of the directory
+
+# Read all FASTA files in `fasta_dir`
+aastringsetlist <- fasta2AAStringSetlist(fasta_dir)
+aastringsetlist
+```
+
+And that's it! Now you have a list of `AAStringSet` objects.
+
+## From GFF/GTF files to a `GRangesList` object
+
+Here is how you can use `gff2GRangesList()` to read GFF/GFF3/GTF files 
+in a directory as a `GRangesList` object.
+
+```{r gff2GRangesList}
+# Path to directory containing FASTA files
+gff_dir <- system.file("extdata", "annotation", package = "syntenet")
+gff_dir
+
+dir(gff_dir) # see the contents of the directory
+
+# Read all FASTA files in `fasta_dir`
+grangeslist <- gff2GRangesList(gff_dir)
+grangeslist
+```
+
+And now you have a `GRangesList` object.
+
+# Data preprocessing
+
+The first part of the pipeline consists in processing the data to make it
+match a standard structure. However, before processing the data for synteny 
+detection, you must use the function `check_input()` to check if your data can
+enter the pipeline. This function checks the input data for 3 
+required conditions:
+
+1. Names of **seq** list (i.e., `names(seq)`) match 
+the names of **annotation** `GRangesList`/`CompressedGRangesList`
+(i.e., `names(annotation)`)
+
+2. For each species (list elements), the number of sequences
+in **seq** is not greater than the number of genes 
+in **annotation**. This is a way to ensure users do not input
+the translated sequences for multiple isoforms of the same gene (generated
+by alternative splicing). Ideally, the number of sequences in **seq** 
+should be equal to the number of genes in **annotation**, but
+this may not always stand true because of non-protein-coding genes.
+
+3. For each species, sequence names (i.e., `names(seq[[x]])`,
+equivalent to FASTA headers) match gene names in `annotation`.
+By default, `r BiocStyle::Biocpkg("syntenet")` looks for gene IDs
+in a column named "gene_id" in the GRanges objects (default field
+in GFF3 files). If your gene IDs are in a different column (e.g., "Name"),
+you can specify it in the *gene_field* parameter of `check_input()`
+and `process_input()`.
+
+
+Let's check if the example data sets satisfy these 3 criteria:
+
+```{r check_input}
+check_input(proteomes, annotation)
+```
+
+As you can see, the data passed the checks. Now, let's process them 
+with the function `process_input()`.
+
+This function processes the input sequences and annotation to:
+
+1. Remove whitespace and anything after it in sequence names 
+(i.e., `names(seq[[x]])`, which is equivalent to FASTA headers), if
+there is any.
+
+2. Add a unique species identifier to sequence names. The species 
+identifier consists of the first 3-5 strings of the element name.
+For instance, if the first element of the **seq** list is named
+"Athaliana", each sequence in it will have an identifier "Atha_" added
+to the beginning of each gene name (e.g., Atha_AT1G01010).
+
+3. If sequences have an asterisk (*) representing stop codon, remove it.
+
+4. Add a unique species identifier (same as above) to 
+gene and chromosome names of each element of the **annotation**
+`GRangesList`/`CompressedGRangesList`.
+
+5. Filter each element of the **annotation** 
+`GRangesList`/`CompressedGRangesList` to keep only seqnames, 
+ranges, and gene ID.
+
+
+Let's process our input data:
+
+```{r process_input}
+pdata <- process_input(proteomes, annotation)
+
+# Looking at the processed data
+pdata$seq
+pdata$annotation
+```
+
+# Synteny network inference
+
+Now that we have our processed data, we can infer the synteny network.
+To detect synteny, we need the tabular output from BLASTp [@altschul1997gapped]
+or similar programs. To get that, you can use the functions `run_diamond()`,
+or `run_last()`, which runs DIAMOND [@buchfink2021sensitive] or last [@kielbasa2011adaptive]
+from the R session and automatically parses its output to a list of data frames [^1].
+
+[^1]: **Alternative:** if you want to use a different program for similarity
+searches, you can run it on the command line, save the output in
+a DIAMOND/BLAST-like tabular format, and read the output files
+as a list of data frames with the function `read_diamond()` or `read_last()`
+(see the FAQ for details).
+
+Let's demonstrate how `run_diamond()` works. 
+Needless to say, you need to have DIAMOND installed in your machine 
+and in your PATH to run this function. To check if you have DIAMOND installed,
+use the function `diamond_is_installed()` [^2].
+
+[^2]: **Note:** in the code chunk below, the if statement is not required.
+We just added it to make sure that the function `run_diamond()` is only
+executed if DIAMOND is installed, to avoid problems when building this
+vignette in machines that do not have DIAMOND installed. If you want to
+reproduce the code in this vignette and do not have DIAMOND installed,
+you can use the example output of `run_diamond()` stored in the *blast_list*
+object (loaded with `data(blast_list)`).
+
+```{r run_diamond}
+data(blast_list)
+if(diamond_is_installed()) {
+    blast_list <- run_diamond(seq = pdata$seq)
+}
+```
+
+The output of `run_diamond()` is a list of data frames containing the tabular
+output of all-vs-all DIAMOND searches. Let's take a look at it.
+
+```{r blast_inspect}
+# List names
+names(blast_list)
+
+# Inspect first data frame
+head(blast_list$Olucimarinus_Olucimarinus)
+```
+
+Now, we can use this list of DIAMOND data frames to detect synteny. Here,
+we reimplemented the popular MCScanX algorithm [@wang2012mcscanx], originally
+written in C++, using the `r BiocStyle::CRANpkg("Rcpp")` [@eddelbuettel2011rcpp] 
+framework for R and C++ integration. This means that
+`r BiocStyle::Biocpkg("syntenet")` comes with a native 
+version of the MCScanX algorithm, so you can run MCScanX in R without
+having to install it yourself. Amazing, huh?
+
+To detect synteny and infer the synteny network, use the 
+function `infer_syntenet()`. The output is a network represented as a
+so-called **edge list** (i.e., a 2-column data frame with node 1 and node 2
+in columns 1 and 2, respectively). 
+
+```{r infer_syntenet}
+# Infer synteny network
+net <- infer_syntenet(blast_list, pdata$annotation)
+
+# Look at the output
+head(net)
+```
+
+In a synteny network, each row of the edge list represents an anchor pair. 
+In the edge list above, for example, 
+the genes `r net[1,1]` and `r net[1,2]` are an anchor pair (i.e., duplicates
+derived from a large-scale duplication event).
+
+Note that gene IDs are preceded by IDs created with `process_input()`.
+Under the hood, `process_input()` uses the function `create_species_id_table()`
+to create unique IDs from the names of the **seq** and **annotation** lists.
+To obtain a data frame of all IDs and their corresponding species, you can
+use the following code:
+
+```{r create_species_id_table}
+# Get a 2-column data frame of species IDs and names
+id_table <- create_species_id_table(names(proteomes))
+
+id_table
+```
+
+# Phylogenomic profiling
+
+After inferring the synteny network, the first thing you would want to do is
+cluster your network and identify which phylogenetic groups are contained
+in each cluster. This is what we call **phylogenomic profiling**. This way,
+you can identify clade-specific clusters, and highly conserved clusters,
+for instance. Here, we will use an example network of BUSCO genes for 
+25 eudicot species, which was obtained from @zhao2019network. 
+
+To obtain the phylogenomic profiles, you first need to cluster your network.
+This can be done with `cluster_network()`. [^3]
+
+[^3]: **Friendly tip:** `r BiocStyle::Biocpkg("syntenet")` uses the *Infomap* 
+algorithm to cluster networks, which has been shown to have the best performance 
+[@zhao2019network]. However, you can use any other network clustering
+method implemented in the *cluster_* family of functions from the 
+`r BiocStyle::CRANpkg("igraph")` package by passing the function directly
+to the *clust_function* parameter (see `?cluster_network` for details).
+Importantly, the Infomap algorithm (default clustering method) 
+assigns each gene to a single cluster. 
+However, for some cases (e.g., detection of tandem arrays), 
+you may want to use an algorithm that allows community overlap 
+(i.e., a gene can be part of more than one cluster). 
+If this is your case, we recommend the *clique percolation* algorithm, 
+which is implemented in the R package
+`r BiocStyle::CRANpkg("CliquePercolation")` [@lange2021cliquepercolation].
+
+```{r cluster_network}
+# Load example data and take a look at it
+data(network)
+head(network)
+
+# Cluster network
+clusters <- cluster_network(network)
+head(clusters)
+```
+
+Now that each gene has been assigned to a cluster, we can identify the
+phylogenomic profiles of each cluster. This function returns 
+a matrix of phylogenomic profiles, with clusters in rows 
+and species in columns.
+
+```{r phylogenomic_profile}
+# Phylogenomic profiling
+profiles <- phylogenomic_profile(clusters)
+
+# Exploring the output
+head(profiles)
+```
+
+As a plot is worth a thousand words (or numbers), you can use the function
+`plot_profiles()` to visualize the phylogenomic profiles as a heatmap with 
+species in rows and synteny network clusters in columns. The heatmap
+generated by this function is highly customizable by users. Some
+important remarks are:
+
+1. You can add a legend for species metadata (e.g., taxonomic information) 
+by passing a 2-column data frame to the parameter *species_annotation*.
+
+2. Columns (network clusters) are grouped with Ward's clustering on a matrix
+of distances. The method to compute the distance matrix can be defined by users
+in parameters *dist_function* and *dist_params*. By default, it uses
+the function `stats::dist()` with parameter `method = "euclidean"`. Likewise,
+the function to cluster the distance matrix and additional parameters
+can be specified in *clust_function* and *clust_params*. By default,
+it uses `stats::hclust` with parameter `method = "ward.D"`.
+
+3. The order in which species are displayed can be defined by users in 
+parameter *cluster_species*. We strongly recommend passing a vector of 
+species order that matches the species tree, so that patterns can be
+explored in a phylogenetic context. Importantly, if the character vector is
+named, vector names will be used as species names in the plot. This a nice
+way to replace species abbreviations with their full names.
+
+
+Here, to briefly demonstrate how to play with the parameters we just mentioned
+in the 3 remarks above, we will:
+
+- Create a vector with the order in which we want species to be displayed,
+with longer species names in vector names.
+
+- Create a metadata data frame containing the family of each species.
+
+- Use the function `dsvdis()` from the `r BiocStyle::CRANpkg("labdsv")` package
+to calculate Ruzicka distances when clustering columns.
+
+```{r plot_profiles}
+# 1) Create a named vector of custom species order to plot
+species_order <- setNames(
+    # vector elements
+    c(
+        "vra", "van", "pvu", "gma", "cca", "tpr", "mtr", "adu", "lja",
+        "Lang", "car", "pmu", "ppe", "pbr", "mdo", "roc", "fve",
+        "Mnot", "Zjuj", "jcu", "mes", "rco", "lus", "ptr"
+    ),
+    # vector names
+    c(
+        "V. radiata", "V. angularis", "P. vulgaris", "G. max", "C. cajan",
+        "T. pratense", "M. truncatula", "A. duranensis", "L. japonicus",
+        "L. angustifolius", "C. arietinum", "P. mume", "P. persica",
+        "P. bretschneideri", "M. domestica", "R. occidentalis", 
+        "F. vesca", "M. notabilis", "Z. jujuba",
+        "J. curcas", "M. esculenta", "R. communis", 
+        "L. usitatissimum", "P. trichocarpa"
+    )
+)
+species_order
+
+# 2) Create a metadata data frame containing the family of each species
+species_annotation <- data.frame(
+    Species = species_order,
+    Family = c(
+        rep("Fabaceae", 11), rep("Rosaceae", 6),
+        "Moraceae", "Ramnaceae", rep("Euphorbiaceae", 3), 
+        "Linaceae", "Salicaceae"
+    )
+)
+head(species_annotation)
+
+
+# 3) Plot phylogenomic profiles, but using Ruzicka distances
+plot_profiles(
+    profiles, 
+    species_annotation, 
+    cluster_species = species_order, 
+    dist_function = labdsv::dsvdis,
+    dist_params = list(index = "ruzicka")
+)
+```
+
+The heatmap is a nice way to observe patterns. For instance, you can see some
+Rosaceae-specific clusters, Fabaceae-specific clusters, and highly conserved
+ones as well.
+
+If you want to explore in more details the group-specific clusters,
+you can use the function `find_GS_clusters()`. For that, you only need to
+input the profiles matrix and a data frame of species annotation (i.e.,
+species groups).
+
+```{r find_GS_clusters}
+# Find group-specific clusters
+gs_clusters <- find_GS_clusters(profiles, species_annotation)
+
+head(gs_clusters)
+
+# How many family-specific clusters are there?
+nrow(gs_clusters)
+```
+
+As you can see, there are `r nrow(gs_clusters)` family-specific clusters
+in the network. Let's plot a heatmap of group-specific clusters only.
+
+```{r heatmap_filtered}
+# Filter profiles matrix to only include group-specific clusters
+idx <- rownames(profiles) %in% gs_clusters$Cluster
+p_gs <- profiles[idx, ]
+
+# Plot heatmap
+plot_profiles(
+    p_gs, species_annotation, 
+    cluster_species = species_order, 
+    cluster_columns = TRUE
+)
+```
+
+Pretty cool, huh? You can also visualize clusters as a network plot with
+the function `plot_network()`. For example, let's visualize the 
+group-specific clusters.
+
+```{r plot_network}
+# 1) Visualize a network of first 5 GS-clusters
+id <- gs_clusters$Cluster[1:5]
+plot_network(network, clusters, cluster_id = id)
+
+# 2) Coloring nodes by family
+genes <- unique(c(network$node1, network$node2))
+gene_df <- data.frame(
+    Gene = genes,
+    Species = unlist(lapply(strsplit(genes, "_"), head, 1))
+)
+gene_df <- merge(gene_df, species_annotation)[, c("Gene", "Family")]
+head(gene_df)
+
+plot_network(network, clusters, cluster_id = id, color_by = gene_df)
+
+# 3) Interactive visualization (zoom out and in to explore it)
+plot_network(
+    network, clusters, cluster_id = id, 
+    interactive = TRUE, dim_interactive = c(500, 300)
+)
+```
+
+# Microsynteny-based phylogeny reconstruction
+
+Finally, you can use the information on presence/absence of clusters in each
+species to reconstruct a microsynteny-based phylogeny.
+
+To do that, you first need to binarize the profiles matrix (0s and 1s
+representing absence and presence, respectively) and transpose it. This can
+be done with `binarize_and_tranpose()`.
+
+```{r binarize}
+bt_mat <- binarize_and_transpose(profiles)
+
+# Looking at the first 5 rows and 5 columns of the matrix
+bt_mat[1:5, 1:5]
+```
+
+Now, you can use this transposed binary matrix as input to 
+IQ-TREE [@minh2020iq] to infer a phylogeny. To do so, you can use the function
+`infer_microsynteny_phylogeny()`, which allows you to run IQ-TREE from 
+an R session [^4]. You need to have IQ-TREE installed in your machine and in 
+your PATH to run this function. You can check if you have IQ-TREE installed 
+with `iqtree_is_installed()`.
+
+[^4]: **Alternative:** if you want to use a different program rather
+than IQ-TREE, you can use the function `profiles2phylip()` to write the 
+transposed binary matrix to a PHYLIP file and run your favorite program
+on the command line. However, when inferring a phylogeny from phylogenomic
+profiles, you need to make sure that the program you are using supports 
+substitution models for binary data. In IQ-TREE, for instance, using
+binary, morphological models requires passing parameters `-st MORPH`.
+
+
+For the sake of demonstration, we will infer a phylogeny with 
+`infer_microsynteny_phylogeny()` using the profiles for BUSCO genes for 
+six legume species only. We will also remove non-variable sites (i.e.,
+clusters that are present in all species or absent in all species).
+However, we're only using this filtered data set for speed issues. 
+For real-life applications, the best thing to do is to 
+**include phylogenomic profiles for all genes** (not only BUSCO genes).
+
+
+```{r infer_phylogeny}
+# Leave only 6 legume species and P. mume as an outgroup for testing purposes
+included <- c("gma", "pvu", "vra", "van", "cca", "pmu")
+bt_mat <- bt_mat[rownames(bt_mat) %in% included, ]
+
+# Remove non-variable sites
+bt_mat <- bt_mat[, colSums(bt_mat) != length(included)]
+
+if(iqtree_is_installed()) {
+    phylo <- infer_microsynteny_phylogeny(bt_mat, outgroup = "pmu", 
+                                          threads = 1)
+}
+```
+
+The output of `infer_microsynteny_phylogeny()` is a character vector with paths
+to the output files from IQ-TREE. Usually, you are interested in the file
+ending in *.treefile*. This is the species tree in Newick format, and it can
+be visualized with your favorite tree viewer. We strongly recommend using
+the `read.tree()` function from the Bioconductor package
+`r BiocStyle::Biocpkg("treeio")` [@wang2020treeio] to
+read the tree, and visualizing it with the `r BiocStyle::Biocpkg("ggtree")` 
+Bioc package [@yu2017ggtree].
+For example, let's visualize a microsynteny-based phylogeny for 123 angiosperm
+species, whose phylogenomic profiles were obtained from @zhao2021whole.
+
+```{r vis_phylogeny, message = FALSE, warning = FALSE, fig.height = 12, fig.width = 7}
+data(angiosperm_phylogeny)
+
+# Plotting the tree
+library(ggtree)
+ggtree(angiosperm_phylogeny) +
+    geom_tiplab(size = 3) +
+    xlim(0, 0.3)
+```
+
+# FAQ {.unnumbered}
+
+## How do I execute an external dependency that is not in my PATH? {.unnumbered}
+
+If you have DIAMOND and/or IQ-TREE installed, but in a directory that is not in 
+your PATH, you can add this given directory to your PATH with the function
+`Sys.setenv()`. 
+
+For example, suppose your DIAMOND binary is in `/home/username/bioinfo_tools`.
+To add this directory to your PATH, you would run:
+
+```{r faq1}
+# Add example directory /home/username/bioinfo_tools to PATH
+Sys.setenv(
+    PATH = paste(
+        Sys.getenv("PATH"), "/home/username/bioinfo_tools", sep = ":"
+    )
+)
+```
+
+Note that your R PATH is not the same as your system's PATH. Thus, even if you
+add the directory `/home/username/bioinfo_tools` to your system's path (e.g.,
+by editing your ~/.bashrc file if you are on Linux), you would still need to
+update your R PATH.
+
+## Can I run the DIAMOND searches on the command line and import the results? {.unnumbered}
+
+Yes. This case is quite common for users who have a large amount
+of data and want to execute DIAMOND or any similarity search program 
+in an HPC cluster (by submitting a job with `qsub` to execute a Bash script). 
+
+To do that, you will have to follow the 3 steps below:
+
+1. Export the processed sequences (as returned by `process_input()`) with the function `export_sequences()`. This function will write the sequences
+to FASTA files in the directory specified in the **outdir**
+parameter.
+
+2. Navigate (i.e., `cd`) to the directory specified in **outdir**, where
+the FASTA files are, and execute all-vs-all similarity searches. The
+output files must be named "[species]_[species].tsv", where [species]
+indicates the basename of the FASTA files (e.g., "speciesA" for a FASTA
+file named *speciesA.fasta*). For DIAMOND, you can use the following 
+code (with adaptations, if you prefer):
+
+```{bash eval=FALSE}
+#!/bin/bash
+
+# Create output directories `dbs` and `results`
+mkdir -p dbs
+mkdir -p results
+
+# 1. Make dbs for each species
+for seqfile in *.fasta
+do
+    dbfile="dbs/$(basename "$seqfile" .fasta)"
+    diamond makedb --in "$seqfile" -d "$dbfile" --quiet
+done
+
+# 2. Perform all-vs-all pairwise similarity searches
+species=( $(basename -s .fasta *.fasta) )
+for (( i=0; i<${#species[@]}; i++ ))
+do
+    query="${species[$i]}.fasta"
+    for (( j=0; j<${#species[@]}; j++ ))
+    do
+        db="dbs/${species[$j]}"
+        outfile="results/${species[$i]}_${species[$j]}.tsv"
+        diamond blastp -q "$query" -d "$db" -o "$outfile" \
+          --max-hsps 1 -k 5 --quiet 
+    done
+done
+```
+
+3. Read the output of the similarity searches into a list of 
+data frames with the `read_diamond()` function. As input, `read_diamond()`
+takes the path to the directory containing the DIAMOND/BLAST output files.
+
+## My sequence names do not match gene IDs in the annotation. What should I do? {.unnumbered}
+
+When the names of your sequences (equivalent to FASTA headers) do not match
+the gene IDs in your `GRanges` objects, __syntenet__ throws the following error:
+
+> Sequence names in 'seq' do not match gene names in 'annotation'.
+
+In most (if not all) of the cases, this error happens because users have 
+protein IDs as sequence names, and __syntenet__ looks for gene IDs 
+(i.e., using rows of the `GRanges` objects for which the 
+column *type* is "gene"). This is the case, for instance, for data obtained
+from NCBI's RefSeq database. To solve the issue, you need to replace 
+**protein/transcript IDs** with **gene IDs** in sequence names, which can
+be done with the function `collapse_protein_ids()`. 
+
+
+To demonstrate how this works, let's explore an example data set containing
+protein sequences and gene annotation obtained from RefSeq. The data contains
+information on a subset of 16 genes from the fish species *Alosa alosa*, and
+it is stored in the `extdata/RefSeq_parsing_example` directory of this
+package.
+
+```{r faq3-p1}
+# Path to directory containing data
+data_dir <- system.file(
+    "extdata", "RefSeq_parsing_example", package = "syntenet"
+)
+dir(data_dir)
+
+# Reading the files to a format that syntenet understands
+seqs <- fasta2AAStringSetlist(data_dir)
+annot <- gff2GRangesList(data_dir)
+
+# Taking a look at the data
+seqs
+head(names(seqs$Aalosa))
+
+annot
+```
+
+The first problem we can observe is that sequence names have additional text
+describing the sequences (e.g., "GSK3-beta..."), and we must have only the IDs.
+To solve this issue, we can remove whitespace and everything 
+that comes after it.
+
+```{r faq3-p2}
+# Remove whitespace and everything after it
+names(seqs$Aalosa) <- gsub(" .*", "", names(seqs$Aalosa))
+
+# Taking a look at the new names
+head(names(seqs$Aalosa))
+```
+
+Great, we removed the unnecessary text! However, there is still
+a problem: sequence names start with *XP_....*. If you look closer at the
+first row of `annot$Aalosa` (which contains ranges for genes), you will
+notice that none of the columns contain such *XP_...* IDs. This is because
+RefSeq uses such IDs for CDS, not for genes. Let's check if we can indeed find
+the *XP_...* IDs in rows that have "CDS" in the `type` column.
+
+```{r faq3-p3}
+# Show only rows for which `type` is "CDS"
+head(annot$Aalosa[annot$Aalosa$type == "CDS"])
+```
+
+The *XP_...* IDs can be found in the `Name` column. Note also that the gene IDs,
+which are what we need for __syntenet__, are in the `gene` column. To collapse
+protein IDs to gene IDs with `collapse_protein_ids()`, we will need to create
+a list of 2-column data frames containing the correspondence between
+protein IDs and gene IDs for each species. In this example, we can do that 
+by extracting the columns `Name` and `gene` from rows that represent CDS 
+ranges. 
+
+```{r faq-p4}
+# Create a list of data frames containing protein-to-gene ID correspondences
+protein2gene <- lapply(annot, function(x) {
+    
+    # Extract only CDS ranges
+    cds_ranges <- x[x$type == "CDS"]
+    
+    # Create the ID correspondence data frame
+    df <- data.frame(
+        protein_id = cds_ranges$Name,
+        gene_id = cds_ranges$gene
+    )
+    
+    # Remove duplicate rows
+    df <- df[!duplicated(df$protein_id), ]
+    
+    return(df)
+})
+
+# Taking a look at the list
+protein2gene
+```
+
+Finally, we can pass the list of sequences and the list of ID correspondences
+to `collapse_protein_ids()`, which will return a list of `AAStringSet` objects
+with gene IDs in sequence names.
+
+```{r faq-p5}
+# Collapse protein IDs to gene IDs in list of sequences
+new_seq <- collapse_protein_ids(seqs, protein2gene)
+
+# Looking at the new sequences
+new_seq
+```
+
+As you can see, protein IDs have been replaced with gene IDs. If there are
+multiple proteins for the same gene (i.e., different isoforms), the function
+keeps only the longest sequence (also known as protein products of the
+primary transcript). This way, the number of sequences will never be greater
+than the number of genes, which is what __syntenet__ expects.
+
+# Session information {.unnumbered}
+
+This document was created under the following conditions:
+
+```{r sessionInfo}
+sessionInfo()
+```
+
+# References {.unnumbered}
