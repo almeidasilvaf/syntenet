@@ -1,5 +1,75 @@
 
 
+#' Create a data frame of bidirectional comparisons from unidirectional comparisons
+#'
+#' @param compare A 2-column data frame with name(s) of target species in 
+#' column 1, and name(s) of outgroup species in column 2.
+#' 
+#' @return A 2-column data frame as in \strong{compare}, but extended to
+#' contain bidirectional comparisons. If the data frame in \strong{compare} has
+#' N rows, the output data frame should contain 2N rows.
+#' 
+#' @importFrom stats setNames
+#' @export
+#' @rdname make_bidirectional
+#' @examples
+#' spp_outgroup <- data.frame(species = "spA", outgroup = "spB")
+#' comp_bi <- make_bidirectional(spp_outgroup)
+#' comp_bi
+make_bidirectional <- function(compare) {
+    
+    cnames <- names(compare)
+    comp_df <- rbind(compare, setNames(compare[, c(2,1)], cnames))
+    
+    return(comp_df)
+}
+
+
+#' Collapse a list of bidirectional DIAMOND hits
+#' 
+#' @param blast_inter A list of data frames containing BLAST/DIAMOND tables 
+#' with comparisons between target species and outgroups. 
+#' BLASTp, DIAMOND, or similar programs must be run on processed sequence data 
+#' as returned by \code{syntenet::process_input()}.
+#' @param compare A 2-column data frame with target species name in column 1,
+#' and outgroup species name in column 2. Species names must match names of
+#' list elements in \strong{blast_inter}.
+#'
+#' @return A list of data frames with BLAST/DIAMOND tables as 
+#' in \strong{blast_inter}, but with bidirectional hits combined. For instance,
+#' if \strong{blast_inter} contains elements 'spA_spB' and 'spB_spA', these
+#' two data frames are combined into a single data frame following the 
+#' order indicated in \strong{outgroups} (i.e. 'column1_column2').
+#' 
+#' @export
+#' @rdname collapse_bidirectional_hits
+#' @examples
+#' data(blast_list)
+#' blast_inter <- blast_list[c(2,3)]
+#' compare <- data.frame(species = "Olucimarinus", outgroup = "OspRCC809")
+#' chits <- collapse_bidirectional_hits(blast_inter, compare)
+collapse_bidirectional_hits <- function(blast_inter, compare) {
+    
+    final_list <- lapply(seq_len(nrow(compare)), function(n) {
+        
+        sp1 <- compare[n, 1]
+        sp2 <- compare[n, 2]
+        
+        # Get data frames to combine
+        df1 <- blast_inter[[paste0(sp1, "_", sp2)]]
+        df2 <- blast_inter[[paste0(sp2, "_", sp1)]]
+        
+        # Combine data frames
+        df_final <- rbind(df1, df2)
+        
+        return(df_final)
+    })
+    names(final_list) <- paste0(compare[, 1], "_", compare[, 2])
+    
+    return(final_list)
+}
+
+
 #' Wrapper to run DIAMOND from an R session
 #'
 #' @param seq A processed list of AAStringSet objects 
