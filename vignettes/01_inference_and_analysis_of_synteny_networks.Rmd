@@ -1,5 +1,5 @@
 ---
-title: "Inference and Analysis of Synteny Networks"
+title: "Inference and analysis of synteny networks"
 author: 
   - name: Fabricio Almeida-Silva
     affiliation: 
@@ -24,7 +24,7 @@ output:
     number_sections: yes
 bibliography: vignette_bibliography.bib
 vignette: >
-  %\VignetteIndexEntry{Inference and Analysis of Synteny Networks}
+  %\VignetteIndexEntry{Inference and analysis of synteny networks}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
