@@ -1,7 +1,7 @@
-pandoc: 3.1.1
-pkgdown: 2.0.9
+pandoc: 3.7.0.2
+pkgdown: 2.1.3
 pkgdown_sha: ~
 articles:
   syntenet: syntenet.html
-last_built: 2024-12-18T11:01Z
-
+  synteny_detection_with_syntenet: synteny_detection_with_syntenet.html
+last_built: 2025-07-23T10:05Z
