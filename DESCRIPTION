@@ -55,7 +55,6 @@ Imports:
     GenomicRanges,
     rlang,
     Biostrings,
-    rtracklayer,
     utils,
     methods,
     igraph,
@@ -67,6 +66,7 @@ Imports:
     ggnetwork,
     intergraph
 Suggests:
+    rtracklayer,
     BiocStyle,
     ggtree,
     labdsv,

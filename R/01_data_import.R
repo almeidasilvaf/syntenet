@@ -9,7 +9,6 @@
 #' 
 #' @export
 #' @rdname gff2GRangesList
-#' @importFrom rtracklayer import
 #' @importFrom GenomicRanges GRangesList
 #' @examples 
 #' gff_dir <- system.file("extdata", "annotation", package = "syntenet")
@@ -20,6 +19,12 @@ gff2GRangesList <- function(gff_dir) {
     files <- list.files(gff_dir, pattern = "\\.gff|\\.gtf", full.names = TRUE)
 
     # Import files
+    if(!requireNamespace("rtracklayer", quietly = TRUE)) {
+        stop(
+            "Package 'rtracklayer' is required to run `gff2GRangesList()`.\n",
+            "You can install it with `BiocManager::install('rtracklayer')`."
+        )
+    }
     grangeslist <- lapply(files, rtracklayer::import)
     grangeslist <- GenomicRanges::GRangesList(grangeslist)
     
